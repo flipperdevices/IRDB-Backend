@@ -1,0 +1,62 @@
+[versions]
+# Kotlin
+kotlin-version = "2.0.0" # https://github.com/JetBrains/kotlin
+kotlin-serialization-json = "1.7.0" # https://github.com/Kotlin/kotlinx.serialization
+android-gradle = "8.4.1" # https://developer.android.com/studio/releases/gradle-plugin
+
+# Shadow
+shadow = "7.1.2" # https://github.com/johnrengelman/shadow
+
+# Exposed
+exposed-version = "0.51.1" # https://github.com/JetBrains/Exposed
+
+# Ktor
+ktor-core = "2.3.11" # https://github.com/ktorio/ktor
+
+# Klibs
+klibs-gradleplugin = "1.3.2" # https://github.com/makeevrserg/gradle-plugin
+
+klibs-kdi = "1.4.2" # https://github.com/makeevrserg/klibs.kdi
+
+[libraries]
+# Klibs
+klibs-gradleplugin-core = { module = "ru.astrainteractive.gradleplugin:convention", version.ref = "klibs-gradleplugin" }
+klibs-kdi = { module = "ru.astrainteractive.klibs:kdi", version.ref = "klibs-kdi" }
+# Koltin
+kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization-json" }
+
+# Exposed
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed-version" }
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed-version" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed-version" }
+sql-driver-mysql = { module = "mysql:mysql-connector-java", version.strictly = "8.0.30" }
+
+# Ktor
+ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor-core" }
+
+logback-classic = { module = "ch.qos.logback:logback-classic", version.strictly = "1.4.11" }
+
+[plugins]
+gradle-android-library = { id = "com.android.library", version.ref = "android-gradle" }
+
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
+gradle-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+gradle-buildconfig = { id = "com.github.gmazzo.buildconfig", version.strictly = "5.3.5" }
+
+# klibs - core
+klibs-gradle-detekt = { id = "ru.astrainteractive.gradleplugin.detekt", version.ref = "klibs-gradleplugin" }
+klibs-gradle-detekt-compose = { id = "ru.astrainteractive.gradleplugin.detekt.compose", version.ref = "klibs-gradleplugin" }
+klibs-gradle-dokka-root = { id = "ru.astrainteractive.gradleplugin.dokka.root", version.ref = "klibs-gradleplugin" }
+klibs-gradle-dokka-module = { id = "ru.astrainteractive.gradleplugin.dokka.module", version.ref = "klibs-gradleplugin" }
+klibs-gradle-java-core = { id = "ru.astrainteractive.gradleplugin.java.core", version.ref = "klibs-gradleplugin" }
+klibs-gradle-stub-javadoc = { id = "ru.astrainteractive.gradleplugin.stub.javadoc", version.ref = "klibs-gradleplugin" }
+klibs-gradle-publication = { id = "ru.astrainteractive.gradleplugin.publication", version.ref = "klibs-gradleplugin" }
+klibs-gradle-kmp-signing = { id = "ru.astrainteractive.gradleplugin.kmp-signing", version.ref = "klibs-gradleplugin" }
+klibs-gradle-rootinfo = { id = "ru.astrainteractive.gradleplugin.root.info", version.ref = "klibs-gradleplugin" }
+# klibs - android
+klibs-gradle-android-core = { id = "ru.astrainteractive.gradleplugin.android.core", version.ref = "klibs-gradleplugin" }
+klibs-gradle-android-compose = { id = "ru.astrainteractive.gradleplugin.android.compose", version.ref = "klibs-gradleplugin" }
+klibs-gradle-android-apk-sign = { id = "ru.astrainteractive.gradleplugin.android.apk.sign", version.ref = "klibs-gradleplugin" }
+klibs-gradle-android-apk-name = { id = "ru.astrainteractive.gradleplugin.android.apk.name", version.ref = "klibs-gradleplugin" }
+klibs-gradle-android-publication = { id = "ru.astrainteractive.gradleplugin.android.publication", version.ref = "klibs-gradleplugin" }
