@@ -9,7 +9,7 @@ interface BuildKonfigModule {
     val connection: Connection
     val ratingDatabaseConnection: DBConnection
 
-    class Default : BuildKonfigModule {
+    object Default : BuildKonfigModule {
         override val connection: Connection = ConnectionFactory.create()
         override val ratingDatabaseConnection: DBConnection = RatingDBConnectionFactory.create()
     }

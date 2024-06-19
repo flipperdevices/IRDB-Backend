@@ -22,6 +22,7 @@ dependencies {
         implementation("io.ktor:ktor-server-resources:$ktor")
         implementation("io.ktor:ktor-server-content-negotiation:$ktor")
     }
+    implementation(libs.smiley4.ktor.swagger)
     // Serialization
     implementation(libs.kotlin.serialization.json)
     // Log

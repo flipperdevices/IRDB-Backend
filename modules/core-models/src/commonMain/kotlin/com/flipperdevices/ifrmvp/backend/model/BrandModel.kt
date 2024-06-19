@@ -3,8 +3,7 @@ package com.flipperdevices.ifrmvp.backend.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-class DeviceCategory(
+class BrandModel(
     val id: Long,
     val name: String,
-    val type: DeviceCategoryType
 )

@@ -15,6 +15,8 @@ buildConfig {
 
     buildConfigField(String::class.java, "VERSION_NAME", requireProjectInfo.versionString)
     buildConfigField(String::class.java, "GROUP", requireProjectInfo.group)
+    buildConfigField(String::class.java, "PROJECT_NAME", requireProjectInfo.name)
+    buildConfigField(String::class.java, "PROJECT_DESC", requireProjectInfo.description)
 }
 
 dependencies {

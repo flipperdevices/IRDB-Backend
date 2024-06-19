@@ -1,41 +1,36 @@
 package com.flipperdevices.ifrmvp.backend.route.categories.presentation
 
 import com.flipperdevices.ifrmvp.backend.core.route.RouteRegistry
-import com.flipperdevices.ifrmvp.backend.model.CategoriesRequestBody
+import com.flipperdevices.ifrmvp.backend.model.CategoriesResponse
 import com.flipperdevices.ifrmvp.backend.model.DeviceCategory
 import com.flipperdevices.ifrmvp.backend.model.DeviceCategoryType
-import com.flipperdevices.ifrmvp.backend.model.PagedModel
-import io.ktor.server.application.call
-import io.ktor.server.request.receive
+import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
-import io.ktor.server.routing.get
-import io.ktor.server.routing.post
 
 internal class CategoriesRouteRegistry : RouteRegistry {
 
     private fun Routing.statusRoute() {
-        post("categories") {
-            @Suppress("UnusedPrivateProperty")
-            val categoriesRequestBody = call.receive<CategoriesRequestBody>()
-
-            val responseModel = PagedModel(
-                page = 0,
-                maxPages = 1,
-                items = listOf(
-                    DeviceCategory("TV", DeviceCategoryType.TV),
-                    DeviceCategory("Air Conditioner", DeviceCategoryType.AIR_CONDITIONER),
-                    DeviceCategory("Set-top Box", DeviceCategoryType.SET_TOP_BOX),
-                    DeviceCategory("Camera", DeviceCategoryType.CAMERA),
-                    DeviceCategory("Fan", DeviceCategoryType.FAN),
-                    DeviceCategory("A/V Receiver", DeviceCategoryType.A_V_RECEIVER),
-                    DeviceCategory("DVD Player", DeviceCategoryType.DVD_PLAYER),
-                    DeviceCategory("Smart Box", DeviceCategoryType.SMART_BOX),
-                    DeviceCategory("Projector", DeviceCategoryType.PROJECTOR),
+        post(
+            path = "categories",
+            builder = { with(CategoriesSwagger) { createSwaggerDefinition() } },
+            body = {
+                val categoriesResponse = CategoriesResponse(
+                    categories = listOf(
+                        DeviceCategory(0, "TV", DeviceCategoryType.TV),
+                        DeviceCategory(1, "Air Conditioner", DeviceCategoryType.AIR_CONDITIONER),
+                        DeviceCategory(2, "Set-top Box", DeviceCategoryType.SET_TOP_BOX),
+                        DeviceCategory(3, "Camera", DeviceCategoryType.CAMERA),
+                        DeviceCategory(4, "Fan", DeviceCategoryType.FAN),
+                        DeviceCategory(5, "A/V Receiver", DeviceCategoryType.A_V_RECEIVER),
+                        DeviceCategory(6, "DVD Player", DeviceCategoryType.DVD_PLAYER),
+                        DeviceCategory(7, "Smart Box", DeviceCategoryType.SMART_BOX),
+                        DeviceCategory(8, "Projector", DeviceCategoryType.PROJECTOR),
+                    )
                 )
-            )
-            context.respond(responseModel)
-        }
+                context.respond(categoriesResponse)
+            }
+        )
     }
 
     override fun register(routing: Routing) {

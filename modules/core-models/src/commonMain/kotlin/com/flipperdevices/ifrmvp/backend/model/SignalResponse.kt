@@ -3,8 +3,7 @@ package com.flipperdevices.ifrmvp.backend.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-class DeviceCategory(
-    val id: Long,
-    val name: String,
-    val type: DeviceCategoryType
+data class SignalResponse(
+    val signal: IfrSignal,
+    val hasNext: Boolean
 )

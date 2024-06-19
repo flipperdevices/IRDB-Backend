@@ -2,7 +2,6 @@ package com.flipperdevices.ifrmvp.backend.plugins
 
 import com.flipperdevices.ifrmvp.backend.buildkonfig.BuildKonfig
 import com.flipperdevices.ifrmvp.backend.model.exception.ErrorResponseModel
-import com.flipperdevices.ifrmvp.backend.model.exception.UnhandledException
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -17,7 +16,7 @@ fun Application.configureStatusPages() {
             logger.error("Unhandled exception: ${call.response}; ${call.request}")
             call.respond(
                 status = HttpStatusCode.InternalServerError,
-                message = ErrorResponseModel(serverException = UnhandledException),
+                message = ErrorResponseModel.Unhandled,
             )
         }
     }
