@@ -1,7 +1,7 @@
 package com.flipperdevices.ifrmvp.backend.route.categories.presentation
 
 import com.flipperdevices.ifrmvp.backend.model.CategoriesResponse
-import com.flipperdevices.ifrmvp.backend.model.exception.ErrorResponseModel
+import com.flipperdevices.ifrmvp.backend.model.ErrorResponseModel
 import io.github.smiley4.ktorswaggerui.dsl.routes.OpenApiRoute
 import io.ktor.http.HttpStatusCode
 
@@ -17,7 +17,8 @@ internal object CategoriesSwagger {
             }
 
             default {
-                body<ErrorResponseModel.Unhandled> {
+                description = "Could not process request"
+                body<ErrorResponseModel> {
                     description = "Unhandled exception"
                 }
             }

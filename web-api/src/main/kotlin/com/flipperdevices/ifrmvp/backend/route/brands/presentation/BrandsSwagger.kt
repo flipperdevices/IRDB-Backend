@@ -1,7 +1,7 @@
 package com.flipperdevices.ifrmvp.backend.route.brands.presentation
 
 import com.flipperdevices.ifrmvp.backend.model.BrandsResponse
-import com.flipperdevices.ifrmvp.backend.model.exception.ErrorResponseModel
+import com.flipperdevices.ifrmvp.backend.model.ErrorResponseModel
 import io.github.smiley4.ktorswaggerui.dsl.routes.OpenApiRoute
 import io.ktor.http.HttpStatusCode
 
@@ -22,13 +22,9 @@ internal object BrandsSwagger {
                 }
             }
 
-            HttpStatusCode.NotFound to {
-                description = "Category not found"
-                body<ErrorResponseModel.CategoryNotFound>()
-            }
-
             default {
-                body<ErrorResponseModel.Unhandled> {
+                description = "Could not process request"
+                body<ErrorResponseModel> {
                     description = "Unhandled exception"
                 }
             }

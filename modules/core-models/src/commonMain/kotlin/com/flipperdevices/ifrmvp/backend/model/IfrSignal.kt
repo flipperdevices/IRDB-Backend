@@ -1,8 +1,10 @@
 package com.flipperdevices.ifrmvp.backend.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName("IfrSignal")
 data class IfrSignal(
     val name: String,
     val type: Type,
@@ -14,6 +16,7 @@ data class IfrSignal(
     val data: ByteArray
 ) {
     @Serializable
+    @SerialName("Type")
     enum class Type {
         RAW, PARSED
     }

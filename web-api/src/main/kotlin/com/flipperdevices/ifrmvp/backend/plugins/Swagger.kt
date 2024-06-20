@@ -27,7 +27,7 @@ fun Application.configureSwagger() {
     install(SwaggerUI) {
         info {
             title = BuildKonfig.PROJECT_NAME
-            version = "openapi: 3.0.0" // BuildKonfig.VERSION_NAME
+            version = BuildKonfig.VERSION_NAME
             summary = "API for Flipper IFR"
             description = BuildKonfig.PROJECT_DESC
             termsOfService = "https://somesite.com"
@@ -38,10 +38,12 @@ fun Application.configureSwagger() {
             }
         }
         server {
-            url = "${BuildKonfigModule.Default.connection.host}/${BuildKonfigModule.Default.connection.port}"
+            url =
+                "${BuildKonfigModule.Default.connection.host}/${BuildKonfigModule.Default.connection.port}"
             description = "Web-Api server"
             variable("version") {
                 default = BuildKonfig.VERSION_NAME
+                enum = listOf(BuildKonfig.VERSION_NAME)
             }
         }
     }

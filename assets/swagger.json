@@ -9,7 +9,7 @@
       "url" : "https://someurl.corp",
       "email" : "somemail@mail.mail"
     },
-    "version" : "openapi: 3.0.0"
+    "version" : "0.1.0"
   },
   "externalDocs" : {
     "url" : "/"
@@ -20,7 +20,7 @@
     "variables" : {
       "version" : {
         "default" : "0.1.0",
-        "enum" : [ ]
+        "enum" : [ "0.1.0" ]
       }
     }
   } ],
@@ -44,6 +44,7 @@
             }
           },
           "default" : {
+            "description" : "Could not process request",
             "headers" : { },
             "content" : {
               "application/json" : {
@@ -99,6 +100,7 @@
             }
           },
           "default" : {
+            "description" : "Could not process request",
             "headers" : { },
             "content" : {
               "application/json" : {
@@ -152,6 +154,7 @@
             }
           },
           "default" : {
+            "description" : "Could not process request",
             "headers" : { },
             "content" : {
               "application/json" : {
