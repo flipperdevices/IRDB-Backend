@@ -1,6 +1,8 @@
 package com.flipperdevices.ifrmvp.backend.route.signal.presentation
 
 import com.flipperdevices.ifrmvp.backend.core.route.RouteRegistry
+import com.flipperdevices.ifrmvp.backend.model.SignalButtonIconType
+import com.flipperdevices.ifrmvp.backend.model.SignalButtonInfo
 import com.flipperdevices.ifrmvp.backend.model.SignalModel
 import com.flipperdevices.ifrmvp.backend.model.SignalRequestModel
 import com.flipperdevices.ifrmvp.backend.model.SignalResponseModel
@@ -28,10 +30,10 @@ internal class SignalRouteRegistry : RouteRegistry {
                         type = "TYPE"
                     ).takeIf { Random.nextBoolean() },
                     hasNext = Random.nextBoolean(),
-                    buttonInfo = SignalResponseModel.ButtonInfo(
+                    buttonInfo = SignalButtonInfo(
                         backgroundColor = 0xFFF63F3F,
                         tintColor = 0xFFFFFFFF,
-                        iconType = SignalResponseModel.ButtonInfo.IconType.POWER
+                        iconType = SignalButtonIconType.POWER
                     )
                 )
                 context.respond(responseModel)

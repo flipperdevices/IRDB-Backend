@@ -11,9 +11,9 @@ data class SignalModel(
     val name: String,
     val type: String,
     val protocol: String? = null,
-    val address: ByteArray? = null,
-    val command: ByteArray? = null,
+    val address: List<Byte>? = null,
+    val command: List<Byte>? = null,
     val frequency: Long? = null,
     val dutyCycle: Float? = null,
-    val data: ByteArray? = null
+    val data: List<Byte>? = null
 )
