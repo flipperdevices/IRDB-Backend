@@ -1,6 +1,7 @@
 [versions]
 # Kotlin
 kotlin-version = "2.0.0" # https://github.com/JetBrains/kotlin
+kotlin-coroutines = "1.8.1"
 kotlin-serialization-json = "1.7.0" # https://github.com/Kotlin/kotlinx.serialization
 android-gradle = "8.4.1" # https://developer.android.com/studio/releases/gradle-plugin
 
@@ -37,6 +38,8 @@ sql-driver-mysql = { module = "mysql:mysql-connector-java", version.strictly = "
 ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor-core" }
 
 logback-classic = { module = "ch.qos.logback:logback-classic", version.strictly = "1.4.11" }
+
+kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
 
 # Swagger
 smiley4-ktor-swagger = { module = "io.github.smiley4:ktor-swagger-ui", version.ref = "smiley4-ktor-swagger" }

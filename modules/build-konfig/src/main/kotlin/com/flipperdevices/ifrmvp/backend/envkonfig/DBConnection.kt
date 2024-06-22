@@ -5,6 +5,8 @@ sealed class DBConnection(val driver: String) {
         val url = "jdbc:sqlite:$name.db"
     }
 
+    class H2(val name: String) : DBConnection("org.h2.Driver")
+
     class MySql(
         val url: String,
         val user: String,

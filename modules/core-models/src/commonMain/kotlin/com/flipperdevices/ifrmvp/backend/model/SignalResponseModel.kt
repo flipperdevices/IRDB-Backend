@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 class SignalResponseModel(
     val signalModel: SignalModel? = null,
     val hasNext: Boolean,
-    val buttonInfo: SignalButtonInfo
+    val buttonInfo: SignalButtonInfo? = null
 )

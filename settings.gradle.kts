@@ -24,5 +24,6 @@ include(":modules:core-models")
 include(":modules:core")
 include(":modules:api-status")
 include(":modules:build-konfig")
+include(":modules:parser")
 // Master
 include("web-api")

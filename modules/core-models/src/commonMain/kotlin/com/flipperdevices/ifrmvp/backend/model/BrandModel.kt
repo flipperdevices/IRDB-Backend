@@ -8,4 +8,5 @@ import kotlinx.serialization.Serializable
 class BrandModel(
     val id: Long,
     val name: String,
+    val categoryId: Long,
 )

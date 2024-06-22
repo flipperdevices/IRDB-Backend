@@ -18,6 +18,6 @@ internal class DBConnectionFactory(
             )
         }.onFailure {
             logger.warning("MySql connection not configured for $prefix: ${it.message}")
-        }.getOrNull() ?: DBConnection.SQLite(prefix)
+        }.getOrNull() ?: DBConnection.H2(prefix)
     }
 }

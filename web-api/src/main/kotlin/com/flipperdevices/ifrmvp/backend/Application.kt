@@ -24,4 +24,5 @@ internal fun Application.module(rootModule: RootModule, logger: Logger) {
         ).forEach { routeRegistry -> routeRegistry.register(this) }
     }
     logger.info("Started!")
+//    rootModule.parserModule.parserController.start()
 }
