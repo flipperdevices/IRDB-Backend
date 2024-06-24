@@ -110,7 +110,5 @@ class ParserController(
         }.awaitAll()
     }
 
-    fun start() {
-        launch { fillCategories() }
-    }
+    fun start() = launch { fillCategories() }
 }

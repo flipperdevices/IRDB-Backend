@@ -5,6 +5,6 @@ import ru.astrainteractive.klibs.kdi.Factory
 
 internal object SignalDBConnectionFactory : Factory<DBConnection> {
     override fun create(): DBConnection {
-        return DBConnectionFactory(prefix = "rating").create()
+        return DBConnectionFactory(prefix = "signal_database").create()
     }
 }

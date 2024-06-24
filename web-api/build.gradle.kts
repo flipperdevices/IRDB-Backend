@@ -35,7 +35,6 @@ dependencies {
     implementation(projects.modules.coreModels)
     implementation(projects.modules.core)
     implementation(projects.modules.apiStatus)
-    implementation(projects.modules.parser)
 }
 
 application {

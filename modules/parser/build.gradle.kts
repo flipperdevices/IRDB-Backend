@@ -1,5 +1,6 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
+    application
 }
 
 dependencies {
@@ -11,4 +12,8 @@ dependencies {
     implementation(projects.modules.core)
     implementation(projects.modules.coreModels)
     implementation(projects.modules.apiStatus)
+}
+
+application {
+    mainClass.set("com.flipperdevices.ifrmvp.parser.MainKt")
 }

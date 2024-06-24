@@ -6,7 +6,6 @@ import com.flipperdevices.ifrmvp.backend.envkonfig.di.BuildKonfigModule
 import com.flipperdevices.ifrmvp.backend.route.brands.di.BrandsModule
 import com.flipperdevices.ifrmvp.backend.route.categories.di.CategoriesModule
 import com.flipperdevices.ifrmvp.backend.route.signal.di.SignalModule
-import com.flipperdevices.ifrmvp.parser.di.ParserModule
 
 interface RootModule {
 
@@ -14,8 +13,6 @@ interface RootModule {
     val buildKonfigModule: BuildKonfigModule
 
     val signalApiModule: SignalApiModule
-
-    val parserModule: ParserModule
 
     val categoriesModule: CategoriesModule
     val brandsModule: BrandsModule
@@ -33,10 +30,6 @@ interface RootModule {
             SignalApiModule.Default(
                 signalDbConnection = buildKonfigModule.signalDbConnection
             )
-        }
-
-        override val parserModule: ParserModule by lazy {
-            ParserModule.Default(signalApiModule)
         }
 
         override val categoriesModule: CategoriesModule by lazy {
