@@ -17,7 +17,6 @@ internal class CategoriesRepositoryImpl(private val database: Database) : Catego
                     val categoryId = resultRow[CategoryTable.id].value
                     DeviceCategory(
                         id = categoryId,
-                        displayName = resultRow[CategoryTable.displayName],
                         type = resultRow[CategoryTable.deviceType],
                         meta = CategoryMetaTable.selectAll()
                             .where { CategoryMetaTable.id eq categoryId }
@@ -32,7 +31,7 @@ internal class CategoriesRepositoryImpl(private val database: Database) : Catego
                                 )
                             }.first()
                     )
-                }.sortedBy { deviceCategory -> deviceCategory.displayName }
+                }.sortedBy { deviceCategory -> deviceCategory.meta.manifest.displayName }
         }
     }
 }

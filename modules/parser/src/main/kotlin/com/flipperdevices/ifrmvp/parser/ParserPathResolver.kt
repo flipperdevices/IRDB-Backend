@@ -28,7 +28,6 @@ object ParserPathResolver {
         get() = categoriesFolder.listFiles()
             .orEmpty()
             .filter { it.isDirectory }
-            .filter { !it.startsWith(".") }
 
     /**
      * Get path to specific category
@@ -46,6 +45,7 @@ object ParserPathResolver {
         return categoryPath(category).listFiles()
             .orEmpty()
             .filter { it.isDirectory }
+            .filter { !it.name.startsWith(".") }
     }
 
     /**

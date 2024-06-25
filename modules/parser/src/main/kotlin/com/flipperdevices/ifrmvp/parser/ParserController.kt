@@ -108,7 +108,7 @@ class ParserController(
             async {
                 val categoryName = categoryFile.name
                 val categoryId = signalTableApi.addCategory(
-                    displayName = categoryName,
+                    categoryFolderName = categoryName,
                     deviceType = DeviceCategoryType.TV
                 )
                 fillCategoryMeta(
