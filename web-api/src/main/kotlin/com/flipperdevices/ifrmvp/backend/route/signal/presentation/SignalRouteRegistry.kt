@@ -30,7 +30,11 @@ internal class SignalRouteRegistry(private val database: Database) : RouteRegist
                         .andWhere { SignalTable.categoryRef eq signalRequestModel.categoryId }
                         .andWhere { SignalTable.id.notInList(signalRequestModel.failedResults.map { it.signalId }) }
                         .andWhere { SignalTable.id.notInList(signalRequestModel.successResults.map { it.signalId }) }
-                        .andWhere { SignalTable.ifrFileRef.notInList(signalRequestModel.failedResults.map { it.ifrFileId }) }
+                        .andWhere {
+                            SignalTable.ifrFileRef.notInList(
+                                signalRequestModel.failedResults.map { it.ifrFileId }
+                            )
+                        }
                 }
 
                 val distinctIrFilesAmount = transaction(database) {

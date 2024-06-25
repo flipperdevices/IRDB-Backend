@@ -3,7 +3,7 @@ plugins {
     `java-library`
     alias(libs.plugins.gradle.shadow) apply false
     alias(libs.plugins.kotlin.serialization) apply false
-    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.multiplatform) apply false
     alias(libs.plugins.gradle.buildconfig) apply false
     alias(libs.plugins.gradle.android.library) apply false
 

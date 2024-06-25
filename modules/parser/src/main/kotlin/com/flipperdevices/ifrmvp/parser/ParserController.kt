@@ -3,7 +3,6 @@ package com.flipperdevices.ifrmvp.parser
 import com.flipperdevices.bridge.dao.api.model.FlipperFileFormat
 import com.flipperdevices.ifrmvp.backend.core.IoCoroutineScope
 import com.flipperdevices.ifrmvp.backend.db.signal.api.SignalTableApi
-import com.flipperdevices.ifrmvp.backend.model.DeviceCategoryType
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
 import kotlinx.coroutines.CoroutineScope

@@ -20,7 +20,7 @@ fun main() {
 /**
  * Fix directory structure
  */
-fun _main() {
+fun mainUnused() {
     val irDbFolder = File("/Users/romanmakeev/Desktop/GitHub/TestUiDesktop/irdb")
     val categories = irDbFolder.resolve("categories")
     categories.listFiles().orEmpty().forEach { categoryFolder ->

@@ -7,7 +7,6 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.IfrFileTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
 import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
-import com.flipperdevices.ifrmvp.backend.model.DeviceCategoryType
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.insert

@@ -1,7 +1,6 @@
 package com.flipperdevices.ifrmvp.backend.db.signal.api
 
 import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
-import com.flipperdevices.ifrmvp.backend.model.DeviceCategoryType
 
 interface SignalTableApi {
     suspend fun addCategory(
@@ -26,6 +25,7 @@ interface SignalTableApi {
         fileName: String
     )
 
+    @Suppress("LongParameterList")
     suspend fun addSignal(
         categoryId: Long,
         brandId: Long,

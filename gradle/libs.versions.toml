@@ -46,6 +46,7 @@ smiley4-ktor-swagger = { module = "io.github.smiley4:ktor-swagger-ui", version.r
 [plugins]
 gradle-android-library = { id = "com.android.library", version.ref = "android-gradle" }
 
+multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin-version" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 gradle-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }

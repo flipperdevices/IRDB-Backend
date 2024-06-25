@@ -12,7 +12,8 @@ dependencies {
     implementation(projects.modules.buildKonfig)
     implementation(projects.modules.apiStatus)
     implementation(projects.modules.core)
-    implementation(projects.modules.coreModels)
+    implementation(projects.modules.sharedBackendModel)
+    implementation(projects.modules.sharedUiModel)
     implementation(projects.modules.apiStatus)
 }
 

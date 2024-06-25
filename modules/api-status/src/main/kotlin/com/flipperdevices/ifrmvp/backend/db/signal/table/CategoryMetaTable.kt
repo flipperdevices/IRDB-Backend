@@ -1,6 +1,5 @@
 package com.flipperdevices.ifrmvp.backend.db.signal.table
 
-import com.flipperdevices.ifrmvp.backend.model.DeviceCategoryType
 import org.jetbrains.exposed.dao.id.LongIdTable
 
 object CategoryMetaTable : LongIdTable("CATEGORY_META") {

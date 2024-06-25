@@ -17,7 +17,6 @@ internal class BrandsRouteRegistry(
             path = "manufacturers",
             builder = { with(BrandsSwagger) { createSwaggerDefinition() } },
             body = {
-                var i = 0L
                 val categoryId = context.request
                     .queryParameters["category_id"]
                     ?.toLongOrNull()
