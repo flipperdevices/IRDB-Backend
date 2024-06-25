@@ -2,6 +2,7 @@ package com.flipperdevices.ifrmvp.backend.db.signal.di.factory
 
 import com.flipperdevices.ifrmvp.backend.core.di.factory.DatabaseFactory
 import com.flipperdevices.ifrmvp.backend.db.signal.table.BrandTable
+import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryMetaTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.IfrFileTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
@@ -25,10 +26,11 @@ internal class SignalDatabaseFactory(
                 addLogger(Slf4jSqlDebugLogger)
                 SchemaUtils.create(
                     BrandTable,
+                    CategoryMetaTable,
                     CategoryTable,
                     IfrFileTable,
                     SignalTable,
-                    UiPresetTable
+                    UiPresetTable,
                 )
             }
         }

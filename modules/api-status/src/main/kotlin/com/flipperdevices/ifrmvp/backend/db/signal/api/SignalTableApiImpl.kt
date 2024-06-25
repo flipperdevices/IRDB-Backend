@@ -1,10 +1,12 @@
 package com.flipperdevices.ifrmvp.backend.db.signal.api
 
 import com.flipperdevices.ifrmvp.backend.db.signal.table.BrandTable
+import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryMetaTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.IfrFileTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
+import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
 import com.flipperdevices.ifrmvp.backend.model.DeviceCategoryType
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.andWhere
@@ -168,6 +170,25 @@ internal class SignalTableApiImpl(
             statement[SignalTable.frequency] = frequency
             statement[SignalTable.dutyCycle] = dutyCycle
             statement[SignalTable.data] = data
+        }
+    }
+
+    override suspend fun addCategoryMeta(
+        categoryId: Long,
+        meta: CategoryMeta
+    ): Unit = transaction(database) {
+        CategoryMetaTable.selectAll()
+            .where { CategoryMetaTable.category eq categoryId }
+            .map { it[CategoryMetaTable.id] }
+            .firstOrNull()
+            ?.value
+            ?.let { _ -> return@transaction Unit }
+        CategoryMetaTable.insert { statement ->
+            statement[CategoryMetaTable.category] = categoryId
+            statement[CategoryMetaTable.displayName] = meta.manifest.displayName
+            statement[CategoryMetaTable.singularDisplayName] = meta.manifest.singularDisplayName
+            statement[CategoryMetaTable.iconPngBase64] = meta.iconPngBase64
+            statement[CategoryMetaTable.iconSvgBase64] = meta.iconSvgBase64
         }
     }
 }

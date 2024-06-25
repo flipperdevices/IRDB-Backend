@@ -1,5 +1,6 @@
 package com.flipperdevices.ifrmvp.backend.db.signal.api
 
+import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
 import com.flipperdevices.ifrmvp.backend.model.DeviceCategoryType
 
 interface SignalTableApi {
@@ -38,5 +39,10 @@ interface SignalTableApi {
         frequency: String?,
         dutyCycle: String?,
         data: String?
+    )
+
+    suspend fun addCategoryMeta(
+        categoryId: Long,
+        meta: CategoryMeta
     )
 }

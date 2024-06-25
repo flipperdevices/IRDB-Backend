@@ -4,10 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("DeviceCategory")
-class DeviceCategory(
-    val id: Long,
+data class CategoryManifest(
+    @SerialName("display_name")
     val displayName: String,
-    val type: DeviceCategoryType,
-    val meta: CategoryMeta
+    @SerialName("singular_display_name")
+    val singularDisplayName: String
 )

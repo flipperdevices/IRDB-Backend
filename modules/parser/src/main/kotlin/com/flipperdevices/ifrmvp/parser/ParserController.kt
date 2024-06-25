@@ -93,6 +93,16 @@ class ParserController(
         }.awaitAll()
     }
 
+    private suspend fun fillCategoryMeta(
+        categoryId: Long,
+        categoryName: String
+    ) {
+        signalTableApi.addCategoryMeta(
+            categoryId = categoryId,
+            meta = ParserPathResolver.categoryMeta(category = categoryName)
+        )
+    }
+
     private suspend fun fillCategories() = coroutineScope {
         ParserPathResolver.categories.map { categoryFile ->
             async {
@@ -100,6 +110,10 @@ class ParserController(
                 val categoryId = signalTableApi.addCategory(
                     displayName = categoryName,
                     deviceType = DeviceCategoryType.TV
+                )
+                fillCategoryMeta(
+                    categoryId = categoryId,
+                    categoryName = categoryName
                 )
                 fillBrands(
                     brands = ParserPathResolver.brands(categoryName),

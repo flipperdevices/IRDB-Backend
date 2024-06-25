@@ -1,10 +1,12 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
     application
+    alias(libs.plugins.kotlin.serialization)
 }
 
 dependencies {
     implementation(libs.kotlin.coroutines)
+    implementation(libs.kotlin.serialization.json)
     implementation(kotlin("test"))
     // Local
     implementation(projects.modules.buildKonfig)
