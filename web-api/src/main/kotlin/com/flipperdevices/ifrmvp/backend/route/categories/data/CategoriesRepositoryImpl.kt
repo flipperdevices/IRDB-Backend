@@ -17,7 +17,6 @@ internal class CategoriesRepositoryImpl(private val database: Database) : Catego
                     val categoryId = resultRow[CategoryTable.id].value
                     DeviceCategory(
                         id = categoryId,
-                        type = resultRow[CategoryTable.deviceType],
                         meta = CategoryMetaTable.selectAll()
                             .where { CategoryMetaTable.id eq categoryId }
                             .map { metaResultRow ->

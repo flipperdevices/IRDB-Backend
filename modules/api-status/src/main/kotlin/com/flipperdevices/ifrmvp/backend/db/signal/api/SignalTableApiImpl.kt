@@ -42,7 +42,6 @@ internal class SignalTableApiImpl(
 
     override suspend fun addCategory(
         categoryFolderName: String,
-        deviceType: DeviceCategoryType
     ): Long = transaction(database) {
         CategoryTable.selectAll()
             .where { CategoryTable.categoryFolderName eq categoryFolderName }
@@ -52,7 +51,6 @@ internal class SignalTableApiImpl(
             ?.let { existingCategoryId -> return@transaction existingCategoryId }
         CategoryTable.insertAndGetId { statement ->
             statement[CategoryTable.categoryFolderName] = categoryFolderName
-            statement[CategoryTable.deviceType] = deviceType
         }.value
     }
 
@@ -177,6 +175,7 @@ internal class SignalTableApiImpl(
         categoryId: Long,
         meta: CategoryMeta
     ): Unit = transaction(database) {
+        checkCategoryExists(categoryId)
         CategoryMetaTable.selectAll()
             .where { CategoryMetaTable.category eq categoryId }
             .map { it[CategoryMetaTable.id] }

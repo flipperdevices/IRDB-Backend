@@ -6,7 +6,6 @@ import com.flipperdevices.ifrmvp.backend.model.DeviceCategoryType
 interface SignalTableApi {
     suspend fun addCategory(
         categoryFolderName: String,
-        deviceType: DeviceCategoryType
     ): Long
 
     suspend fun addBrand(

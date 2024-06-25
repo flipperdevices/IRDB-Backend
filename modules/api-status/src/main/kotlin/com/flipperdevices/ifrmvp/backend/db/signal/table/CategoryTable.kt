@@ -5,5 +5,4 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 
 object CategoryTable : LongIdTable("CATEGORY") {
     val categoryFolderName = text("folder_name")
-    val deviceType = enumeration<DeviceCategoryType>("device_type")
 }

@@ -7,6 +7,5 @@ import kotlinx.serialization.Serializable
 @SerialName("DeviceCategory")
 class DeviceCategory(
     val id: Long,
-    val type: DeviceCategoryType,
     val meta: CategoryMeta
 )
