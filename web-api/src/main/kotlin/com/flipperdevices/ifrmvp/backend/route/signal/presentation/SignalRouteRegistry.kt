@@ -12,6 +12,7 @@ import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -24,18 +25,25 @@ internal class SignalRouteRegistry(private val database: Database) : RouteRegist
             builder = { with(SignalSwagger) { createSwaggerDefinition() } },
             body = {
                 val signalRequestModel = context.receive<SignalRequestModel>()
-
-                val signalModels = transaction(database) {
-                    SignalTable.selectAll()
-                        .where { SignalTable.brandRef eq signalRequestModel.brandId }
+                fun Query.withWhereExpression(): Query {
+                    return andWhere { SignalTable.brandRef eq signalRequestModel.brandId }
                         .andWhere { SignalTable.categoryRef eq signalRequestModel.categoryId }
                         .andWhere { SignalTable.id.notInList(signalRequestModel.failedResults.map { it.signalId }) }
                         .andWhere { SignalTable.id.notInList(signalRequestModel.successResults.map { it.signalId }) }
-                        .andWhere {
-                            SignalTable.ifrFileRef.notInList(
-                                signalRequestModel.failedResults.map { it.ifrFileId }
-                            )
-                        }
+                        .andWhere { SignalTable.ifrFileRef.notInList(signalRequestModel.failedResults.map { it.ifrFileId }) }
+                }
+
+                val distinctIrFilesAmount = transaction(database) {
+                    SignalTable.select(SignalTable.ifrFileRef)
+                        .withWhereExpression()
+                        .distinctBy { it[SignalTable.ifrFileRef] }
+                        .count()
+                }
+
+                val signalModels = transaction(database) {
+                    SignalTable.selectAll()
+                        .withWhereExpression()
+                        .limit(1)
                         .map {
                             SignalModel(
                                 id = it[SignalTable.id].value,
@@ -53,7 +61,6 @@ internal class SignalRouteRegistry(private val database: Database) : RouteRegist
                             )
                         }
                 }
-                val distinctIrFilesAmount = signalModels.distinctBy(SignalModel::irFileId).size
                 println("signalModelsCount: ${signalModels.size}; distinctIrFilesAmount: $distinctIrFilesAmount")
 
                 val responseModel = SignalResponseModel(
