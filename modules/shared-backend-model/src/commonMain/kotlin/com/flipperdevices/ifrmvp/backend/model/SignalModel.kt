@@ -15,5 +15,6 @@ data class SignalModel(
     val command: String? = null,
     val frequency: String? = null,
     val dutyCycle: String? = null,
-    val data: String? = null
+    val data: String? = null,
+    val hash: String
 )

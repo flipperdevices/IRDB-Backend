@@ -13,6 +13,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.security.MessageDigest
 
 internal class SignalTableApiImpl(
     private val database: Database
@@ -120,6 +121,7 @@ internal class SignalTableApiImpl(
         }
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     override suspend fun addSignal(
         categoryId: Long,
         brandId: Long,
@@ -136,6 +138,20 @@ internal class SignalTableApiImpl(
         checkCategoryExists(categoryId)
         checkBrandExists(brandId)
         checkIrFileExists(irFileId)
+
+        val dataByteArray = listOfNotNull(
+            type.toByteArray(),
+            protocol?.toByteArray(),
+            address?.toByteArray(),
+            command?.toByteArray(),
+            frequency?.toByteArray(),
+            dutyCycle?.toByteArray(),
+            data?.toByteArray()
+        ).flatMap(ByteArray::asList).toByteArray()
+
+        val md5 = MessageDigest.getInstance("MD5")
+            .digest(dataByteArray)
+            .toHexString()
 
         SignalTable.selectAll()
             .where { SignalTable.name eq name }
@@ -154,7 +170,6 @@ internal class SignalTableApiImpl(
             ?.value
             ?.let { existingIrfFileId -> return@transaction Unit }
 
-        // todo check hash
         SignalTable.insert { statement ->
             statement[SignalTable.categoryRef] = categoryId
             statement[SignalTable.brandRef] = brandId
@@ -167,6 +182,7 @@ internal class SignalTableApiImpl(
             statement[SignalTable.frequency] = frequency
             statement[SignalTable.dutyCycle] = dutyCycle
             statement[SignalTable.data] = data
+            statement[SignalTable.hash] = md5
         }
     }
 

@@ -14,4 +14,5 @@ object SignalTable : LongIdTable("SIGNAL_TABLE") {
     val frequency = text("frequency").nullable()
     val dutyCycle = text("duty_cycle").nullable()
     val data = text("data").nullable()
+    val hash = text("hash")
 }

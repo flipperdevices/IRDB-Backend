@@ -61,7 +61,8 @@ internal class SignalRouteRegistry(private val database: Database) : RouteRegist
                                 command = it[SignalTable.command],
                                 frequency = it[SignalTable.frequency],
                                 dutyCycle = it[SignalTable.dutyCycle],
-                                data = it[SignalTable.data]
+                                data = it[SignalTable.data],
+                                hash = it[SignalTable.hash]
                             )
                         }
                 }
