@@ -1,6 +1,7 @@
 package com.flipperdevices.ifrmvp.parser
 
 import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
+import com.flipperdevices.ifrmvp.parser.model.OrderModel
 import kotlinx.serialization.json.Json
 import java.io.File
 import kotlin.io.encoding.Base64
@@ -92,5 +93,22 @@ object ParserPathResolver {
             .listFiles()
             .orEmpty()
             .flatMap { irFolder -> irFolder.listFiles().orEmpty().filter { it.extension == "ir" } }
+    }
+
+    /**
+     * Get orders of selected controller
+     * @param category category name of brand
+     * @param brand the name of brand
+     * @param controller the name of controller
+     */
+    fun controllerOrders(
+        category: String,
+        brand: String,
+        controller: String
+    ): List<OrderModel> {
+        val controllerFolder = brandPath(category, brand).resolve(controller)
+        val orders = controllerFolder.resolve("orders.json")
+        if (!orders.exists()) return emptyList()
+        return Json.decodeFromString<List<OrderModel>>(orders.readText())
     }
 }

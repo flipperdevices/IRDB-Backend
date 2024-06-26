@@ -26,4 +26,11 @@ sealed interface IfrKeyIdentifier {
         @SerialName("sha_256_string")
         val sha256String: String
     ) : IfrKeyIdentifier
+
+    @SerialName("NAME")
+    @Serializable
+    class Name(
+        @SerialName("key_name")
+        val name: String,
+    ) : IfrKeyIdentifier
 }

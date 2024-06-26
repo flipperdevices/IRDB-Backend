@@ -1,6 +1,8 @@
-package com.flipperdevices.ifrmvp.backend.db.signal.api
+package com.flipperdevices.ifrmvp.parser.api
 
 import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
+import com.flipperdevices.ifrmvp.parser.model.OrderModel
+import com.flipperdevices.ifrmvp.parser.model.RawIfrRemote
 
 interface SignalTableApi {
     suspend fun addCategory(
@@ -25,23 +27,23 @@ interface SignalTableApi {
         fileName: String
     )
 
-    @Suppress("LongParameterList")
     suspend fun addSignal(
         categoryId: Long,
         brandId: Long,
         irFileId: Long,
-        name: String,
-        type: String,
-        protocol: String?,
-        address: String?,
-        command: String?,
-        frequency: String?,
-        dutyCycle: String?,
-        data: String?
-    )
+        remote: RawIfrRemote
+    ): Long
 
     suspend fun addCategoryMeta(
         categoryId: Long,
         meta: CategoryMeta
+    )
+
+    suspend fun addOrderModel(
+        orderModel: OrderModel,
+        ifrSignalId: Long,
+        categoryId: Long,
+        brandId: Long,
+        ifrFileId: Long
     )
 }

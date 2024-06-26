@@ -5,6 +5,9 @@ plugins {
 }
 
 dependencies {
+    // Exposed
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.dao)
     implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.serialization.json)
     implementation(kotlin("test"))

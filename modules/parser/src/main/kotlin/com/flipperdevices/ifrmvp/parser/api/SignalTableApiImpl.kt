@@ -1,19 +1,23 @@
-package com.flipperdevices.ifrmvp.backend.db.signal.api
+package com.flipperdevices.ifrmvp.parser.api
 
 import com.flipperdevices.ifrmvp.backend.db.signal.table.BrandTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryMetaTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.IfrFileTable
+import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalOrderTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
 import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
+import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData
+import com.flipperdevices.ifrmvp.model.buttondata.TextButtonData
+import com.flipperdevices.ifrmvp.parser.model.OrderModel
+import com.flipperdevices.ifrmvp.parser.model.RawIfrRemote
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.security.MessageDigest
 
 internal class SignalTableApiImpl(
     private val database: Database
@@ -121,69 +125,47 @@ internal class SignalTableApiImpl(
         }
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     override suspend fun addSignal(
         categoryId: Long,
         brandId: Long,
         irFileId: Long,
-        name: String,
-        type: String,
-        protocol: String?,
-        address: String?,
-        command: String?,
-        frequency: String?,
-        dutyCycle: String?,
-        data: String?
-    ): Unit = transaction(database) {
+        remote: RawIfrRemote
+    ): Long = transaction(database) {
         checkCategoryExists(categoryId)
         checkBrandExists(brandId)
         checkIrFileExists(irFileId)
 
-        val dataByteArray = listOfNotNull(
-            type.toByteArray(),
-            protocol?.toByteArray(),
-            address?.toByteArray(),
-            command?.toByteArray(),
-            frequency?.toByteArray(),
-            dutyCycle?.toByteArray(),
-            data?.toByteArray()
-        ).flatMap(ByteArray::asList).toByteArray()
-
-        val md5 = MessageDigest.getInstance("MD5")
-            .digest(dataByteArray)
-            .toHexString()
-
         SignalTable.selectAll()
-            .where { SignalTable.name eq name }
-            .andWhere { SignalTable.type eq type }
-            .andWhere { SignalTable.protocol eq protocol }
-            .andWhere { SignalTable.address eq address }
-            .andWhere { SignalTable.command eq command }
-            .andWhere { SignalTable.frequency eq frequency }
-            .andWhere { SignalTable.dutyCycle eq dutyCycle }
-            .andWhere { SignalTable.data eq data }
+            .where { SignalTable.name eq remote.name }
+            .andWhere { SignalTable.type eq remote.type }
+            .andWhere { SignalTable.protocol eq remote.protocol }
+            .andWhere { SignalTable.address eq remote.address }
+            .andWhere { SignalTable.command eq remote.command }
+            .andWhere { SignalTable.frequency eq remote.frequency }
+            .andWhere { SignalTable.dutyCycle eq remote.dutyCycle }
+            .andWhere { SignalTable.data eq remote.data }
             .andWhere { SignalTable.categoryRef eq categoryId }
             .andWhere { SignalTable.ifrFileRef eq irFileId }
             .andWhere { SignalTable.brandRef eq brandId }
             .map { it[SignalTable.id] }
             .firstOrNull()
             ?.value
-            ?.let { existingIrfFileId -> return@transaction Unit }
+            ?.let { existingIrfSignalId -> return@transaction existingIrfSignalId }
 
-        SignalTable.insert { statement ->
+        SignalTable.insertAndGetId { statement ->
             statement[SignalTable.categoryRef] = categoryId
             statement[SignalTable.brandRef] = brandId
             statement[SignalTable.ifrFileRef] = irFileId
-            statement[SignalTable.name] = name
-            statement[SignalTable.type] = type
-            statement[SignalTable.protocol] = protocol
-            statement[SignalTable.address] = address
-            statement[SignalTable.command] = command
-            statement[SignalTable.frequency] = frequency
-            statement[SignalTable.dutyCycle] = dutyCycle
-            statement[SignalTable.data] = data
-            statement[SignalTable.hash] = md5
-        }
+            statement[SignalTable.name] = remote.name
+            statement[SignalTable.type] = remote.type
+            statement[SignalTable.protocol] = remote.protocol
+            statement[SignalTable.address] = remote.address
+            statement[SignalTable.command] = remote.command
+            statement[SignalTable.frequency] = remote.frequency
+            statement[SignalTable.dutyCycle] = remote.dutyCycle
+            statement[SignalTable.data] = remote.data
+            statement[SignalTable.hash] = remote.md5
+        }.value
     }
 
     override suspend fun addCategoryMeta(
@@ -203,6 +185,30 @@ internal class SignalTableApiImpl(
             statement[CategoryMetaTable.singularDisplayName] = meta.manifest.singularDisplayName
             statement[CategoryMetaTable.iconPngBase64] = meta.iconPngBase64
             statement[CategoryMetaTable.iconSvgBase64] = meta.iconSvgBase64
+        }
+    }
+
+    override suspend fun addOrderModel(
+        orderModel: OrderModel,
+        ifrSignalId: Long,
+        categoryId: Long,
+        brandId: Long,
+        ifrFileId: Long
+    ): Unit = transaction(database) {
+        SignalOrderTable.insert { statement ->
+            statement[SignalOrderTable.categoryRef] = categoryId
+            statement[SignalOrderTable.brandRef] = brandId
+            statement[SignalOrderTable.ifrFileRef] = ifrFileId
+            statement[SignalOrderTable.ifrSignalRef] = ifrSignalId
+            statement[SignalOrderTable.dataType] = orderModel.data.type.name
+            statement[SignalOrderTable.dataIconId] = when (orderModel.data) {
+                is IconButtonData -> orderModel.data.iconId.name
+                else -> null
+            }
+            statement[SignalOrderTable.dataText] = when (orderModel.data) {
+                is TextButtonData -> orderModel.data.text
+                else -> null
+            }
         }
     }
 }

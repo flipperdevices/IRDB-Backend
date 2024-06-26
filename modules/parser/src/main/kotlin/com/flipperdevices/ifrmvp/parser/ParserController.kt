@@ -2,7 +2,11 @@ package com.flipperdevices.ifrmvp.parser
 
 import com.flipperdevices.bridge.dao.api.model.FlipperFileFormat
 import com.flipperdevices.ifrmvp.backend.core.IoCoroutineScope
-import com.flipperdevices.ifrmvp.backend.db.signal.api.SignalTableApi
+import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
+import com.flipperdevices.ifrmvp.model.buttondata.SingleKeyButtonData
+import com.flipperdevices.ifrmvp.parser.api.SignalTableApi
+import com.flipperdevices.ifrmvp.parser.model.OrderModel
+import com.flipperdevices.ifrmvp.parser.model.RawIfrRemote
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
 import kotlinx.coroutines.CoroutineScope
@@ -16,20 +20,58 @@ class ParserController(
     private val signalTableApi: SignalTableApi
 ) : CoroutineScope by IoCoroutineScope() {
 
+    private suspend fun addOrder(
+        orderModels: List<OrderModel>,
+        remote: RawIfrRemote,
+        ifrSignalId: Long,
+        categoryId: Long,
+        brandId: Long,
+        ifrFileId: Long
+    ) {
+        orderModels
+            .filter { orderModel ->
+                val keyIdentifier = when (orderModel.data) {
+                    is SingleKeyButtonData -> orderModel.data.keyIdentifier
+                    else -> error("Type ${orderModel.data::class} is not supported")
+                }
+                when (keyIdentifier) {
+                    is IfrKeyIdentifier.Name -> {
+                        remote.name == keyIdentifier.name
+                    }
+
+                    is IfrKeyIdentifier.Sha256 -> error("Comparison by SHA not supported")
+                }
+            }
+            .forEach { orderModel ->
+                signalTableApi.addOrderModel(
+                    orderModel = orderModel,
+                    ifrSignalId = ifrSignalId,
+                    categoryId = categoryId,
+                    brandId = brandId,
+                    ifrFileId = ifrFileId
+                )
+            }
+    }
+
     private suspend fun fillIrSignal(
         ifrFileId: Long,
         categoryId: Long,
         brandId: Long,
-        remotes: List<InfraredRemote>
+        remotes: List<InfraredRemote>,
+        categoryName: String,
+        brandName: String,
+        ifrFolderName: String
     ) = coroutineScope {
+        val orders = ParserPathResolver.controllerOrders(
+            category = categoryName,
+            brand = brandName,
+            controller = ifrFolderName
+        )
         remotes.map { remote ->
             val parsed = remote as? InfraredRemote.Parsed
             val raw = remote as? InfraredRemote.Raw
             async {
-                signalTableApi.addSignal(
-                    categoryId = categoryId,
-                    brandId = brandId,
-                    irFileId = ifrFileId,
+                val rawRemote = RawIfrRemote(
                     name = remote.name,
                     type = remote.type,
                     protocol = parsed?.protocol,
@@ -39,6 +81,20 @@ class ParserController(
                     dutyCycle = raw?.dutyCycle,
                     data = raw?.data
                 )
+                val ifrSignalId = signalTableApi.addSignal(
+                    categoryId = categoryId,
+                    brandId = brandId,
+                    irFileId = ifrFileId,
+                    remote = rawRemote,
+                )
+                addOrder(
+                    orderModels = orders,
+                    remote = rawRemote,
+                    ifrSignalId = ifrSignalId,
+                    categoryId = categoryId,
+                    brandId = brandId,
+                    ifrFileId = ifrFileId
+                )
             }
         }.awaitAll()
     }
@@ -46,7 +102,9 @@ class ParserController(
     private suspend fun fillIrFiles(
         categoryId: Long,
         brandId: Long,
-        irFiles: List<File>
+        irFiles: List<File>,
+        categoryName: String,
+        brandName: String
     ) = coroutineScope {
         irFiles.map { irFile ->
             async {
@@ -62,7 +120,10 @@ class ParserController(
                     ifrFileId = irFileId,
                     categoryId = categoryId,
                     brandId = brandId,
-                    remotes = signals
+                    remotes = signals,
+                    categoryName = categoryName,
+                    brandName = brandName,
+                    ifrFolderName = irFile.parentFile.name
                 )
             }
         }.awaitAll()
@@ -83,6 +144,8 @@ class ParserController(
                 fillIrFiles(
                     categoryId = categoryId,
                     brandId = brandId,
+                    categoryName = categoryName,
+                    brandName = brandName,
                     irFiles = ParserPathResolver.brandIfrFiles(
                         category = categoryName,
                         brand = brandName

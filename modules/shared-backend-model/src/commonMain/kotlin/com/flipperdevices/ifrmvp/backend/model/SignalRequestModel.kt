@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SignalRequestModel(
-    val successResults: List<SignalResultData>,
-    val failedResults: List<SignalResultData>,
+    val successResults: List<SignalResultData> = emptyList(),
+    val failedResults: List<SignalResultData> = emptyList(),
     val categoryId: Long,
     val brandId: Long
 ) {
