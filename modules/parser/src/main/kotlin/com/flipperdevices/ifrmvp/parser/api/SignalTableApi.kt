@@ -4,7 +4,7 @@ import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
 import com.flipperdevices.ifrmvp.parser.model.OrderModel
 import com.flipperdevices.ifrmvp.parser.model.RawIfrRemote
 
-interface SignalTableApi {
+internal interface SignalTableApi {
     suspend fun addCategory(
         categoryFolderName: String,
     ): Long

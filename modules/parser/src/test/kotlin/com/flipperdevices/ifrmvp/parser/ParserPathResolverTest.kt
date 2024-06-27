@@ -5,7 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class ParserPathResolverTest {
+internal class ParserPathResolverTest {
     @Test
     fun test() {
         assertTrue("IR Database folder doesn't exists") {

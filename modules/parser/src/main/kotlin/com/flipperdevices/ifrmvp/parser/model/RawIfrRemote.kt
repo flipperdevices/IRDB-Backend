@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import java.security.MessageDigest
 
 @Serializable
-data class RawIfrRemote(
+internal data class RawIfrRemote(
     val name: String,
     val type: String,
     val protocol: String?,

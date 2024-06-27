@@ -13,7 +13,7 @@ fun main() {
         )
     )
     runBlocking {
-        parserModule.parserController.start().join()
+        parserModule.fillerController.fillDatabase().join()
     }
 }
 
