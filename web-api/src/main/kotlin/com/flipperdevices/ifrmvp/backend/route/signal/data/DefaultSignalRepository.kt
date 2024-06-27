@@ -2,13 +2,11 @@ package com.flipperdevices.ifrmvp.backend.route.signal.data
 
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.model.IfrFileModel
-import com.flipperdevices.ifrmvp.backend.model.SignalOrderModel
 import com.flipperdevices.ifrmvp.backend.model.SignalRequestModel
+import com.flipperdevices.ifrmvp.backend.model.SignalResponse
 import com.flipperdevices.ifrmvp.backend.model.SignalResponseModel
 import com.flipperdevices.ifrmvp.backend.route.signal.mapping.SignalModelMapper.toSignalModel
 import com.flipperdevices.ifrmvp.model.buttondata.ButtonData
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.notInList
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
 
@@ -33,14 +31,13 @@ internal class DefaultSignalRepository {
                 SignalResponseModel(ifrFileModel = ifrFile)
             } else {
                 SignalResponseModel(
-                    signalOrderModel = SignalOrderModel(
-                        categoryId = ifrFile.categoryId,
-                        brandId = ifrFile.brandId,
-                        ifrFile = ifrFile,
+                    signalResponse = SignalResponse(
                         signalModel = signalModel,
-                        dataType = ButtonData.ButtonType.TEXT.name,
-                        dataIconId = null,
-                        dataText = signalModel.name
+                        data = SignalResponse.Data(
+                            type = ButtonData.ButtonType.TEXT.name,
+                            iconId = null,
+                            text = signalModel.name
+                        )
                     )
                 )
             }
