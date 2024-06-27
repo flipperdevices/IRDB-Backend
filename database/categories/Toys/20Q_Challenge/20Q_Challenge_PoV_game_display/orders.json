@@ -1,0 +1,12 @@
+[
+  {
+    "data": {
+      "key_id": {
+        "type": "NAME",
+        "key_name": "power"
+      },
+      "icon_id": "POWER",
+      "type": "ICON"
+    }
+  }
+]

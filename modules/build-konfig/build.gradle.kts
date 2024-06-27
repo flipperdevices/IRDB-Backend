@@ -14,10 +14,31 @@ buildConfig {
     packageName("${requireProjectInfo.group}.buildkonfig")
     useKotlinOutput { internalVisibility = false }
 
-    buildConfigField(String::class.java, "VERSION_NAME", requireProjectInfo.versionString)
-    buildConfigField(String::class.java, "GROUP", requireProjectInfo.group)
-    buildConfigField(String::class.java, "PROJECT_NAME", requireProjectInfo.name)
-    buildConfigField(String::class.java, "PROJECT_DESC", requireProjectInfo.description)
+    buildConfigField(
+        type = String::class.java,
+        name = "VERSION_NAME",
+        value = requireProjectInfo.versionString
+    )
+    buildConfigField(
+        type = String::class.java,
+        name = "GROUP",
+        value = requireProjectInfo.group
+    )
+    buildConfigField(
+        type = String::class.java,
+        name = "PROJECT_NAME",
+        value = requireProjectInfo.name
+    )
+    buildConfigField(
+        type = String::class.java,
+        name = "PROJECT_DESC",
+        value = requireProjectInfo.description
+    )
+    buildConfigField(
+        type = String::class.java,
+        name = "IR_FOLDER_PATH",
+        value = rootProject.file("database").absolutePath
+    )
 }
 
 afterEvaluate {

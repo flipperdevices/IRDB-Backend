@@ -1,7 +1,7 @@
 package com.flipperdevices.ifrmvp.parser.di
 
 import com.flipperdevices.ifrmvp.backend.db.signal.di.SignalApiModule
-import com.flipperdevices.ifrmvp.parser.ParserController
+import com.flipperdevices.ifrmvp.parser.presentation.ParserController
 import com.flipperdevices.ifrmvp.parser.api.SignalTableApi
 import com.flipperdevices.ifrmvp.parser.api.SignalTableApiImpl
 

@@ -1,4 +1,4 @@
-package com.flipperdevices.ifrmvp.parser
+package com.flipperdevices.ifrmvp.parser.presentation
 
 import com.flipperdevices.bridge.dao.api.model.FlipperFileFormat
 import com.flipperdevices.ifrmvp.backend.core.IoCoroutineScope
@@ -7,6 +7,7 @@ import com.flipperdevices.ifrmvp.model.buttondata.SingleKeyButtonData
 import com.flipperdevices.ifrmvp.parser.api.SignalTableApi
 import com.flipperdevices.ifrmvp.parser.model.OrderModel
 import com.flipperdevices.ifrmvp.parser.model.RawIfrRemote
+import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
 import kotlinx.coroutines.CoroutineScope

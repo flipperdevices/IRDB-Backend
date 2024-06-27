@@ -1,5 +1,6 @@
-package com.flipperdevices.ifrmvp.parser
+package com.flipperdevices.ifrmvp.parser.util
 
+import com.flipperdevices.ifrmvp.backend.buildkonfig.BuildKonfig
 import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
 import com.flipperdevices.ifrmvp.parser.model.OrderModel
 import kotlinx.serialization.json.Json
@@ -13,7 +14,7 @@ object ParserPathResolver {
      * The root folder of file database
      */
     val irDbFolderFolder: File
-        get() = File("/Users/romanmakeev/Desktop/GitHub/TestUiDesktop/irdb")
+        get() = File(BuildKonfig.IR_FOLDER_PATH)
             .also { println(it.absolutePath) }
 
     /**

@@ -1,5 +1,6 @@
 package com.flipperdevices.ifrmvp.parser
 
+import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
