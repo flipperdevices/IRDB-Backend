@@ -3,6 +3,7 @@ package com.flipperdevices.ifrmvp.parser
 import com.flipperdevices.ifrmvp.backend.db.signal.di.SignalApiModule
 import com.flipperdevices.ifrmvp.backend.envkonfig.EnvKonfig
 import com.flipperdevices.ifrmvp.parser.di.ParserModule
+import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import kotlinx.coroutines.runBlocking
 import java.io.File
 
@@ -21,8 +22,7 @@ fun main() {
  * Fix directory structure
  */
 fun mainUnused() {
-    val irDbFolder = File("/Users/romanmakeev/Desktop/GitHub/TestUiDesktop/irdb")
-    val categories = irDbFolder.resolve("categories")
+    val categories = ParserPathResolver.irDbFolderFolder.resolve("categories")
     categories.listFiles().orEmpty().forEach { categoryFolder ->
         categoryFolder
             .listFiles()
