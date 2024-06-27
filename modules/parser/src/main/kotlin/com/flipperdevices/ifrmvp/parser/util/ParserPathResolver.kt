@@ -9,7 +9,6 @@ import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 object ParserPathResolver {
-    // todo
     /**
      * The root folder of file database
      */

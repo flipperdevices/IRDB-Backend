@@ -13,7 +13,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.jsonPrimitive
 
-class ButtonDataDecoder(private val json: Json) {
+internal class ButtonDataDecoder(private val json: Json) {
     fun decodeFromJsonObject(jsonObject: JsonObject): ButtonData {
         val type = jsonObject["type"]?.jsonPrimitive?.content
         val buttonType = ButtonData.ButtonType.entries.find { entry -> entry.name == type }

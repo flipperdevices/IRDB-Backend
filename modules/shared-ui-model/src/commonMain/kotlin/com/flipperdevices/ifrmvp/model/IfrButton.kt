@@ -1,13 +1,14 @@
 package com.flipperdevices.ifrmvp.model
 
 import com.flipperdevices.ifrmvp.model.buttondata.ButtonData
-import com.flipperdevices.ifrmvp.model.serialization.IfrButtonSerializer
+import com.flipperdevices.ifrmvp.model.serialization.ButtonDataSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable(IfrButtonSerializer::class)
+@Serializable
 data class IfrButton(
     @SerialName("data")
+    @Serializable(ButtonDataSerializer::class)
     val data: ButtonData,
     @SerialName("position")
     val position: Position,

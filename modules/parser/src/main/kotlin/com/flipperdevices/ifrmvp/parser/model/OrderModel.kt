@@ -1,12 +1,13 @@
 package com.flipperdevices.ifrmvp.parser.model
 
 import com.flipperdevices.ifrmvp.model.buttondata.ButtonData
-import com.flipperdevices.ifrmvp.parser.serialization.OrderModelSerializer
+import com.flipperdevices.ifrmvp.model.serialization.ButtonDataSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable(OrderModelSerializer::class)
+@Serializable
 data class OrderModel(
     @SerialName("data")
+    @Serializable(with = ButtonDataSerializer::class)
     val data: ButtonData,
 )

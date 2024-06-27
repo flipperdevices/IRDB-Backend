@@ -1,7 +1,9 @@
 package com.flipperdevices.ifrmvp.parser.model
 
+import kotlinx.serialization.Serializable
 import java.security.MessageDigest
 
+@Serializable
 data class RawIfrRemote(
     val name: String,
     val type: String,
