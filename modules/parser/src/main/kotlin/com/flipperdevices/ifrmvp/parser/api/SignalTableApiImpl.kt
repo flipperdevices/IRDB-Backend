@@ -12,6 +12,7 @@ import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.TextButtonData
 import com.flipperdevices.ifrmvp.parser.model.OrderModel
 import com.flipperdevices.ifrmvp.parser.model.RawIfrRemote
+import com.flipperdevices.ifrmvp.parser.util.IfrRemoteExt.md5
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.insert

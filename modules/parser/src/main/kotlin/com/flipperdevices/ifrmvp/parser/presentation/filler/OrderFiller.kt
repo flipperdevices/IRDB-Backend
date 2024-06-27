@@ -7,21 +7,24 @@ import com.flipperdevices.ifrmvp.parser.model.OrderModel
 import com.flipperdevices.ifrmvp.parser.model.RawIfrRemote
 
 internal class OrderFiller(private val signalTableApi: SignalTableApi) {
+
+    private fun isEquals(rawIfrRemote: RawIfrRemote, orderModel: OrderModel): Boolean {
+        val keyIdentifier = when (orderModel.data) {
+            is SingleKeyButtonData -> orderModel.data.keyIdentifier
+            else -> error("Type ${orderModel.data::class} is not supported")
+        }
+        return when (keyIdentifier) {
+            is IfrKeyIdentifier.Name -> {
+                rawIfrRemote.name == keyIdentifier.name
+            }
+
+            is IfrKeyIdentifier.Sha256 -> error("Comparison by SHA not supported")
+        }
+    }
+
     suspend fun fill(model: Model) = with(model) {
         orderModels
-            .filter { orderModel ->
-                val keyIdentifier = when (orderModel.data) {
-                    is SingleKeyButtonData -> orderModel.data.keyIdentifier
-                    else -> error("Type ${orderModel.data::class} is not supported")
-                }
-                when (keyIdentifier) {
-                    is IfrKeyIdentifier.Name -> {
-                        remote.name == keyIdentifier.name
-                    }
-
-                    is IfrKeyIdentifier.Sha256 -> error("Comparison by SHA not supported")
-                }
-            }
+            .filter { orderModel -> isEquals(model.remote, orderModel) }
             .forEach { orderModel ->
                 signalTableApi.addOrderModel(
                     orderModel = orderModel,
