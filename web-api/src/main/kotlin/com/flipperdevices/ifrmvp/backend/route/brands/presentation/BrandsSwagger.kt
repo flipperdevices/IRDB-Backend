@@ -7,18 +7,18 @@ import io.ktor.http.HttpStatusCode
 
 internal object BrandsSwagger {
     fun OpenApiRoute.createSwaggerDefinition() {
-        description = "Get list of category's manufacturers"
+        description = "Get list of category's brands"
         request {
-            queryParameter<String>("category_name") {
-                description = "Unique name of the category"
+            queryParameter<Long>("category_id") {
+                description = "Unique id of the category"
                 required = true
             }
         }
         response {
             HttpStatusCode.OK to {
-                description = "Manufacturers fetched successfully"
+                description = "Category's brands fetched successfully"
                 body<BrandsResponse> {
-                    description = "List of manufacturers"
+                    description = "List of category's brands"
                 }
             }
 

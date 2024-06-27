@@ -5,7 +5,6 @@ import com.flipperdevices.ifrmvp.backend.envkonfig.EnvKonfig
 import com.flipperdevices.ifrmvp.parser.di.ParserModule
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import kotlinx.coroutines.runBlocking
-import java.io.File
 
 fun main() {
     val parserModule = ParserModule.Default(

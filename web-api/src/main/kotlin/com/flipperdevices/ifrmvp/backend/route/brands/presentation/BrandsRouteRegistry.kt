@@ -14,7 +14,7 @@ internal class BrandsRouteRegistry(
 
     private fun Routing.statusRoute() {
         get(
-            path = "manufacturers",
+            path = "brands",
             builder = { with(BrandsSwagger) { createSwaggerDefinition() } },
             body = {
                 val categoryId = context.request
