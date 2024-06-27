@@ -49,13 +49,13 @@ internal class SignalTableApiImpl(
         categoryFolderName: String,
     ): Long = transaction(database) {
         CategoryTable.selectAll()
-            .where { CategoryTable.categoryFolderName eq categoryFolderName }
+            .where { CategoryTable.folderName eq categoryFolderName }
             .map { it[CategoryTable.id] }
             .firstOrNull()
             ?.value
             ?.let { existingCategoryId -> return@transaction existingCategoryId }
         CategoryTable.insertAndGetId { statement ->
-            statement[CategoryTable.categoryFolderName] = categoryFolderName
+            statement[CategoryTable.folderName] = categoryFolderName
         }.value
     }
 
@@ -87,16 +87,16 @@ internal class SignalTableApiImpl(
         checkBrandExists(brandId)
         IfrFileTable.selectAll()
             .where { IfrFileTable.fileName eq fileName }
-            .andWhere { IfrFileTable.categoryRef eq categoryId }
-            .andWhere { IfrFileTable.brandRef eq brandId }
+            .andWhere { IfrFileTable.categoryId eq categoryId }
+            .andWhere { IfrFileTable.brandId eq brandId }
             .map { it[IfrFileTable.id] }
             .firstOrNull()
             ?.value
             ?.let { existingIrfFileId -> return@transaction existingIrfFileId }
 
         IfrFileTable.insertAndGetId { statement ->
-            statement[IfrFileTable.categoryRef] = categoryId
-            statement[IfrFileTable.brandRef] = brandId
+            statement[IfrFileTable.categoryId] = categoryId
+            statement[IfrFileTable.brandId] = brandId
             statement[IfrFileTable.fileName] = fileName
         }.value
     }
@@ -119,9 +119,9 @@ internal class SignalTableApiImpl(
             ?.let { _ -> return@transaction }
 
         UiPresetTable.insert { statement ->
-            statement[UiPresetTable.categoryRef] = categoryId
-            statement[UiPresetTable.brandRef] = brandId
-            statement[UiPresetTable.ifrFileRef] = irFileId
+            statement[UiPresetTable.categoryId] = categoryId
+            statement[UiPresetTable.brandId] = brandId
+            statement[UiPresetTable.ifrFileId] = irFileId
             statement[UiPresetTable.fileName] = fileName
         }
     }
@@ -145,18 +145,18 @@ internal class SignalTableApiImpl(
             .andWhere { SignalTable.frequency eq remote.frequency }
             .andWhere { SignalTable.dutyCycle eq remote.dutyCycle }
             .andWhere { SignalTable.data eq remote.data }
-            .andWhere { SignalTable.categoryRef eq categoryId }
-            .andWhere { SignalTable.ifrFileRef eq irFileId }
-            .andWhere { SignalTable.brandRef eq brandId }
+            .andWhere { SignalTable.categoryId eq categoryId }
+            .andWhere { SignalTable.ifrFileId eq irFileId }
+            .andWhere { SignalTable.brandId eq brandId }
             .map { it[SignalTable.id] }
             .firstOrNull()
             ?.value
             ?.let { existingIrfSignalId -> return@transaction existingIrfSignalId }
 
         SignalTable.insertAndGetId { statement ->
-            statement[SignalTable.categoryRef] = categoryId
-            statement[SignalTable.brandRef] = brandId
-            statement[SignalTable.ifrFileRef] = irFileId
+            statement[SignalTable.categoryId] = categoryId
+            statement[SignalTable.brandId] = brandId
+            statement[SignalTable.ifrFileId] = irFileId
             statement[SignalTable.name] = remote.name
             statement[SignalTable.type] = remote.type
             statement[SignalTable.protocol] = remote.protocol
@@ -175,13 +175,13 @@ internal class SignalTableApiImpl(
     ): Unit = transaction(database) {
         checkCategoryExists(categoryId)
         CategoryMetaTable.selectAll()
-            .where { CategoryMetaTable.category eq categoryId }
+            .where { CategoryMetaTable.categoryId eq categoryId }
             .map { it[CategoryMetaTable.id] }
             .firstOrNull()
             ?.value
             ?.let { _ -> return@transaction Unit }
         CategoryMetaTable.insert { statement ->
-            statement[CategoryMetaTable.category] = categoryId
+            statement[CategoryMetaTable.categoryId] = categoryId
             statement[CategoryMetaTable.displayName] = meta.manifest.displayName
             statement[CategoryMetaTable.singularDisplayName] = meta.manifest.singularDisplayName
             statement[CategoryMetaTable.iconPngBase64] = meta.iconPngBase64
@@ -197,10 +197,10 @@ internal class SignalTableApiImpl(
         ifrFileId: Long
     ): Unit = transaction(database) {
         SignalOrderTable.insert { statement ->
-            statement[SignalOrderTable.categoryRef] = categoryId
-            statement[SignalOrderTable.brandRef] = brandId
-            statement[SignalOrderTable.ifrFileRef] = ifrFileId
-            statement[SignalOrderTable.ifrSignalRef] = ifrSignalId
+            statement[SignalOrderTable.categoryId] = categoryId
+            statement[SignalOrderTable.brandId] = brandId
+            statement[SignalOrderTable.ifrFileId] = ifrFileId
+            statement[SignalOrderTable.ifrSignalId] = ifrSignalId
             statement[SignalOrderTable.dataType] = orderModel.data.type.name
             statement[SignalOrderTable.dataIconId] = when (orderModel.data) {
                 is IconButtonData -> orderModel.data.iconId.name

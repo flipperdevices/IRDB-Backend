@@ -3,9 +3,9 @@ package com.flipperdevices.ifrmvp.backend.db.signal.table
 import org.jetbrains.exposed.dao.id.LongIdTable
 
 object SignalTable : LongIdTable("SIGNAL_TABLE") {
-    val categoryRef = reference("category_id", CategoryTable)
-    val brandRef = reference("brand_id", BrandTable)
-    val ifrFileRef = reference("ifr_file_id", IfrFileTable)
+    val categoryId = reference("category_id", CategoryTable)
+    val brandId = reference("brand_id", BrandTable)
+    val ifrFileId = reference("ifr_file_id", IfrFileTable)
     val name = text("name")
     val type = text("type")
     val protocol = text("protocol").nullable()

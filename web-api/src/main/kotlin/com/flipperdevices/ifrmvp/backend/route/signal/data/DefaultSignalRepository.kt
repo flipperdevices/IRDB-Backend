@@ -22,7 +22,7 @@ internal class DefaultSignalRepository {
         } else {
             val signalModel = SignalTable
                 .selectAll()
-                .andWhere { SignalTable.ifrFileRef eq ifrFile.id }
+                .andWhere { SignalTable.ifrFileId eq ifrFile.id }
                 .andWhere { SignalTable.id.notInList(signalRequestModel.successResults.map { it.signalId }) }
                 .limit(1)
                 .map { signalResultRow -> signalResultRow.toSignalModel() }

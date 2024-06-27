@@ -9,9 +9,9 @@ internal object SignalModelMapper {
         val signalResultRow = this
         return SignalModel(
             id = signalResultRow[SignalTable.id].value,
-            irFileId = signalResultRow[SignalTable.ifrFileRef].value,
-            brandId = signalResultRow[SignalTable.brandRef].value,
-            categoryId = signalResultRow[SignalTable.categoryRef].value,
+            irFileId = signalResultRow[SignalTable.ifrFileId].value,
+            brandId = signalResultRow[SignalTable.brandId].value,
+            categoryId = signalResultRow[SignalTable.categoryId].value,
             name = signalResultRow[SignalTable.name],
             type = signalResultRow[SignalTable.type],
             protocol = signalResultRow[SignalTable.protocol],

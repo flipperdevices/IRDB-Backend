@@ -23,14 +23,14 @@ internal class SignalByOrderRepository {
         }
         val signalResponse = SignalOrderTable
             .selectAll()
-            .andWhere { SignalOrderTable.ifrSignalRef eq ifrFile.id }
+            .andWhere { SignalOrderTable.ifrSignalId eq ifrFile.id }
             .andWhere {
-                SignalOrderTable.ifrSignalRef.notInList(
+                SignalOrderTable.ifrSignalId.notInList(
                     signalRequestModel.successResults.map { it.signalId }
                 )
             }
             .map { signalOrderResultRow ->
-                val signalId = signalOrderResultRow[SignalOrderTable.ifrSignalRef].value
+                val signalId = signalOrderResultRow[SignalOrderTable.ifrSignalId].value
                 SignalResponse(
                     data = SignalResponse.Data(
                         type = signalOrderResultRow[SignalOrderTable.dataType],
