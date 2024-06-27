@@ -29,6 +29,7 @@ object ParserPathResolver {
         get() = categoriesFolder.listFiles()
             .orEmpty()
             .filter { it.isDirectory }
+            .filter { it.name != ".DS_Store" }
 
     /**
      * Get path to specific category
