@@ -1,7 +1,7 @@
 package com.flipperdevices.ifrmvp.backend.plugins
 
 import com.flipperdevices.ifrmvp.backend.buildkonfig.BuildKonfig
-import com.flipperdevices.ifrmvp.backend.envkonfig.di.BuildKonfigModule
+import com.flipperdevices.ifrmvp.backend.envkonfig.EnvKonfig
 import io.github.smiley4.ktorswaggerui.SwaggerUI
 import io.github.smiley4.ktorswaggerui.routing.openApiSpec
 import io.github.smiley4.ktorswaggerui.routing.swaggerUI
@@ -38,8 +38,7 @@ fun Application.configureSwagger() {
             }
         }
         server {
-            url =
-                "${BuildKonfigModule.Default.connection.host}/${BuildKonfigModule.Default.connection.port}"
+            url = "${EnvKonfig.FBACKEND_HOST}:${EnvKonfig.FBACKEND_PORT}"
             description = "Web-Api server"
             variable("version") {
                 default = BuildKonfig.VERSION_NAME

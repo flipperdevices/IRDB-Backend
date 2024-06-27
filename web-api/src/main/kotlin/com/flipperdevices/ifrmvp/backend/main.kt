@@ -3,6 +3,7 @@
 package com.flipperdevices.ifrmvp.backend
 
 import com.flipperdevices.ifrmvp.backend.di.RootModule
+import com.flipperdevices.ifrmvp.backend.envkonfig.EnvKonfig
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.util.logging.KtorSimpleLogger
@@ -10,13 +11,12 @@ import io.ktor.util.logging.KtorSimpleLogger
 fun main() {
     val rootModule: RootModule = RootModule.Default()
     val logger = KtorSimpleLogger("Application")
-    val envConfig = rootModule.buildKonfigModule
     logger.info("Starting...")
-    logger.info("Server is running on ${envConfig.connection.host}:${envConfig.connection.port}")
+    logger.info("Server is running on ${EnvKonfig.FBACKEND_HOST}:${EnvKonfig.FBACKEND_PORT}")
     embeddedServer(
         factory = Netty,
         module = { module(rootModule, logger) },
-        host = envConfig.connection.host,
-        port = envConfig.connection.port
+        host = EnvKonfig.FBACKEND_HOST,
+        port = EnvKonfig.FBACKEND_PORT
     ).start(wait = true)
 }

@@ -8,7 +8,7 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.IfrFileTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalOrderTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
-import com.flipperdevices.ifrmvp.backend.envkonfig.DBConnection
+import com.flipperdevices.ifrmvp.backend.envkonfig.model.DBConnection
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
