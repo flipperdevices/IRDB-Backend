@@ -15,7 +15,7 @@
     "url" : "/"
   },
   "servers" : [ {
-    "url" : "127.0.0.1/8080",
+    "url" : "127.0.0.1:8080",
     "description" : "Web-Api server",
     "variables" : {
       "version" : {
@@ -27,7 +27,7 @@
   "tags" : [ ],
   "paths" : {
     "/categories" : {
-      "post" : {
+      "get" : {
         "tags" : [ ],
         "description" : "Get list of available categories",
         "parameters" : [ ],
@@ -49,7 +49,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.exception.ErrorResponseModel.Unhandled"
+                  "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.ErrorResponseModel"
                 }
               }
             }
@@ -58,43 +58,33 @@
         "deprecated" : false
       }
     },
-    "/manufacturers" : {
-      "post" : {
+    "/brands" : {
+      "get" : {
         "tags" : [ ],
-        "description" : "Get list of category's manufacturers",
+        "description" : "Get list of category's brands",
         "parameters" : [ {
-          "name" : "category_name",
+          "name" : "category_id",
           "in" : "query",
-          "description" : "Unique name of the category",
+          "description" : "Unique id of the category",
           "required" : true,
           "deprecated" : false,
           "allowEmptyValue" : true,
           "explode" : false,
           "allowReserved" : true,
           "schema" : {
-            "title" : "String",
-            "type" : "string"
+            "title" : "Long",
+            "type" : "integer",
+            "format" : "int64"
           }
         } ],
         "responses" : {
           "200" : {
-            "description" : "Manufacturers fetched successfully",
+            "description" : "Category's brands fetched successfully",
             "headers" : { },
             "content" : {
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.BrandsResponse"
-                }
-              }
-            }
-          },
-          "404" : {
-            "description" : "Category not found",
-            "headers" : { },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.exception.ErrorResponseModel.CategoryNotFound"
                 }
               }
             }
@@ -105,7 +95,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.exception.ErrorResponseModel.Unhandled"
+                  "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.ErrorResponseModel"
                 }
               }
             }
@@ -124,7 +114,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.SignalRequest"
+                "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.SignalRequestModel"
               }
             }
           },
@@ -137,18 +127,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.SignalResponse"
-                }
-              }
-            }
-          },
-          "404" : {
-            "description" : "Signal not found",
-            "headers" : { },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.exception.ErrorResponseModel.NoSignal"
+                  "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.SignalResponseModel"
                 }
               }
             }
@@ -159,7 +138,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.exception.ErrorResponseModel.Unhandled"
+                  "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.ErrorResponseModel"
                 }
               }
             }
@@ -173,7 +152,7 @@
     "schemas" : {
       "com.flipperdevices.ifrmvp.backend.model.DeviceCategory" : {
         "title" : "DeviceCategory",
-        "required" : [ "id", "name", "type" ],
+        "required" : [ "id", "meta" ],
         "type" : "object",
         "properties" : {
           "id" : {
@@ -181,18 +160,43 @@
             "type" : "integer",
             "format" : "int64"
           },
-          "name" : {
-            "title" : "String",
-            "type" : "string"
-          },
-          "type" : {
-            "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.DeviceCategoryType"
+          "meta" : {
+            "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.CategoryMeta"
           }
         }
       },
-      "com.flipperdevices.ifrmvp.backend.model.DeviceCategoryType" : {
-        "title" : "DeviceCategoryType",
-        "enum" : [ "TV", "AIR_CONDITIONER", "SET_TOP_BOX", "CAMERA", "FAN", "A_V_RECEIVER", "DVD_PLAYER", "SMART_BOX", "PROJECTOR", "UNKNOWN" ]
+      "com.flipperdevices.ifrmvp.backend.model.CategoryMeta" : {
+        "title" : "CategoryMeta",
+        "required" : [ "iconPngBase64", "iconSvgBase64", "manifest" ],
+        "type" : "object",
+        "properties" : {
+          "iconPngBase64" : {
+            "title" : "String",
+            "type" : "string"
+          },
+          "iconSvgBase64" : {
+            "title" : "String",
+            "type" : "string"
+          },
+          "manifest" : {
+            "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.CategoryManifest"
+          }
+        }
+      },
+      "com.flipperdevices.ifrmvp.backend.model.CategoryManifest" : {
+        "title" : "CategoryManifest",
+        "required" : [ "displayName", "singularDisplayName" ],
+        "type" : "object",
+        "properties" : {
+          "displayName" : {
+            "title" : "String",
+            "type" : "string"
+          },
+          "singularDisplayName" : {
+            "title" : "String",
+            "type" : "string"
+          }
+        }
       },
       "com.flipperdevices.ifrmvp.backend.model.CategoriesResponse" : {
         "title" : "CategoriesResponse",
@@ -208,16 +212,30 @@
           }
         }
       },
-      "com.flipperdevices.ifrmvp.backend.model.exception.ErrorResponseModel.Unhandled" : {
-        "title" : "Unhandled",
+      "com.flipperdevices.ifrmvp.backend.model.ErrorType" : {
+        "title" : "ErrorType",
+        "enum" : [ "UNHANDLED", "CATEGORY_NOT_FOUND", "BRAND_NOT_FOUND", "NO_SIGNAL" ]
+      },
+      "com.flipperdevices.ifrmvp.backend.model.ErrorResponseModel" : {
+        "title" : "ErrorResponseModel",
+        "required" : [ "errorType" ],
         "type" : "object",
-        "properties" : { }
+        "properties" : {
+          "errorType" : {
+            "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.ErrorType"
+          }
+        }
       },
       "com.flipperdevices.ifrmvp.backend.model.BrandModel" : {
         "title" : "BrandModel",
-        "required" : [ "id", "name" ],
+        "required" : [ "categoryId", "id", "name" ],
         "type" : "object",
         "properties" : {
+          "categoryId" : {
+            "title" : "Long",
+            "type" : "integer",
+            "format" : "int64"
+          },
           "id" : {
             "title" : "Long",
             "type" : "integer",
@@ -243,87 +261,153 @@
           }
         }
       },
-      "com.flipperdevices.ifrmvp.backend.model.exception.ErrorResponseModel.CategoryNotFound" : {
-        "title" : "CategoryNotFound",
-        "type" : "object",
-        "properties" : { }
-      },
-      "com.flipperdevices.ifrmvp.backend.model.SignalRequest" : {
-        "title" : "SignalRequest",
-        "required" : [ "categoryId", "city", "countryCode", "failedSignalIds", "languageCode", "manufacturerId", "successfulSignalIds" ],
+      "com.flipperdevices.ifrmvp.backend.model.SignalRequestModel.SignalResultData" : {
+        "title" : "SignalResultData",
+        "required" : [ "ifrFileId", "signalId" ],
         "type" : "object",
         "properties" : {
+          "ifrFileId" : {
+            "title" : "Long",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "signalId" : {
+            "title" : "Long",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      },
+      "com.flipperdevices.ifrmvp.backend.model.SignalRequestModel" : {
+        "title" : "SignalRequestModel",
+        "required" : [ "brandId", "categoryId", "failedResults", "successResults" ],
+        "type" : "object",
+        "properties" : {
+          "brandId" : {
+            "title" : "Long",
+            "type" : "integer",
+            "format" : "int64"
+          },
           "categoryId" : {
             "title" : "Long",
             "type" : "integer",
             "format" : "int64"
           },
-          "city" : {
-            "title" : "String",
-            "type" : "string"
-          },
-          "countryCode" : {
-            "title" : "String",
-            "type" : "string"
-          },
-          "failedSignalIds" : {
-            "title" : "List<Long>",
+          "failedResults" : {
+            "title" : "List<SignalResultData>",
             "type" : "array",
             "items" : {
-              "title" : "Long",
-              "type" : "integer",
-              "format" : "int64"
+              "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.SignalRequestModel.SignalResultData"
             }
           },
-          "languageCode" : {
-            "title" : "String",
-            "type" : "string"
-          },
-          "manufacturerId" : {
-            "title" : "Long",
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "successfulSignalIds" : {
-            "title" : "List<Long>",
+          "successResults" : {
+            "title" : "List<SignalResultData>",
             "type" : "array",
             "items" : {
-              "title" : "Long",
-              "type" : "integer",
-              "format" : "int64"
+              "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.SignalRequestModel.SignalResultData"
             }
           }
         }
       },
-      "com.flipperdevices.ifrmvp.backend.model.IfrSignal" : {
-        "title" : "IfrSignal",
-        "required" : [ "address", "command", "data", "dutyCycle", "frequency", "name", "protocol", "type" ],
+      "com.flipperdevices.ifrmvp.backend.model.IfrFileModel" : {
+        "title" : "IfrFileModel",
+        "required" : [ "brandId", "categoryId", "id" ],
+        "type" : "object",
+        "properties" : {
+          "brandId" : {
+            "title" : "Long",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "categoryId" : {
+            "title" : "Long",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "id" : {
+            "title" : "Long",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      },
+      "com.flipperdevices.ifrmvp.backend.model.SignalResponse" : {
+        "title" : "SignalResponse",
+        "required" : [ "data", "signalModel" ],
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.SignalResponse.Data"
+          },
+          "signalModel" : {
+            "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.SignalModel"
+          }
+        }
+      },
+      "com.flipperdevices.ifrmvp.backend.model.SignalResponse.Data" : {
+        "title" : "Data",
+        "required" : [ "type" ],
+        "type" : "object",
+        "properties" : {
+          "iconId" : {
+            "title" : "String",
+            "type" : "string"
+          },
+          "text" : {
+            "title" : "String",
+            "type" : "string"
+          },
+          "type" : {
+            "title" : "String",
+            "type" : "string"
+          }
+        }
+      },
+      "com.flipperdevices.ifrmvp.backend.model.SignalModel" : {
+        "title" : "SignalModel",
+        "required" : [ "brandId", "categoryId", "hash", "id", "irFileId", "name", "type" ],
         "type" : "object",
         "properties" : {
           "address" : {
             "title" : "String",
             "type" : "string"
           },
+          "brandId" : {
+            "title" : "Long",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "categoryId" : {
+            "title" : "Long",
+            "type" : "integer",
+            "format" : "int64"
+          },
           "command" : {
             "title" : "String",
             "type" : "string"
           },
           "data" : {
-            "title" : "ByteArray<Byte>",
-            "type" : "array",
-            "items" : {
-              "title" : "Byte",
-              "maximum" : 127,
-              "minimum" : -128,
-              "type" : "integer"
-            }
+            "title" : "String",
+            "type" : "string"
           },
           "dutyCycle" : {
-            "title" : "Float",
-            "type" : "number",
-            "format" : "float"
+            "title" : "String",
+            "type" : "string"
           },
           "frequency" : {
+            "title" : "String",
+            "type" : "string"
+          },
+          "hash" : {
+            "title" : "String",
+            "type" : "string"
+          },
+          "id" : {
+            "title" : "Long",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "irFileId" : {
             "title" : "Long",
             "type" : "integer",
             "format" : "int64"
@@ -337,32 +421,22 @@
             "type" : "string"
           },
           "type" : {
-            "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.IfrSignal.Type"
+            "title" : "String",
+            "type" : "string"
           }
         }
       },
-      "com.flipperdevices.ifrmvp.backend.model.IfrSignal.Type" : {
-        "title" : "Type",
-        "enum" : [ "RAW", "PARSED" ]
-      },
-      "com.flipperdevices.ifrmvp.backend.model.SignalResponse" : {
-        "title" : "SignalResponse",
-        "required" : [ "hasNext", "signal" ],
+      "com.flipperdevices.ifrmvp.backend.model.SignalResponseModel" : {
+        "title" : "SignalResponseModel",
         "type" : "object",
         "properties" : {
-          "hasNext" : {
-            "title" : "Boolean",
-            "type" : "boolean"
+          "ifrFileModel" : {
+            "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.IfrFileModel"
           },
-          "signal" : {
-            "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.IfrSignal"
+          "signalResponse" : {
+            "$ref" : "#/components/schemas/com.flipperdevices.ifrmvp.backend.model.SignalResponse"
           }
         }
-      },
-      "com.flipperdevices.ifrmvp.backend.model.exception.ErrorResponseModel.NoSignal" : {
-        "title" : "NoSignal",
-        "type" : "object",
-        "properties" : { }
       }
     },
     "examples" : { }
