@@ -7,6 +7,10 @@ import kotlinx.serialization.Serializable
 data class SignalResponse(
     @SerialName("signal_model")
     val signalModel: SignalModel,
+    @SerialName("message")
+    val message: String,
+    @SerialName("category_name")
+    val categoryName: String,
     @SerialName("data")
     val data: Data,
 ) {

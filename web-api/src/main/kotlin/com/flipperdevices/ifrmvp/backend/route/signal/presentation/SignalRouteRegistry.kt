@@ -1,6 +1,7 @@
 package com.flipperdevices.ifrmvp.backend.route.signal.presentation
 
 import com.flipperdevices.ifrmvp.backend.core.route.RouteRegistry
+import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryMetaTable
 import com.flipperdevices.ifrmvp.backend.model.SignalRequestModel
 import com.flipperdevices.ifrmvp.backend.model.SignalResponseModel
 import com.flipperdevices.ifrmvp.backend.route.signal.data.CounterRepository
@@ -35,6 +36,12 @@ internal class SignalRouteRegistry(
                 .successResults
                 .count { it.ifrFileId == ifrFile.id }
                 .toLong()
+            val categorySingularDisplayName = CategoryMetaTable
+                .select(CategoryMetaTable.singularDisplayName)
+                .where { CategoryMetaTable.categoryId eq signalRequestModel.categoryId }
+                .limit(1)
+                .map { it[CategoryMetaTable.singularDisplayName] }
+                .firstOrNull() ?: return@transaction SignalResponseModel()
 
             println("Success count: $successCount; Orders count: $orderCount")
             println("IfrFileId: ${ifrFile.id} category: ${ifrFile.categoryId} brand: ${ifrFile.brandId}")
@@ -45,7 +52,8 @@ internal class SignalRouteRegistry(
                 defaultSignalRepository.getDefaultSignal(
                     successCount = successCount,
                     ifrFile = ifrFile,
-                    signalRequestModel = signalRequestModel
+                    signalRequestModel = signalRequestModel,
+                    categorySingularDisplayName = categorySingularDisplayName
                 )
             } else {
                 signalByOrderRepository.getSignalByOrder(
@@ -53,6 +61,7 @@ internal class SignalRouteRegistry(
                     ifrFile = ifrFile,
                     orderCount = orderCount,
                     successCount = successCount,
+                    categorySingularDisplayName = categorySingularDisplayName,
                 )
             }
         }

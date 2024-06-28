@@ -1,9 +1,10 @@
 [
   {
+    "message": "Does %s turns on?",
     "data": {
       "key_id": {
         "type": "NAME",
-        "key_name": "power"
+        "key_name": "Power"
       },
       "icon_id": "POWER",
       "type": "ICON"

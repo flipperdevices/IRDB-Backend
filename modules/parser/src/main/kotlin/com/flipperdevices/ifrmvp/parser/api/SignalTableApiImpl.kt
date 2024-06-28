@@ -201,6 +201,7 @@ internal class SignalTableApiImpl(
             statement[SignalOrderTable.brandId] = brandId
             statement[SignalOrderTable.ifrFileId] = ifrFileId
             statement[SignalOrderTable.ifrSignalId] = ifrSignalId
+            statement[SignalOrderTable.message] = orderModel.message
             statement[SignalOrderTable.dataType] = orderModel.data.type.name
             statement[SignalOrderTable.dataIconId] = when (orderModel.data) {
                 is IconButtonData -> orderModel.data.iconId.name

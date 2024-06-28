@@ -10,4 +10,6 @@ internal data class OrderModel(
     @SerialName("data")
     @Serializable(with = ButtonDataSerializer::class)
     val data: ButtonData,
+    @Serializable
+    val message: String
 )

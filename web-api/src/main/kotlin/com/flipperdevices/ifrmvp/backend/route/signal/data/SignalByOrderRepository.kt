@@ -16,18 +16,22 @@ internal class SignalByOrderRepository {
         signalRequestModel: SignalRequestModel,
         ifrFile: IfrFileModel,
         orderCount: Long,
-        successCount: Long
+        successCount: Long,
+        categorySingularDisplayName: String
     ): SignalResponseModel {
         if (successCount == orderCount) {
             return SignalResponseModel(ifrFileModel = ifrFile)
         }
+        println(
+            "SignalOrderTable size: ${SignalOrderTable.select(
+                SignalOrderTable.id
+            ).where { SignalOrderTable.ifrFileId eq ifrFile.id }.count()}"
+        )
         val signalResponse = SignalOrderTable
             .selectAll()
-            .andWhere { SignalOrderTable.ifrSignalId eq ifrFile.id }
+            .where { SignalOrderTable.ifrFileId eq ifrFile.id }
             .andWhere {
-                SignalOrderTable.ifrSignalId.notInList(
-                    signalRequestModel.successResults.map { it.signalId }
-                )
+                SignalOrderTable.ifrSignalId.notInList(signalRequestModel.successResults.map { it.signalId })
             }
             .map { signalOrderResultRow ->
                 val signalId = signalOrderResultRow[SignalOrderTable.ifrSignalId].value
@@ -41,11 +45,15 @@ internal class SignalByOrderRepository {
                         .selectAll()
                         .where { SignalTable.id eq signalId }
                         .map { signalResultRow -> signalResultRow.toSignalModel() }
-                        .first()
+                        .first(),
+                    message = signalOrderResultRow[SignalOrderTable.message].format(categorySingularDisplayName),
+                    categoryName = categorySingularDisplayName
                 )
             }.firstOrNull()
         // All signals passed
-        if (signalResponse == null) return SignalResponseModel(ifrFileModel = ifrFile)
+        if (signalResponse == null) {
+            return SignalResponseModel(ifrFileModel = ifrFile)
+        }
         return SignalResponseModel(signalResponse = signalResponse)
     }
 }

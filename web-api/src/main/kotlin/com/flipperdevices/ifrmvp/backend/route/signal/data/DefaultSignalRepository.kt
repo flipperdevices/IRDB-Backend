@@ -16,6 +16,7 @@ internal class DefaultSignalRepository {
         successCount: Long,
         ifrFile: IfrFileModel,
         signalRequestModel: SignalRequestModel,
+        categorySingularDisplayName: String
     ): SignalResponseModel {
         return if (successCount >= 4) {
             SignalResponseModel(ifrFileModel = ifrFile)
@@ -37,7 +38,9 @@ internal class DefaultSignalRepository {
                             type = ButtonData.ButtonType.TEXT.name,
                             iconId = null,
                             text = signalModel.name
-                        )
+                        ),
+                        categoryName = categorySingularDisplayName,
+                        message = "Does $categorySingularDisplayName respond to button?"
                     )
                 )
             }
