@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class OrderModel(
+data class OrderModel(
     @SerialName("data")
     @Serializable(with = ButtonDataSerializer::class)
     val data: ButtonData,

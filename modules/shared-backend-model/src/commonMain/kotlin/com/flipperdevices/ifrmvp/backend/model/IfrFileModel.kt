@@ -10,5 +10,7 @@ data class IfrFileModel(
     @SerialName("category_id")
     val categoryId: Long,
     @SerialName("brand_id")
-    val brandId: Long
+    val brandId: Long,
+    @SerialName("file_name")
+    val fileName: String
 )

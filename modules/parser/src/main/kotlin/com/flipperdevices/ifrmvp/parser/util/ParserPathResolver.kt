@@ -8,7 +8,7 @@ import java.io.File
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-internal object ParserPathResolver {
+object ParserPathResolver {
     /**
      * The root folder of file database
      */
@@ -94,6 +94,17 @@ internal object ParserPathResolver {
             .listFiles()
             .orEmpty()
             .flatMap { irFolder -> irFolder.listFiles().orEmpty().filter { it.extension == "ir" } }
+    }
+
+    /**
+     * Get list of all ir files in selected brand
+     * @param category category name of brand
+     * @param brand the name of brand
+     * @param ifrFolderName the name of specific controller id, it's ifr file name
+     */
+    fun ifrFile(category: String, brand: String, ifrFolderName: String): File {
+        val folder = brandPath(category, brand).resolve(ifrFolderName)
+        return folder.resolve("$ifrFolderName.ir")
     }
 
     /**

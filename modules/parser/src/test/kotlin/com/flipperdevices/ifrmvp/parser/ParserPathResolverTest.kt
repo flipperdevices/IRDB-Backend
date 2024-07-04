@@ -33,6 +33,16 @@ internal class ParserPathResolverTest {
                             "Brands ir files are empty brand=${brandFolder.name}; category=${categoryFolder.name}"
                         ) {
                             ParserPathResolver.brandIfrFiles(categoryFolder.name, brandFolder.name)
+                                .onEach { ifrFile ->
+                                    val ifrFolder = ifrFile.parentFile
+                                    assertTrue("Ifr file not exists ${ifrFolder.name} ${ifrFolder.absolutePath}") {
+                                        ParserPathResolver.ifrFile(
+                                            category = categoryFolder.name,
+                                            brand = brandFolder.name,
+                                            ifrFolderName = ifrFolder.name
+                                        ).exists()
+                                    }
+                                }
                                 .isNotEmpty()
                         }
                     }

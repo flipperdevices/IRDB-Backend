@@ -10,7 +10,8 @@ object EnvKonfig {
 
     val FBACKEND_HOST: String
         get() = KSystem.getenvOrNull("FBACKEND_HOST")
-            ?: InetAddress.getLocalHost().hostAddress
+//            ?: InetAddress.getLocalHost().hostAddress
+            ?: "192.168.0.100"
     val FBACKEND_PORT: Int
         get() = KSystem.getenvOrNull("FBACKEND_PORT")
             ?.toIntOrNull()

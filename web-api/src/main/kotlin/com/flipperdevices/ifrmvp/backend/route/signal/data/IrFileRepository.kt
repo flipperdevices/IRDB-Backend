@@ -19,7 +19,8 @@ internal class IrFileRepository {
                 IfrFileModel(
                     id = it[IfrFileTable.id].value,
                     categoryId = it[IfrFileTable.categoryId].value,
-                    brandId = it[IfrFileTable.brandId].value
+                    brandId = it[IfrFileTable.brandId].value,
+                    fileName = it[IfrFileTable.fileName]
                 )
             }.firstOrNull()
     }

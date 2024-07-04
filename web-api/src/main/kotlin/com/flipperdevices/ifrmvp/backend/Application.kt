@@ -20,7 +20,9 @@ internal fun Application.module(rootModule: RootModule, logger: Logger) {
         listOf(
             rootModule.categoriesModule.registry,
             rootModule.brandsModule.registry,
-            rootModule.signalModule.registry
+            rootModule.signalModule.registry,
+            rootModule.keyModule.registry,
+            rootModule.uiModule.registry
         ).forEach { routeRegistry -> routeRegistry.register(this) }
     }
     logger.info("Started!")

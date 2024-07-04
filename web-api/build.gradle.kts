@@ -36,6 +36,7 @@ dependencies {
     implementation(projects.modules.sharedBackendModel)
     implementation(projects.modules.core)
     implementation(projects.modules.apiStatus)
+    implementation(projects.modules.parser)
 }
 
 application {
