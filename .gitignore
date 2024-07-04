@@ -1,0 +1,5 @@
+# Root
+.gradle
+.idea
+.kotlin
+build
