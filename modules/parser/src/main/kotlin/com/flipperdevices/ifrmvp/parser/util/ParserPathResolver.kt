@@ -1,6 +1,5 @@
 package com.flipperdevices.ifrmvp.parser.util
 
-import com.flipperdevices.ifrmvp.backend.buildkonfig.BuildKonfig
 import com.flipperdevices.ifrmvp.backend.envkonfig.EnvKonfig
 import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
 import com.flipperdevices.ifrmvp.parser.model.OrderModel

@@ -31,8 +31,6 @@ object EnvKonfig {
         get() = KSystem.getenvOrNull("DB_FULL_PATH")
             ?: BuildKonfig.FALLBACK_DB_FULL_PATH
 
-
-
     val signalDatabaseConnection: DBConnection
         get() = when (EnvKonfig.FBACKEND_DB_TYPE) {
             EnvKonfig.DBType.H2 -> DBConnection.H2(EnvKonfig.FBACKEND_DB_NAME)
