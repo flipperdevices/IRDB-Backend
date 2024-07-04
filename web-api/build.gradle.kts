@@ -55,6 +55,6 @@ tasks.shadowJar {
     from(project.configurations.runtimeClasspath)
 
     archiveVersion.set(requireProjectInfo.versionString)
-    archiveBaseName.set(requireProjectInfo.name)
+    archiveBaseName.set("${requireProjectInfo.name}-web")
     File(rootDir, "jars").also(File::mkdirs).also(destinationDirectory::set)
 }
