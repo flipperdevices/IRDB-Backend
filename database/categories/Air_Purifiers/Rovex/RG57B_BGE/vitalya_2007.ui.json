@@ -6,7 +6,7 @@
           "data": {
             "key_id": {
               "type": "NAME",
-              "key_name": "Power"
+              "key_name": "On"
             },
             "icon_id": "POWER",
             "type": "ICON"

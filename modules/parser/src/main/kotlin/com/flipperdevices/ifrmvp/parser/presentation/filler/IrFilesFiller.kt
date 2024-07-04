@@ -10,17 +10,32 @@ import java.io.File
 
 internal class IrFilesFiller(
     private val signalTableApi: SignalTableApi,
-    private val ifrSignalFiller: IfrSignalFiller
+    private val ifrSignalFiller: IfrSignalFiller,
+    private val uiFileFiller: UiPresetFiller
 ) {
     suspend fun fill(model: Model) = coroutineScope {
         with(model) {
             irFiles.map { irFile ->
+
                 async {
                     val irFileId = signalTableApi.addIrFile(
                         fileName = irFile.name,
                         categoryId = categoryId,
                         brandId = brandId
                     )
+                    irFile.parentFile.listFiles()
+                        .orEmpty()
+                        .filter { file -> file.name.endsWith(".ui.json") }
+                        .onEach { file ->
+                            uiFileFiller.fill(
+                                UiPresetFiller.Model(
+                                    categoryId = categoryId,
+                                    brandId = brandId,
+                                    ifrFileId = irFileId,
+                                    uiFileName = file.name
+                                )
+                            )
+                        }
                     val signals = irFile.readText()
                         .let(FlipperFileFormat::fromFileContent)
                         .let(InfraredKeyParser::mapParsedKeyToInfraredRemotes)

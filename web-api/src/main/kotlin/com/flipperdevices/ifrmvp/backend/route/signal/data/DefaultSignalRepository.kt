@@ -18,7 +18,7 @@ internal class DefaultSignalRepository {
         signalRequestModel: SignalRequestModel,
         categorySingularDisplayName: String
     ): SignalResponseModel {
-        return if (successCount >= 4) {
+        return if (successCount >= 2) {
             SignalResponseModel(ifrFileModel = ifrFile)
         } else {
             val signalModel = SignalTable

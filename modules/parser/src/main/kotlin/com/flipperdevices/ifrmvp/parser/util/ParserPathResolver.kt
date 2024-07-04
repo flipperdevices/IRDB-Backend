@@ -97,7 +97,7 @@ object ParserPathResolver {
     }
 
     /**
-     * Get list of all ir files in selected brand
+     * Get specific ifr file
      * @param category category name of brand
      * @param brand the name of brand
      * @param ifrFolderName the name of specific controller id, it's ifr file name
@@ -105,6 +105,23 @@ object ParserPathResolver {
     fun ifrFile(category: String, brand: String, ifrFolderName: String): File {
         val folder = brandPath(category, brand).resolve(ifrFolderName)
         return folder.resolve("$ifrFolderName.ir")
+    }
+
+    /**
+     * Get specific ui preset file
+     * @param category category name of brand
+     * @param brand the name of brand
+     * @param ifrFolderName the name of specific controller id, it's ifr file name
+     * @param presetFileName name of preset with extension
+     */
+    fun uiPresetFile(
+        category: String,
+        brand: String,
+        ifrFolderName: String,
+        presetFileName: String
+    ): File {
+        val folder = brandPath(category, brand).resolve(ifrFolderName)
+        return folder.resolve(presetFileName)
     }
 
     /**

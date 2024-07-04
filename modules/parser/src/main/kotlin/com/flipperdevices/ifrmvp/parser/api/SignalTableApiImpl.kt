@@ -112,7 +112,10 @@ internal class SignalTableApiImpl(
         checkIrFileExists(irFileId)
 
         UiPresetTable.selectAll()
-            .where { UiPresetTable.fileName eq fileName }
+            .where { UiPresetTable.ifrFileId eq irFileId }
+            .andWhere { UiPresetTable.categoryId eq categoryId }
+            .andWhere { UiPresetTable.brandId eq brandId }
+            .andWhere { UiPresetTable.fileName eq fileName }
             .map { it[UiPresetTable.id] }
             .firstOrNull()
             ?.value

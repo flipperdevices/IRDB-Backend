@@ -4,6 +4,7 @@ import com.flipperdevices.ifrmvp.backend.core.route.RouteRegistry
 import com.flipperdevices.ifrmvp.backend.db.signal.table.BrandTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.IfrFileTable
+import com.flipperdevices.ifrmvp.backend.model.IfrFileContentResponse
 import com.flipperdevices.ifrmvp.backend.model.IfrFileModel
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import io.github.smiley4.ktorswaggerui.dsl.routing.get
@@ -59,7 +60,8 @@ internal class KeyRouteRegistry(
                     ifrFolderName = ifrFileModel.fileName.replaceFirst(".ir","")//todo
                 )
                 if (!file.exists()) error("Ifr file doesn't exists! ${file.absolutePath}")
-                context.respond(file.readText())
+                val response = IfrFileContentResponse(file.readText())
+                context.respond(response)
             }
         )
     }
