@@ -46,17 +46,22 @@ internal class SignalRouteRegistry(
             println("Success count: $successCount; Orders count: $orderCount")
             println("IfrFileId: ${ifrFile.id} category: ${ifrFile.categoryId} brand: ${ifrFile.brandId}")
 
+            if (orderCount == 1L && successCount >= 1) {
+                return@transaction SignalResponseModel(ifrFileModel = ifrFile)
+            }
             // If orders empty, getting just by signal
             // If orders not empty, getting by orders
-            return@transaction if (orderCount == 0L) {
-                defaultSignalRepository.getDefaultSignal(
-                    successCount = successCount,
+            if (orderCount == 0L) {
+                if (successCount >= MAX_SUCCESS_ROW) {
+                    return@transaction SignalResponseModel(ifrFileModel = ifrFile)
+                }
+                return@transaction defaultSignalRepository.getDefaultSignal(
                     ifrFile = ifrFile,
                     signalRequestModel = signalRequestModel,
                     categorySingularDisplayName = categorySingularDisplayName
                 )
             } else {
-                signalByOrderRepository.getSignalByOrder(
+                return@transaction signalByOrderRepository.getSignalByOrder(
                     signalRequestModel = signalRequestModel,
                     ifrFile = ifrFile,
                     orderCount = orderCount,
@@ -81,5 +86,9 @@ internal class SignalRouteRegistry(
 
     override fun register(routing: Routing) {
         routing.statusRoute()
+    }
+
+    companion object {
+        private const val MAX_SUCCESS_ROW = 4
     }
 }

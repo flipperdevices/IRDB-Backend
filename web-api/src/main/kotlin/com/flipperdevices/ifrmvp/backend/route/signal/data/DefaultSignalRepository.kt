@@ -13,37 +13,32 @@ import org.jetbrains.exposed.sql.selectAll
 internal class DefaultSignalRepository {
 
     fun getDefaultSignal(
-        successCount: Long,
         ifrFile: IfrFileModel,
         signalRequestModel: SignalRequestModel,
-        categorySingularDisplayName: String
+        categorySingularDisplayName: String,
     ): SignalResponseModel {
-        return if (successCount >= 2) {
+        val signalModel = SignalTable
+            .selectAll()
+            .andWhere { SignalTable.ifrFileId eq ifrFile.id }
+            .andWhere { SignalTable.id.notInList(signalRequestModel.successResults.map { it.signalId }) }
+            .limit(1)
+            .map { signalResultRow -> signalResultRow.toSignalModel() }
+            .firstOrNull()
+        return if (signalModel == null) {
             SignalResponseModel(ifrFileModel = ifrFile)
         } else {
-            val signalModel = SignalTable
-                .selectAll()
-                .andWhere { SignalTable.ifrFileId eq ifrFile.id }
-                .andWhere { SignalTable.id.notInList(signalRequestModel.successResults.map { it.signalId }) }
-                .limit(1)
-                .map { signalResultRow -> signalResultRow.toSignalModel() }
-                .firstOrNull()
-            if (signalModel == null) {
-                SignalResponseModel(ifrFileModel = ifrFile)
-            } else {
-                SignalResponseModel(
-                    signalResponse = SignalResponse(
-                        signalModel = signalModel,
-                        data = SignalResponse.Data(
-                            type = ButtonData.ButtonType.TEXT.name,
-                            iconId = null,
-                            text = signalModel.name
-                        ),
-                        categoryName = categorySingularDisplayName,
-                        message = "Does $categorySingularDisplayName respond to button?"
-                    )
+            SignalResponseModel(
+                signalResponse = SignalResponse(
+                    signalModel = signalModel,
+                    data = SignalResponse.Data(
+                        type = ButtonData.ButtonType.TEXT.name,
+                        iconId = null,
+                        text = signalModel.name
+                    ),
+                    categoryName = categorySingularDisplayName,
+                    message = "Does $categorySingularDisplayName respond to button?"
                 )
-            }
+            )
         }
     }
 }
