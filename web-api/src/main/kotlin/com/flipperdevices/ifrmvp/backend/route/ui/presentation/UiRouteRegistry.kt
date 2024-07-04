@@ -8,13 +8,11 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
 import com.flipperdevices.ifrmvp.backend.model.IfrFileModel
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -67,7 +65,7 @@ internal class UiRouteRegistry(
                     category = categoryFolderName,
                     brand = brandFolderName,
                     presetFileName = uiFileName,
-                    ifrFolderName = ifrFileModel.fileName.replace(".ir","")
+                    ifrFolderName = ifrFileModel.fileName.replace(".ir", "")
                 )
                 if (!uiPresetFile.exists()) error("Preset file ${uiPresetFile.absolutePath} not exists")
 

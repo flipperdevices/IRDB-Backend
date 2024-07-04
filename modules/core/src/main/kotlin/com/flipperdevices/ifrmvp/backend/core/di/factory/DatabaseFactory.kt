@@ -14,7 +14,7 @@ interface DatabaseFactory {
             return when (dbConnection) {
                 is DBConnection.H2 -> {
                     Database.connect(
-                        url = "jdbc:h2:./${dbConnection.name};DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false",
+                        url = "jdbc:h2:${dbConnection.path};DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false",
                         driver = dbConnection.driver
                     )
                 }

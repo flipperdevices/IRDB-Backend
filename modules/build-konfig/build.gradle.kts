@@ -39,6 +39,12 @@ buildConfig {
         name = "IR_FOLDER_PATH",
         value = rootProject.file("database").absolutePath
     )
+
+    buildConfigField(
+        type = String::class.java,
+        name = "FALLBACK_DB_FULL_PATH",
+        value = rootProject.file("DB_FILE").absolutePath
+    )
 }
 
 afterEvaluate {

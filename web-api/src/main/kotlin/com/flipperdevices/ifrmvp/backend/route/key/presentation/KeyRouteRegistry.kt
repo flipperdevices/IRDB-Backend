@@ -23,7 +23,6 @@ internal class KeyRouteRegistry(
             path = "key",
             builder = { with(KeySwagger) { createSwaggerDefinition() } },
             body = {
-
                 val ifrFileId = context.parameters["ifr_file_id"]?.toLongOrNull()
                 val ifrFileModel = transaction(database) {
                     IfrFileTable.selectAll()
@@ -53,11 +52,11 @@ internal class KeyRouteRegistry(
                         .firstOrNull()
                         ?: error("Brand with id ${ifrFileModel.brandId} not found!")
                 }
-                println("Category :${categoryFolderName} brand: ${brandFolderName} ifr: ${ifrFileModel.fileName}")
+                println("Category :$categoryFolderName brand: $brandFolderName ifr: ${ifrFileModel.fileName}")
                 val file = ParserPathResolver.ifrFile(
                     category = categoryFolderName,
                     brand = brandFolderName,
-                    ifrFolderName = ifrFileModel.fileName.replaceFirst(".ir","")//todo
+                    ifrFolderName = ifrFileModel.fileName.replaceFirst(".ir", "") // todo
                 )
                 if (!file.exists()) error("Ifr file doesn't exists! ${file.absolutePath}")
                 val response = IfrFileContentResponse(file.readText())

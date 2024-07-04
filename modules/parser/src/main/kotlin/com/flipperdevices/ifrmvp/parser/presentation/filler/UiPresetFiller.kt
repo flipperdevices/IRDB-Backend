@@ -1,12 +1,7 @@
 package com.flipperdevices.ifrmvp.parser.presentation.filler
 
-import com.flipperdevices.bridge.dao.api.model.FlipperFileFormat
 import com.flipperdevices.ifrmvp.parser.api.SignalTableApi
-import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import java.io.File
 
 internal class UiPresetFiller(
     private val signalTableApi: SignalTableApi,
