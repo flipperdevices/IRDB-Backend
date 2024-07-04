@@ -11,6 +11,8 @@
 
 ### Shadow server
 
+Output jars will be located in [generated ./jars folder](./jars)
+
 ```bash
 # Shadow parser
 ./gradlew :modules:parser:shadowJar
