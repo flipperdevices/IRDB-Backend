@@ -37,7 +37,7 @@ buildConfig {
     buildConfigField(
         type = String::class.java,
         name = "IR_FOLDER_PATH",
-        value = rootProject.file("database").absolutePath
+        value = rootProject.file("IRDB").resolve("database").absolutePath
     )
 
     buildConfigField(

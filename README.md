@@ -21,6 +21,8 @@
 ### Environment
 
 ```properties
+# Path to https://github.com/flipperdevices/IRDB/tree/dev/database
+IR_FOLDER_PATH="./IRDB/database"
 FBACKEND_PORT=8080
 # H2 Section
 FBACKEND_DB_TYPE="H2"

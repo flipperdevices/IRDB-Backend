@@ -1,6 +1,7 @@
 package com.flipperdevices.ifrmvp.parser.util
 
 import com.flipperdevices.ifrmvp.backend.buildkonfig.BuildKonfig
+import com.flipperdevices.ifrmvp.backend.envkonfig.EnvKonfig
 import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
 import com.flipperdevices.ifrmvp.parser.model.OrderModel
 import kotlinx.serialization.json.Json
@@ -13,8 +14,7 @@ object ParserPathResolver {
      * The root folder of file database
      */
     val irDbFolderFolder: File
-        get() = File(BuildKonfig.IR_FOLDER_PATH)
-            .also { println(it.absolutePath) }
+        get() = File(EnvKonfig.IR_DATABASE_PATH)
 
     /**
      * Get Categories folder
