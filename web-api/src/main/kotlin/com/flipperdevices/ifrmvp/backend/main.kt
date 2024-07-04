@@ -12,11 +12,10 @@ fun main() {
     val rootModule: RootModule = RootModule.Default()
     val logger = KtorSimpleLogger("Application")
     logger.info("Starting...")
-    logger.info("Server is running on ${EnvKonfig.FBACKEND_HOST}:${EnvKonfig.FBACKEND_PORT}")
+    logger.info("Server is running on port ${EnvKonfig.FBACKEND_PORT}")
     embeddedServer(
         factory = Netty,
         module = { module(rootModule, logger) },
-        host = EnvKonfig.FBACKEND_HOST,
         port = EnvKonfig.FBACKEND_PORT
     ).start(wait = true)
 }
