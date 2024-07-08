@@ -65,12 +65,14 @@ fun fixMiRemoteDatabase() {
                     val brandName = irFile.name.let { name ->
                         val splitByUnderscore = name.split("_")
                         val i = splitByUnderscore.indexOfFirst { it.toIntOrNull() != null }
-                        if (i == -1) when {
-                            name.contains("kk") -> name.split("_kk").first()
-                            name.contains("mi") -> name.split("_mi").first()
-                            name.contains("mx") -> name.split("_mx").first()
-                            name.contains("xm") -> name.split("_xm").first()
-                            else -> splitByUnderscore.first()
+                        if (i == -1) {
+                            when {
+                                name.contains("kk") -> name.split("_kk").first()
+                                name.contains("mi") -> name.split("_mi").first()
+                                name.contains("mx") -> name.split("_mx").first()
+                                name.contains("xm") -> name.split("_xm").first()
+                                else -> splitByUnderscore.first()
+                            }
                         } else {
                             splitByUnderscore.joinToString(separator = "_", limit = i, truncated = "").removeSuffix("_")
                         }
@@ -87,31 +89,3 @@ fun fixMiRemoteDatabase() {
                 }
         }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
