@@ -7,6 +7,7 @@ object SignalOrderTable : LongIdTable("SIGNAL_ORDER_TABLE") {
     val brandId = reference("brand_id", BrandTable)
     val ifrFileId = reference("ifr_file_id", IfrFileTable)
     val ifrSignalId = reference("ifr_signal_id", SignalTable.id)
+    val order = integer("order")
 
     val message = text("message")
 

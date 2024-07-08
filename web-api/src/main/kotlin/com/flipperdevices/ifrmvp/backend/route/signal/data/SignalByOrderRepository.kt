@@ -7,6 +7,7 @@ import com.flipperdevices.ifrmvp.backend.model.SignalRequestModel
 import com.flipperdevices.ifrmvp.backend.model.SignalResponse
 import com.flipperdevices.ifrmvp.backend.model.SignalResponseModel
 import com.flipperdevices.ifrmvp.backend.route.signal.mapping.SignalModelMapper.toSignalModel
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
 
@@ -23,12 +24,15 @@ internal class SignalByOrderRepository {
             return SignalResponseModel(ifrFileModel = ifrFile)
         }
         println(
-            "SignalOrderTable size: ${SignalOrderTable.select(
-                SignalOrderTable.id
-            ).where { SignalOrderTable.ifrFileId eq ifrFile.id }.count()}"
+            "SignalOrderTable size: ${
+                SignalOrderTable.select(
+                    SignalOrderTable.id
+                ).where { SignalOrderTable.ifrFileId eq ifrFile.id }.count()
+            }"
         )
         val signalResponse = SignalOrderTable
             .selectAll()
+            .orderBy(SignalOrderTable.order, SortOrder.ASC)
             .where { SignalOrderTable.ifrFileId eq ifrFile.id }
             .andWhere {
                 SignalOrderTable.ifrSignalId.notInList(signalRequestModel.successResults.map { it.signalId })

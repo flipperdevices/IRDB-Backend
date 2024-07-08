@@ -44,6 +44,7 @@ internal interface SignalTableApi {
         ifrSignalId: Long,
         categoryId: Long,
         brandId: Long,
-        ifrFileId: Long
+        ifrFileId: Long,
+        order: Int
     )
 }

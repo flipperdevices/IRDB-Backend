@@ -25,13 +25,14 @@ internal class OrderFiller(private val signalTableApi: SignalTableApi) {
     suspend fun fill(model: Model) = with(model) {
         orderModels
             .filter { orderModel -> isEquals(model.remote, orderModel) }
-            .forEach { orderModel ->
+            .forEachIndexed { i, orderModel ->
                 signalTableApi.addOrderModel(
                     orderModel = orderModel,
                     ifrSignalId = ifrSignalId,
                     categoryId = categoryId,
                     brandId = brandId,
-                    ifrFileId = ifrFileId
+                    ifrFileId = ifrFileId,
+                    order = i
                 )
             }
     }

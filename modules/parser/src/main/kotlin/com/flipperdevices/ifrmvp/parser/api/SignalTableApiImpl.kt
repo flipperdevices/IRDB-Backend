@@ -197,7 +197,8 @@ internal class SignalTableApiImpl(
         ifrSignalId: Long,
         categoryId: Long,
         brandId: Long,
-        ifrFileId: Long
+        ifrFileId: Long,
+        order: Int
     ): Unit = transaction(database) {
         SignalOrderTable.insert { statement ->
             statement[SignalOrderTable.categoryId] = categoryId
@@ -206,6 +207,7 @@ internal class SignalTableApiImpl(
             statement[SignalOrderTable.ifrSignalId] = ifrSignalId
             statement[SignalOrderTable.message] = orderModel.message
             statement[SignalOrderTable.dataType] = orderModel.data.type.name
+            statement[SignalOrderTable.order] = order
             statement[SignalOrderTable.dataIconId] = when (orderModel.data) {
                 is IconButtonData -> orderModel.data.iconId.name
                 else -> null
