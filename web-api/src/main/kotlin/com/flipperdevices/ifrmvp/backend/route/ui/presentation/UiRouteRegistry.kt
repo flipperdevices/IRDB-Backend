@@ -8,12 +8,10 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
 import com.flipperdevices.ifrmvp.backend.model.IfrFileModel
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import io.github.smiley4.ktorswaggerui.dsl.routing.get
-import io.ktor.http.*
-import io.ktor.server.response.*
+import io.ktor.http.ContentType
+import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
-import io.ktor.server.routing.get
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 

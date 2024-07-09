@@ -2,6 +2,7 @@ package com.flipperdevices.ifrmvp.backend.envkonfig
 
 import com.flipperdevices.ifrmvp.backend.buildkonfig.BuildKonfig
 import com.flipperdevices.ifrmvp.backend.envkonfig.model.DBConnection
+import java.net.InetAddress
 
 object EnvKonfig {
     internal enum class DBType {
@@ -14,8 +15,7 @@ object EnvKonfig {
 
     val FBACKEND_HOST: String
         get() = KSystem.getenvOrNull("FBACKEND_HOST")
-//            ?: InetAddress.getLocalHost().hostAddress
-            ?: "192.168.0.103"
+            ?: InetAddress.getLocalHost().hostAddress
 
     val FBACKEND_PORT: Int
         get() = KSystem.getenvOrNull("FBACKEND_PORT")

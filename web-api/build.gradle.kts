@@ -23,6 +23,13 @@ dependencies {
         implementation("io.ktor:ktor-server-content-negotiation:$ktor")
     }
     implementation(libs.smiley4.ktor.swagger)
+    libs.versions.smiley4.kenerator.get().let { version ->
+        implementation("io.github.smiley4:schema-kenerator-core:$version")
+        implementation("io.github.smiley4:schema-kenerator-reflection:$version")
+        implementation("io.github.smiley4:schema-kenerator-serialization:$version")
+        implementation("io.github.smiley4:schema-kenerator-swagger:$version")
+        implementation("io.github.smiley4:schema-kenerator-jackson:$version")
+    }
     // Serialization
     implementation(libs.kotlin.serialization.json)
     // Log
