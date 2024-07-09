@@ -64,7 +64,6 @@ fun Application.configureSwagger() {
             }
         }
         swagger {
-            displayOperationId = true
             showTagFilterInput = true
             sort = SwaggerUiSort.HTTP_METHOD
             withCredentials = false
