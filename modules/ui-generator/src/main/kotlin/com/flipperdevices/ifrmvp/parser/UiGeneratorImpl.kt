@@ -5,6 +5,7 @@ import com.flipperdevices.ifrmvp.model.IfrButton
 import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
 import com.flipperdevices.ifrmvp.model.PageLayout
 import com.flipperdevices.ifrmvp.model.PagesLayout
+import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.TextButtonData
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
 
@@ -20,11 +21,23 @@ class UiGeneratorImpl : UiGenerator {
                 PageLayout(
                     buttons = signals.map { signal ->
                         x += 1
+                        val keyIdentifier = IfrKeyIdentifier.Name(signal.name)
                         IfrButton(
-                            data = TextButtonData(
-                                keyIdentifier = IfrKeyIdentifier.Name(signal.name),
-                                text = signal.name
-                            ),
+                            data = when {
+                                signal.name.contains("pwr", true)
+                                        || signal.name.contains("power", true)
+                                        || signal.name.contains("on", true) -> {
+                                    IconButtonData(
+                                        keyIdentifier = keyIdentifier,
+                                        iconId = IconButtonData.IconType.POWER
+                                    )
+                                }
+
+                                else -> TextButtonData(
+                                    keyIdentifier = keyIdentifier,
+                                    text = signal.name
+                                )
+                            },
                             position = IfrButton.Position(
                                 y = (x / MAX_COLUMNS) % MAX_ROWS,
                                 x = x % MAX_COLUMNS
