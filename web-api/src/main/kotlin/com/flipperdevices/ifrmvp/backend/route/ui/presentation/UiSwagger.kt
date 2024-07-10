@@ -1,5 +1,6 @@
 package com.flipperdevices.ifrmvp.backend.route.ui.presentation
 
+import com.flipperdevices.ifrmvp.model.PagesLayout
 import io.github.smiley4.ktorswaggerui.dsl.routes.OpenApiRoute
 import io.ktor.http.HttpStatusCode
 
@@ -15,7 +16,7 @@ internal object UiSwagger {
         response {
             HttpStatusCode.OK to {
                 description = "Content of UI template"
-                body<String> {
+                body<PagesLayout> {
                     description = "Content of UI template"
                 }
             }

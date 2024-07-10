@@ -45,7 +45,10 @@ interface RootModule {
             KeyModule.Default(signalApiModule)
         }
         override val uiModule: UiModule by lazy {
-            UiModule.Default(signalApiModule)
+            UiModule.Default(
+                signalApiModule = signalApiModule,
+                keyModule = keyModule
+            )
         }
     }
 }

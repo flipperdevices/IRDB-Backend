@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.modules.core)
     implementation(projects.modules.apiStatus)
     implementation(projects.modules.parser)
+    implementation(projects.modules.uiGenerator)
 }
 
 application {

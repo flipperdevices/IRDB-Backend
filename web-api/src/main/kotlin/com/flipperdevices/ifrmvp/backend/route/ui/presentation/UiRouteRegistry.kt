@@ -6,9 +6,12 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.IfrFileTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
 import com.flipperdevices.ifrmvp.backend.model.IfrFileModel
+import com.flipperdevices.ifrmvp.backend.route.key.data.KeyRouteRepository
+import com.flipperdevices.ifrmvp.parser.UiGenerator
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.ktor.http.ContentType
+import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import org.jetbrains.exposed.sql.Database
@@ -16,7 +19,9 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 internal class UiRouteRegistry(
-    private val database: Database
+    private val database: Database,
+    private val keyRouteRepository: KeyRouteRepository,
+    private val uiGenerator: UiGenerator
 ) : RouteRegistry {
 
     private fun Routing.statusRoute() {
@@ -24,7 +29,7 @@ internal class UiRouteRegistry(
             path = "ui",
             builder = { with(UiSwagger) { createSwaggerDefinition() } },
             body = {
-                val ifrFileId = context.parameters["ifr_file_id"]?.toLongOrNull()
+                val ifrFileId = context.parameters["ifr_file_id"]?.toLongOrNull() ?: -1
                 val ifrFileModel = transaction(database) {
                     IfrFileTable.selectAll()
                         .where { IfrFileTable.id eq ifrFileId }
@@ -58,19 +63,24 @@ internal class UiRouteRegistry(
                         .where { UiPresetTable.ifrFileId eq ifrFileId }
                         .map { it[UiPresetTable.fileName] }
                         .firstOrNull()
-                        ?: error("Could not find ui files with ifrid: $ifrFileId")
+//                        ?: error("Could not find ui files with ifrid: $ifrFileId")
                 }
-                val uiPresetFile = ParserPathResolver.uiPresetFile(
-                    category = categoryFolderName,
-                    brand = brandFolderName,
-                    presetFileName = uiFileName,
-                    ifrFolderName = ifrFileModel.fileName.replace(".ir", "")
-                )
-                if (!uiPresetFile.exists()) error("Preset file ${uiPresetFile.absolutePath} not exists")
-                context.respondText(
-                    contentType = ContentType.Application.Json,
-                    text = uiPresetFile.readText()
-                )
+                if (uiFileName != null) {
+                    val uiPresetFile = ParserPathResolver.uiPresetFile(
+                        category = categoryFolderName,
+                        brand = brandFolderName,
+                        presetFileName = uiFileName,
+                        ifrFolderName = ifrFileModel.fileName.replace(".ir", "")
+                    )
+                    if (!uiPresetFile.exists()) error("Preset file ${uiPresetFile.absolutePath} not exists")
+                    context.respondText(
+                        contentType = ContentType.Application.Json,
+                        text = uiPresetFile.readText()
+                    )
+                } else {
+                    val ifrFile = keyRouteRepository.getIfrFile(ifrFileId)
+                    context.respond(uiGenerator.generate(ifrFile.readText()))
+                }
             }
         )
     }
