@@ -23,51 +23,65 @@ internal class SignalRouteRegistry(
     private val signalByOrderRepository: SignalByOrderRepository
 ) : RouteRegistry {
 
+    private fun getCategorySingularDisplayName(categoryId: Long): String {
+        return CategoryMetaTable
+            .select(CategoryMetaTable.singularDisplayName)
+            .where { CategoryMetaTable.categoryId eq categoryId }
+            .limit(1)
+            .map { it[CategoryMetaTable.singularDisplayName] }
+            .firstOrNull()
+            ?: error("Could not find category $categoryId")
+    }
+
     private fun getSignal(signalRequestModel: SignalRequestModel): SignalResponseModel {
         return transaction(database) {
             // Looking for ifr file id with non-failed results
             // If file not found then we don't have signals
-            val ifrFile = irFileRepository
-                .getIrFile(signalRequestModel)
-                ?: return@transaction SignalResponseModel()
+            val ifrFile = irFileRepository.getNextIrFile(signalRequestModel)
+            if (ifrFile == null) {
+                val mostSuccessIfrFile = irFileRepository.getMostSuccessfulIfrFile(signalRequestModel)
+                return@transaction SignalResponseModel(ifrFileModel = mostSuccessIfrFile)
+            }
 
             val orderCount = counterRepository.countOrders(ifrFile.id)
+
             val successCount = signalRequestModel
                 .successResults
                 .count { it.ifrFileId == ifrFile.id }
                 .toLong()
-            val categorySingularDisplayName = CategoryMetaTable
-                .select(CategoryMetaTable.singularDisplayName)
-                .where { CategoryMetaTable.categoryId eq signalRequestModel.categoryId }
-                .limit(1)
-                .map { it[CategoryMetaTable.singularDisplayName] }
-                .firstOrNull() ?: return@transaction SignalResponseModel()
+
+            val categorySingularDisplayName = getCategorySingularDisplayName(signalRequestModel.categoryId)
 
             println("Success count: $successCount; Orders count: $orderCount")
             println("IfrFileId: ${ifrFile.id} category: ${ifrFile.categoryId} brand: ${ifrFile.brandId}")
 
-            if (orderCount == 1L && successCount >= 1) {
-                return@transaction SignalResponseModel(ifrFileModel = ifrFile)
-            }
-            // If orders empty, getting just by signal
-            // If orders not empty, getting by orders
-            if (orderCount == 0L) {
-                if (successCount >= MAX_SUCCESS_ROW) {
-                    return@transaction SignalResponseModel(ifrFileModel = ifrFile)
+            return@transaction when {
+                orderCount == 1L && successCount >= 1 -> {
+                    SignalResponseModel(ifrFileModel = ifrFile)
                 }
-                return@transaction defaultSignalRepository.getDefaultSignal(
-                    ifrFile = ifrFile,
-                    signalRequestModel = signalRequestModel,
-                    categorySingularDisplayName = categorySingularDisplayName
-                )
-            } else {
-                return@transaction signalByOrderRepository.getSignalByOrder(
-                    signalRequestModel = signalRequestModel,
-                    ifrFile = ifrFile,
-                    orderCount = orderCount,
-                    successCount = successCount,
-                    categorySingularDisplayName = categorySingularDisplayName,
-                )
+
+                orderCount == 0L && successCount >= MAX_SUCCESS_ROW -> {
+                    SignalResponseModel(ifrFileModel = ifrFile)
+                }
+
+                orderCount == 0L -> {
+                    defaultSignalRepository.getDefaultSignal(
+                        ifrFile = ifrFile,
+                        signalRequestModel = signalRequestModel,
+                        categorySingularDisplayName = categorySingularDisplayName,
+                        successCount = successCount
+                    )
+                }
+
+                else -> {
+                    signalByOrderRepository.getSignalByOrder(
+                        signalRequestModel = signalRequestModel,
+                        ifrFile = ifrFile,
+                        orderCount = orderCount,
+                        successCount = successCount,
+                        categorySingularDisplayName = categorySingularDisplayName,
+                    )
+                }
             }
         }
     }

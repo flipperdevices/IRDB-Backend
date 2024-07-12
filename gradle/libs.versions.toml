@@ -3,7 +3,7 @@
 kotlin-version = "2.0.0" # https://github.com/JetBrains/kotlin
 kotlin-coroutines = "1.8.1"
 kotlin-serialization-json = "1.7.0" # https://github.com/Kotlin/kotlinx.serialization
-android-gradle = "8.4.2" # https://developer.android.com/studio/releases/gradle-plugin
+android-gradle = "8.2.0" # https://developer.android.com/studio/releases/gradle-plugin
 
 # Shadow
 shadow = "7.1.2" # https://github.com/johnrengelman/shadow

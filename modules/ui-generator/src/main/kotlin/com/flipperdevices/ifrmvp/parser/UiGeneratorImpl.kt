@@ -24,9 +24,9 @@ class UiGeneratorImpl : UiGenerator {
                         val keyIdentifier = IfrKeyIdentifier.Name(signal.name)
                         IfrButton(
                             data = when {
-                                signal.name.contains("pwr", true)
-                                        || signal.name.contains("power", true)
-                                        || signal.name.contains("on", true) -> {
+                                signal.name.contains("pwr", true) ||
+                                    signal.name.contains("power", true) ||
+                                    signal.name.contains("on", true) -> {
                                     IconButtonData(
                                         keyIdentifier = keyIdentifier,
                                         iconId = IconButtonData.IconType.POWER

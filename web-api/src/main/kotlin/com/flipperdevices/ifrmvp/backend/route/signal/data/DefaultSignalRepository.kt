@@ -27,9 +27,16 @@ internal class DefaultSignalRepository {
                 when {
                     count == 0 -> andWhere {
                         SignalTable.name.eq("power")
-                        SignalTable.name.eq("on")
+                            .or(SignalTable.name.eq("on"))
                             .or(SignalTable.name.like("%power%"))
                             .or(SignalTable.name.like("%on%"))
+                    }
+
+                    count >= 1 -> andWhere {
+                        SignalTable.name.neq("power")
+                            .or(SignalTable.name.neq("on"))
+                            .or(SignalTable.name.notLike("%power%"))
+                            .or(SignalTable.name.notLike("%on%"))
                     }
 
                     else -> this
@@ -44,23 +51,32 @@ internal class DefaultSignalRepository {
         ifrFile: IfrFileModel,
         signalRequestModel: SignalRequestModel,
         categorySingularDisplayName: String,
+        successCount: Long,
     ): SignalResponseModel {
         val signalModel = getSignal(ifrFile.id, signalRequestModel)
-        return if (signalModel == null) {
-            SignalResponseModel(ifrFileModel = ifrFile)
-        } else {
-            SignalResponseModel(
-                signalResponse = SignalResponse(
-                    signalModel = signalModel,
-                    data = SignalResponse.Data(
-                        type = ButtonData.ButtonType.TEXT.name,
-                        iconId = null,
-                        text = signalModel.name
-                    ),
-                    categoryName = categorySingularDisplayName,
-                    message = "Does $categorySingularDisplayName respond to button?"
+        return when {
+            signalModel == null && successCount == 0L -> {
+                SignalResponseModel()
+            }
+
+            signalModel == null -> {
+                SignalResponseModel(ifrFileModel = ifrFile)
+            }
+
+            else -> {
+                SignalResponseModel(
+                    signalResponse = SignalResponse(
+                        signalModel = signalModel,
+                        data = SignalResponse.Data(
+                            type = ButtonData.ButtonType.TEXT.name,
+                            iconId = null,
+                            text = signalModel.name
+                        ),
+                        categoryName = categorySingularDisplayName,
+                        message = "Does $categorySingularDisplayName respond to button?"
+                    )
                 )
-            )
+            }
         }
     }
 }
