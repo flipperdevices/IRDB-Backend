@@ -27,5 +27,6 @@ include(":modules:api-status")
 include(":modules:build-konfig")
 include(":modules:parser")
 include(":modules:ui-generator")
+include(":modules:config-generator")
 // Master
 include("web-api")
