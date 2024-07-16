@@ -44,6 +44,7 @@ fun mainUnused() {
     }
 }
 
+@Suppress("NestedBlockDepth")
 fun fixMiRemoteDatabase() {
     val miRemoteFolder = ParserPathResolver.irDbFolderFolder
         .parentFile

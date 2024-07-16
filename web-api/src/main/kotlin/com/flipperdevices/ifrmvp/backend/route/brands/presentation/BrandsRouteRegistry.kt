@@ -6,7 +6,6 @@ import com.flipperdevices.ifrmvp.backend.route.brands.data.BrandsRepository
 import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
-import io.ktor.server.routing.get
 
 internal class BrandsRouteRegistry(
     private val brandsRepository: BrandsRepository
@@ -23,7 +22,7 @@ internal class BrandsRouteRegistry(
                     ?: 0
                 val brandsResponse = BrandsResponse(
                     brands = brandsRepository.getBrands(categoryId)
-                        .sortedBy { brandModel -> brandModel.name.first() }
+                        .sortedBy { brandModel -> brandModel.folderName.first() }
                 )
                 context.respond(brandsResponse)
             }

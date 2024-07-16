@@ -21,7 +21,8 @@ internal class IrFilesFiller(
                     val irFileId = signalTableApi.addIrFile(
                         fileName = irFile.name,
                         categoryId = categoryId,
-                        brandId = brandId
+                        brandId = brandId,
+                        folderName = irFile.parentFile.name
                     )
                     irFile.parentFile.listFiles()
                         .orEmpty()

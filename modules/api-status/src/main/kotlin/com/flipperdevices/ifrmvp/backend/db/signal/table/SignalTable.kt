@@ -2,10 +2,15 @@ package com.flipperdevices.ifrmvp.backend.db.signal.table
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 
+/**
+ * Every UNIQUE signal of every .ir file
+ *
+ * There's shouldn't be the same signal with same data
+ *
+ * Exception for raw signals which can be the same with parsed
+ */
 object SignalTable : LongIdTable("SIGNAL_TABLE") {
-    val categoryId = reference("category_id", CategoryTable)
-    val brandId = reference("brand_id", BrandTable)
-    val ifrFileId = reference("ifr_file_id", IfrFileTable)
+    val infraredFileId = reference("infrared_file_id", InfraredFileTable)
     val name = text("name")
     val type = text("type")
     val protocol = text("protocol").nullable()
@@ -14,5 +19,17 @@ object SignalTable : LongIdTable("SIGNAL_TABLE") {
     val frequency = text("frequency").nullable()
     val dutyCycle = text("duty_cycle").nullable()
     val data = text("data").nullable()
-    val hash = text("hash")
+
+    init {
+        uniqueIndex(
+            "signalindex",
+            type,
+            protocol,
+            address,
+            command,
+            frequency,
+            dutyCycle,
+            data
+        )
+    }
 }

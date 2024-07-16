@@ -1,7 +1,6 @@
 package com.flipperdevices.ifrmvp.parser.api
 
 import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
-import com.flipperdevices.ifrmvp.parser.model.OrderModel
 import com.flipperdevices.ifrmvp.parser.model.RawIfrRemote
 
 internal interface SignalTableApi {
@@ -17,7 +16,8 @@ internal interface SignalTableApi {
     suspend fun addIrFile(
         fileName: String,
         categoryId: Long,
-        brandId: Long
+        brandId: Long,
+        folderName: String
     ): Long
 
     suspend fun addUiPreset(
@@ -37,14 +37,5 @@ internal interface SignalTableApi {
     suspend fun addCategoryMeta(
         categoryId: Long,
         meta: CategoryMeta
-    )
-
-    suspend fun addOrderModel(
-        orderModel: OrderModel,
-        ifrSignalId: Long,
-        categoryId: Long,
-        brandId: Long,
-        ifrFileId: Long,
-        order: Int
     )
 }

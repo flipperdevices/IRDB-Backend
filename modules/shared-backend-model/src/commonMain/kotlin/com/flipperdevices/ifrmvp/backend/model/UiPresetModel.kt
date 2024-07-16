@@ -4,12 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("BrandModel")
-class BrandModel(
+data class UiPresetModel(
     @SerialName("id")
     val id: Long,
-    @SerialName("name")
-    val folderName: String,
-    @SerialName("category_id")
-    val categoryId: Long,
+    @SerialName("infrared_file_id")
+    val infraredFileId: Long,
+    @SerialName("file_name")
+    val fileName: String
 )

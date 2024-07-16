@@ -3,16 +3,11 @@ package com.flipperdevices.ifrmvp.parser.api
 import com.flipperdevices.ifrmvp.backend.db.signal.table.BrandTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryMetaTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryTable
-import com.flipperdevices.ifrmvp.backend.db.signal.table.IfrFileTable
-import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalOrderTable
+import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
 import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
-import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData
-import com.flipperdevices.ifrmvp.model.buttondata.TextButtonData
-import com.flipperdevices.ifrmvp.parser.model.OrderModel
 import com.flipperdevices.ifrmvp.parser.model.RawIfrRemote
-import com.flipperdevices.ifrmvp.parser.util.IfrRemoteExt.md5
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.insert
@@ -21,7 +16,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 internal class SignalTableApiImpl(
-    private val database: Database
+    private val database: Database,
 ) : SignalTableApi {
 
     private fun checkCategoryExists(id: Long) {
@@ -39,8 +34,8 @@ internal class SignalTableApiImpl(
     }
 
     private fun checkIrFileExists(id: Long) {
-        val isExists = IfrFileTable.selectAll()
-            .where { IfrFileTable.id eq id }
+        val isExists = InfraredFileTable.selectAll()
+            .where { InfraredFileTable.id eq id }
             .count() != 0L
         check(isExists) { "IrFile does not exists" }
     }
@@ -65,39 +60,39 @@ internal class SignalTableApiImpl(
     ): Long = transaction(database) {
         checkCategoryExists(categoryId)
         BrandTable.selectAll()
-            .where { BrandTable.displayName eq displayName }
-            .andWhere { BrandTable.category eq categoryId }
+            .where { BrandTable.folderName eq displayName }
+            .andWhere { BrandTable.categoryId eq categoryId }
             .map { it[BrandTable.id] }
             .firstOrNull()
             ?.value
             ?.let { existingBrandId -> return@transaction existingBrandId }
 
         BrandTable.insertAndGetId { statement ->
-            statement[BrandTable.category] = categoryId
-            statement[BrandTable.displayName] = displayName
+            statement[BrandTable.categoryId] = categoryId
+            statement[BrandTable.folderName] = displayName
         }.value
     }
 
     override suspend fun addIrFile(
         fileName: String,
         categoryId: Long,
-        brandId: Long
+        brandId: Long,
+        folderName: String
     ): Long = transaction(database) {
         checkCategoryExists(categoryId)
         checkBrandExists(brandId)
-        IfrFileTable.selectAll()
-            .where { IfrFileTable.fileName eq fileName }
-            .andWhere { IfrFileTable.categoryId eq categoryId }
-            .andWhere { IfrFileTable.brandId eq brandId }
-            .map { it[IfrFileTable.id] }
+        InfraredFileTable.selectAll()
+            .where { InfraredFileTable.fileName eq fileName }
+            .andWhere { InfraredFileTable.brandId eq brandId }
+            .map { it[InfraredFileTable.id] }
             .firstOrNull()
             ?.value
             ?.let { existingIrfFileId -> return@transaction existingIrfFileId }
 
-        IfrFileTable.insertAndGetId { statement ->
-            statement[IfrFileTable.categoryId] = categoryId
-            statement[IfrFileTable.brandId] = brandId
-            statement[IfrFileTable.fileName] = fileName
+        InfraredFileTable.insertAndGetId { statement ->
+            statement[InfraredFileTable.brandId] = brandId
+            statement[InfraredFileTable.fileName] = fileName
+            statement[InfraredFileTable.folderName] = folderName
         }.value
     }
 
@@ -112,9 +107,7 @@ internal class SignalTableApiImpl(
         checkIrFileExists(irFileId)
 
         UiPresetTable.selectAll()
-            .where { UiPresetTable.ifrFileId eq irFileId }
-            .andWhere { UiPresetTable.categoryId eq categoryId }
-            .andWhere { UiPresetTable.brandId eq brandId }
+            .where { UiPresetTable.infraredFileId eq irFileId }
             .andWhere { UiPresetTable.fileName eq fileName }
             .map { it[UiPresetTable.id] }
             .firstOrNull()
@@ -122,9 +115,7 @@ internal class SignalTableApiImpl(
             ?.let { _ -> return@transaction }
 
         UiPresetTable.insert { statement ->
-            statement[UiPresetTable.categoryId] = categoryId
-            statement[UiPresetTable.brandId] = brandId
-            statement[UiPresetTable.ifrFileId] = irFileId
+            statement[UiPresetTable.infraredFileId] = irFileId
             statement[UiPresetTable.fileName] = fileName
         }
     }
@@ -148,18 +139,14 @@ internal class SignalTableApiImpl(
             .andWhere { SignalTable.frequency eq remote.frequency }
             .andWhere { SignalTable.dutyCycle eq remote.dutyCycle }
             .andWhere { SignalTable.data eq remote.data }
-            .andWhere { SignalTable.categoryId eq categoryId }
-            .andWhere { SignalTable.ifrFileId eq irFileId }
-            .andWhere { SignalTable.brandId eq brandId }
+            .andWhere { SignalTable.infraredFileId eq irFileId }
             .map { it[SignalTable.id] }
             .firstOrNull()
             ?.value
             ?.let { existingIrfSignalId -> return@transaction existingIrfSignalId }
 
         SignalTable.insertAndGetId { statement ->
-            statement[SignalTable.categoryId] = categoryId
-            statement[SignalTable.brandId] = brandId
-            statement[SignalTable.ifrFileId] = irFileId
+            statement[SignalTable.infraredFileId] = irFileId
             statement[SignalTable.name] = remote.name
             statement[SignalTable.type] = remote.type
             statement[SignalTable.protocol] = remote.protocol
@@ -168,7 +155,6 @@ internal class SignalTableApiImpl(
             statement[SignalTable.frequency] = remote.frequency
             statement[SignalTable.dutyCycle] = remote.dutyCycle
             statement[SignalTable.data] = remote.data
-            statement[SignalTable.hash] = remote.md5
         }.value
     }
 
@@ -189,33 +175,6 @@ internal class SignalTableApiImpl(
             statement[CategoryMetaTable.singularDisplayName] = meta.manifest.singularDisplayName
             statement[CategoryMetaTable.iconPngBase64] = meta.iconPngBase64
             statement[CategoryMetaTable.iconSvgBase64] = meta.iconSvgBase64
-        }
-    }
-
-    override suspend fun addOrderModel(
-        orderModel: OrderModel,
-        ifrSignalId: Long,
-        categoryId: Long,
-        brandId: Long,
-        ifrFileId: Long,
-        order: Int
-    ): Unit = transaction(database) {
-        SignalOrderTable.insert { statement ->
-            statement[SignalOrderTable.categoryId] = categoryId
-            statement[SignalOrderTable.brandId] = brandId
-            statement[SignalOrderTable.ifrFileId] = ifrFileId
-            statement[SignalOrderTable.ifrSignalId] = ifrSignalId
-            statement[SignalOrderTable.message] = orderModel.message
-            statement[SignalOrderTable.dataType] = orderModel.data.type.name
-            statement[SignalOrderTable.order] = order
-            statement[SignalOrderTable.dataIconId] = when (orderModel.data) {
-                is IconButtonData -> orderModel.data.iconId.name
-                else -> null
-            }
-            statement[SignalOrderTable.dataText] = when (orderModel.data) {
-                is TextButtonData -> orderModel.data.text
-                else -> null
-            }
         }
     }
 }

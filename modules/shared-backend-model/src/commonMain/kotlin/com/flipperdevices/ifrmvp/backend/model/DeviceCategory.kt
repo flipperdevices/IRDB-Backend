@@ -9,5 +9,7 @@ class DeviceCategory(
     @SerialName("id")
     val id: Long,
     @SerialName("meta")
-    val meta: CategoryMeta
+    val meta: CategoryMeta,
+    @SerialName("folder_name")
+    val folderName: String
 )

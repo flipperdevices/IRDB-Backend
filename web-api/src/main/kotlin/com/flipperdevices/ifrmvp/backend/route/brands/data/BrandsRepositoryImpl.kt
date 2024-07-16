@@ -10,12 +10,12 @@ internal class BrandsRepositoryImpl(private val database: Database) : BrandsRepo
     override suspend fun getBrands(categoryId: Long): List<BrandModel> {
         return transaction(database) {
             BrandTable.selectAll()
-                .where { BrandTable.category eq categoryId }
+                .where { BrandTable.categoryId eq categoryId }
                 .map {
                     BrandModel(
                         id = it[BrandTable.id].value,
-                        name = it[BrandTable.displayName],
-                        categoryId = it[BrandTable.category].value,
+                        folderName = it[BrandTable.folderName],
+                        categoryId = it[BrandTable.categoryId].value,
                     )
                 }
         }

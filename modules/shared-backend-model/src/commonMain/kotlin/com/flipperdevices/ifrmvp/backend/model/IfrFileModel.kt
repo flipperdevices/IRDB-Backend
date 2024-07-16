@@ -7,10 +7,10 @@ import kotlinx.serialization.Serializable
 data class IfrFileModel(
     @SerialName("id")
     val id: Long,
-    @SerialName("category_id")
-    val categoryId: Long,
     @SerialName("brand_id")
     val brandId: Long,
     @SerialName("file_name")
-    val fileName: String
+    val fileName: String,
+    @SerialName("folder_name")
+    val folderName: String
 )
