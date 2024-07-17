@@ -42,10 +42,10 @@ dependencies {
     implementation(projects.modules.model)
     implementation(projects.modules.core)
     implementation(projects.modules.apiStatus)
-    implementation(projects.modules.parser)
     implementation(projects.modules.infrared)
-    implementation(projects.modules.uiGenerator)
-    implementation(projects.modules.configGenerator)
+    implementation(projects.modules.kenerator.ui)
+    implementation(projects.modules.kenerator.sql)
+    implementation(projects.modules.kenerator.configuration)
 }
 
 application {

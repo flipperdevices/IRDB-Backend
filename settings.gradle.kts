@@ -28,5 +28,8 @@ include(":modules:ui-generator")
 include(":modules:config-generator")
 include(":modules:model")
 include(":modules:infrared")
+include(":modules:kenerator:configuration")
+include(":modules:kenerator:sql")
+include(":modules:kenerator:ui")
 // Master
 include("web-api")
