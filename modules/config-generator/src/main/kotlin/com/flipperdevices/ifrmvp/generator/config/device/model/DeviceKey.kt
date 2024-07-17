@@ -1,5 +1,10 @@
 package com.flipperdevices.ifrmvp.generator.config.device.model
 
+/**
+ * [DeviceKey] is default set of pre-defined keys for remote controls
+ *
+ * The keys have comments in which devices they are present
+ */
 enum class DeviceKey {
     // TV, Air_Purifiers, Box, DVD, Fan, Projector
     PWR,
