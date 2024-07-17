@@ -18,7 +18,5 @@ dependencies {
     implementation(libs.exposed.jdbc)
     implementation(libs.sql.driver.mysql)
     // Services
-    implementation("com.flipperdevices.ifrmvp.backend:shared-ui-model")
-    implementation(projects.modules.sharedUiModel)
     implementation(projects.modules.buildKonfig)
 }

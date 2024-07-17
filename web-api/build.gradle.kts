@@ -39,8 +39,7 @@ dependencies {
     implementation(libs.exposed.dao)
     // Services
     implementation(projects.modules.buildKonfig)
-    implementation(projects.modules.sharedUiModel)
-    implementation(projects.modules.sharedBackendModel)
+    implementation(projects.modules.model)
     implementation(projects.modules.core)
     implementation(projects.modules.apiStatus)
     implementation(projects.modules.parser)
