@@ -4,7 +4,7 @@
 
 ```bash
 # Run parser and fill DB
-./gradlew :modules:parser:run
+./gradlew :modules:kenerator:sql:run
 # Run server
 ./gradlew :web-api:run
 ```
@@ -15,7 +15,7 @@ Output jars will be located in [generated ./jars folder](./jars)
 
 ```bash
 # Shadow parser
-./gradlew :modules:parser:shadowJar
+./gradlew :modules:kenerator:sql:shadowJar
 # Shadow server
 ./gradlew :web-api:shadowJar
 ```

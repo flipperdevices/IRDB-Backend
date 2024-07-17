@@ -19,17 +19,16 @@ dependencyResolutionManagement {
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "backend"
 
-// Services
-include(":modules:core")
+// database
 include(":modules:api-status")
+// core
 include(":modules:build-konfig")
-include(":modules:parser")
-include(":modules:ui-generator")
-include(":modules:config-generator")
+include(":modules:core")
 include(":modules:model")
 include(":modules:infrared")
+// generators
 include(":modules:kenerator:configuration")
 include(":modules:kenerator:sql")
 include(":modules:kenerator:ui")
-// Master
+// application
 include("web-api")

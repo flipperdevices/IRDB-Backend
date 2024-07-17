@@ -6,7 +6,7 @@ COPY . .
 
 
 RUN ./gradlew :web-api:shadowJar
-RUN ./gradlew :modules:parser:shadowJar
+RUN ./gradlew :modules:kenerator:sql:shadowJar
 
 FROM openjdk:24-slim as parser
 
