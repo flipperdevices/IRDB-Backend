@@ -11,6 +11,7 @@ interface SignalModule {
         override val registry: RouteRegistry by lazy {
             SignalRouteRegistry(
                 database = signalApiModule.database,
+                tableDao = signalApiModule.tableDao
             )
         }
     }

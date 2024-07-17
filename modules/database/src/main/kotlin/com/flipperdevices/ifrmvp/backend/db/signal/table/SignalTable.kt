@@ -10,7 +10,6 @@ import org.jetbrains.exposed.dao.id.LongIdTable
  * Exception for raw signals which can be the same with parsed
  */
 object SignalTable : LongIdTable("SIGNAL_TABLE") {
-    val infraredFileId = reference("infrared_file_id", InfraredFileTable)
     val name = text("name")
     val type = text("type")
     val protocol = text("protocol").nullable()

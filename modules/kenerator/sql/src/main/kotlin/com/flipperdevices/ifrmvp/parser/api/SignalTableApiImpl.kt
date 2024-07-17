@@ -139,14 +139,12 @@ internal class SignalTableApiImpl(
             .andWhere { SignalTable.frequency eq remote.frequency }
             .andWhere { SignalTable.dutyCycle eq remote.dutyCycle }
             .andWhere { SignalTable.data eq remote.data }
-            .andWhere { SignalTable.infraredFileId eq irFileId }
             .map { it[SignalTable.id] }
             .firstOrNull()
             ?.value
             ?.let { existingIrfSignalId -> return@transaction existingIrfSignalId }
 
         SignalTable.insertAndGetId { statement ->
-            statement[SignalTable.infraredFileId] = irFileId
             statement[SignalTable.name] = remote.name
             statement[SignalTable.type] = remote.type
             statement[SignalTable.protocol] = remote.protocol
