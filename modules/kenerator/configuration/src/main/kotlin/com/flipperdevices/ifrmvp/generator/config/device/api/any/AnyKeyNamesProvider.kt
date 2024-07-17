@@ -1,7 +1,7 @@
 package com.flipperdevices.ifrmvp.generator.config.device.api.any
 
+import com.flipperdevices.ifrmvp.backend.model.DeviceKey
 import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvider
-import com.flipperdevices.ifrmvp.generator.config.device.model.DeviceKey
 
 object AnyKeyNamesProvider : DeviceKeyNamesProvider {
     @Suppress("LongMethod", "CyclomaticComplexMethod")

@@ -1,5 +1,6 @@
 package com.flipperdevices.ifrmvp.generator.config.device.model
 
+import com.flipperdevices.ifrmvp.backend.model.DeviceKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

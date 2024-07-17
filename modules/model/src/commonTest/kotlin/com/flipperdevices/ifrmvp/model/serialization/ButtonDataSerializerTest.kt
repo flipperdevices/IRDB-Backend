@@ -3,10 +3,10 @@ package com.flipperdevices.ifrmvp.model.serialization
 import com.flipperdevices.ifrmvp.model.IfrButton
 import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
 import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData
-import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class ButtonDataSerializerTest {
     private val json = Json {

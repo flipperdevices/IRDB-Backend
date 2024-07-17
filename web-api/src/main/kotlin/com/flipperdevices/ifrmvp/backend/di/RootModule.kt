@@ -54,7 +54,8 @@ interface RootModule {
         }
         override val configGenModule: ConfigGenModule by lazy {
             ConfigGenModule.Default(
-                keyModule = keyModule
+                keyModule = keyModule,
+                apiModule = signalApiModule
             )
         }
     }

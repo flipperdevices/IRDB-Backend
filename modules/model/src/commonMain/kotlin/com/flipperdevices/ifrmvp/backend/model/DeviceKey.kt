@@ -1,4 +1,4 @@
-package com.flipperdevices.ifrmvp.generator.config.device.model
+package com.flipperdevices.ifrmvp.backend.model
 
 /**
  * [DeviceKey] is default set of pre-defined keys for remote controls
