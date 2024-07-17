@@ -20,6 +20,7 @@ dependencies {
     implementation(projects.modules.core)
     implementation(projects.modules.model)
     implementation(projects.modules.apiStatus)
+    implementation(projects.modules.infrared)
 }
 
 application {

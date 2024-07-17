@@ -27,5 +27,6 @@ include(":modules:parser")
 include(":modules:ui-generator")
 include(":modules:config-generator")
 include(":modules:model")
+include(":modules:infrared")
 // Master
 include("web-api")

@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.modules.core)
     implementation(projects.modules.apiStatus)
     implementation(projects.modules.parser)
+    implementation(projects.modules.infrared)
     implementation(projects.modules.uiGenerator)
     implementation(projects.modules.configGenerator)
 }
