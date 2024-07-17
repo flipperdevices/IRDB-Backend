@@ -20,7 +20,7 @@ sealed interface IfrKeyIdentifier {
      */
     @SerialName("SHA_256")
     @Serializable
-    class Sha256(
+    data class Sha256(
         @SerialName("key_name")
         val name: String,
         @SerialName("sha_256_string")
@@ -29,8 +29,12 @@ sealed interface IfrKeyIdentifier {
 
     @SerialName("NAME")
     @Serializable
-    class Name(
+    data class Name(
         @SerialName("key_name")
         val name: String,
     ) : IfrKeyIdentifier
+
+    @SerialName("EMPTY")
+    @Serializable
+    data object Empty : IfrKeyIdentifier
 }
