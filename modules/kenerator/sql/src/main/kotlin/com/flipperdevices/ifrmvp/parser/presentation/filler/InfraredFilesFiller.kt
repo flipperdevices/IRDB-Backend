@@ -8,9 +8,9 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import java.io.File
 
-internal class IrFilesFiller(
+internal class InfraredFilesFiller(
     private val signalTableApi: SignalTableApi,
-    private val ifrSignalFiller: IfrSignalFiller,
+    private val infraredSignalsFiller: InfraredSignalsFiller,
     private val uiFileFiller: UiPresetFiller
 ) {
     suspend fun fill(model: Model) = coroutineScope {
@@ -40,8 +40,8 @@ internal class IrFilesFiller(
                     val signals = irFile.readText()
                         .let(FlipperFileFormat::fromFileContent)
                         .let(InfraredKeyParser::mapParsedKeyToInfraredRemotes)
-                    ifrSignalFiller.fill(
-                        model = IfrSignalFiller.Model(
+                    infraredSignalsFiller.fill(
+                        model = InfraredSignalsFiller.Model(
                             ifrFileId = irFileId,
                             categoryId = categoryId,
                             brandId = brandId,

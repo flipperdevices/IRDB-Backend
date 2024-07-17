@@ -7,7 +7,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
-internal class IfrSignalFiller(
+internal class InfraredSignalsFiller(
     private val signalTableApi: SignalTableApi,
 ) {
 
@@ -27,11 +27,15 @@ internal class IfrSignalFiller(
                         dutyCycle = raw?.dutyCycle,
                         data = raw?.data
                     )
-                    signalTableApi.addSignal(
+                    val signalId = signalTableApi.addSignal(
                         categoryId = categoryId,
                         brandId = brandId,
                         irFileId = ifrFileId,
                         remote = rawRemote,
+                    )
+                    signalTableApi.linkFileAndSignal(
+                        infraredFileId = ifrFileId,
+                        signalId = signalId
                     )
                 }
             }.awaitAll()

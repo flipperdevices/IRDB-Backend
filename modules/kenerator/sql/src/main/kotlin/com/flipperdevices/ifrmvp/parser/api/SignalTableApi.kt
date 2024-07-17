@@ -38,4 +38,9 @@ internal interface SignalTableApi {
         categoryId: Long,
         meta: CategoryMeta
     )
+
+    suspend fun linkFileAndSignal(
+        infraredFileId: Long,
+        signalId: Long
+    )
 }

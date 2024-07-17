@@ -22,7 +22,7 @@ internal class BrandsRouteRegistry(
                     ?: 0
                 val brandsResponse = BrandsResponse(
                     brands = brandsRepository.getBrands(categoryId)
-                        .sortedBy { brandModel -> brandModel.folderName.first() }
+                        .sortedBy { brandModel -> brandModel.folderName.lowercase() }
                 )
                 context.respond(brandsResponse)
             }

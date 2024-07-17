@@ -9,7 +9,7 @@ import java.io.File
 
 internal class BrandsFiller(
     private val signalTableApi: SignalTableApi,
-    private val irFilesFiller: IrFilesFiller
+    private val infraredFilesFiller: InfraredFilesFiller
 ) {
 
     suspend fun full(model: Model) = coroutineScope {
@@ -21,8 +21,8 @@ internal class BrandsFiller(
                         categoryId = categoryId,
                         displayName = brandName
                     )
-                    irFilesFiller.fill(
-                        model = IrFilesFiller.Model(
+                    infraredFilesFiller.fill(
+                        model = InfraredFilesFiller.Model(
                             categoryId = categoryId,
                             brandId = brandId,
                             categoryName = categoryName,

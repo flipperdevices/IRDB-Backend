@@ -18,6 +18,7 @@ import io.ktor.server.routing.Routing
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
 
 @Suppress("UnusedPrivateProperty")
 internal class SignalRouteRegistry(
@@ -31,6 +32,7 @@ internal class SignalRouteRegistry(
             body = {
                 @Suppress("UnusedPrivateProperty")
                 val signalRequestModel = context.receive<SignalRequestModel>()
+                println("REQUEST: $signalRequestModel")
                 // Index of successful results
                 val index = signalRequestModel.successResults.size
 
@@ -40,67 +42,103 @@ internal class SignalRouteRegistry(
                     .entries
                     .firstOrNull { it.folderName == category.folderName }
                     ?: error("Could not find category with folderName ${category.folderName}")
-                val order = AllCategoryConfigGenerator
-                    .generate(categoryType)
-                    .orders
-                    .getOrNull(index)
-                    ?: TODO()
-                val keyNames = AnyKeyNamesProvider.getKeyNames(order.key)
+                val order = transaction(database) {
+                    AllCategoryConfigGenerator
+                        .generate(categoryType)
+                        .orders
+                        .getOrNull(index)
+                }
 
                 // Keep only those files, in which signals have been successfully passed
-                val includedFileIds = InfraredFileToSignalTable
-                    .select(InfraredFileToSignalTable.infraredFileId)
-                    .groupBy(InfraredFileToSignalTable.infraredFileId)
-                    .where {
-                        InfraredFileToSignalTable
-                            .signalId
-                            .inList(
-                                signalRequestModel.successResults.map(SignalRequestModel.SignalResultData::signalId)
-                            )
-                    }
-
-                when (includedFileIds.count()) {
+                val includedFileIds = transaction(database) {
+                    InfraredFileToSignalTable
+                        .select(InfraredFileToSignalTable.infraredFileId)
+                        .groupBy(InfraredFileToSignalTable.infraredFileId)
+                        .apply {
+                            if (signalRequestModel.successResults.isNotEmpty()) {
+                                where {
+                                    InfraredFileToSignalTable
+                                        .signalId
+                                        .inList(
+                                            signalRequestModel.successResults.map(
+                                                SignalRequestModel.SignalResultData::signalId
+                                            )
+                                        )
+                                }
+                            } else {
+                                this
+                            }
+                        }
+                }
+                val includedInfraredFilesCount = transaction(database) { includedFileIds.count() }
+                when (includedInfraredFilesCount) {
                     0L -> {
                         TODO()
                     }
 
                     1L -> {
-                        val infraredFileId = includedFileIds
-                            .map { it[InfraredFileToSignalTable.infraredFileId] }
-                            .first()
-                            .value
+                        val infraredFileId = transaction(database) {
+                            includedFileIds
+                                .map { it[InfraredFileToSignalTable.infraredFileId] }
+                                .first()
+                                .value
+                        }
                         val response = SignalResponseModel(ifrFileModel = tableDao.ifrFileById(infraredFileId))
                         context.respond(response)
                     }
 
                     else -> {
-                        val includedSignalIds = InfraredFileToSignalTable
-                            .select(InfraredFileToSignalTable.signalId)
-                            .groupBy(InfraredFileToSignalTable.signalId)
-                            .where {
-                                InfraredFileToSignalTable
-                                    .infraredFileId
-                                    .inSubQuery(includedFileIds)
+                        val includedSignalIds = transaction(database) {
+                            InfraredFileToSignalTable
+                                .select(InfraredFileToSignalTable.signalId)
+                                .groupBy(InfraredFileToSignalTable.signalId)
+                                .where {
+                                    InfraredFileToSignalTable
+                                        .infraredFileId
+                                        .inSubQuery(includedFileIds)
+                                }
+                        }
+                        if (order == null) {
+                            val infraredFileId = transaction(database) {
+                                includedFileIds
+                                    .map { it[InfraredFileToSignalTable.infraredFileId] }
+                                    .first()
+                                    .value
                             }
-
-                        val signalModel = SignalTable.selectAll()
-                            .where { SignalTable.name inList keyNames }
-                            .andWhere { SignalTable.id.inSubQuery(includedSignalIds) }
-                            .limit(1)
-                            .map {
-                                SignalModel(
-                                    id = it[SignalTable.id].value,
-                                    name = it[SignalTable.name],
-                                    type = it[SignalTable.type],
-                                    protocol = it[SignalTable.protocol],
-                                    address = it[SignalTable.address],
-                                    command = it[SignalTable.command],
-                                    frequency = it[SignalTable.frequency],
-                                    dutyCycle = it[SignalTable.dutyCycle],
-                                    data = it[SignalTable.data],
-                                )
-                            }
-                            .first()
+                            val response = SignalResponseModel(ifrFileModel = tableDao.ifrFileById(infraredFileId))
+                            context.respond(response)
+                            return@post
+                        }
+                        val keyNames = AnyKeyNamesProvider.getKeyNames(order.key)
+                        val signalModel = transaction(database) {
+                            SignalTable.selectAll()
+                                .where { SignalTable.name inList keyNames }
+                                .andWhere { SignalTable.id.inSubQuery(includedSignalIds) }
+                                .andWhere { SignalTable.brandId eq brand.id }
+                                .andWhere {
+                                    SignalTable.id
+                                        .notInList(
+                                            signalRequestModel.failedResults.map(
+                                                SignalRequestModel.SignalResultData::signalId
+                                            )
+                                        )
+                                }
+                                .limit(1)
+                                .map {
+                                    SignalModel(
+                                        id = it[SignalTable.id].value,
+                                        name = it[SignalTable.name],
+                                        type = it[SignalTable.type],
+                                        protocol = it[SignalTable.protocol],
+                                        address = it[SignalTable.address],
+                                        command = it[SignalTable.command],
+                                        frequency = it[SignalTable.frequency],
+                                        dutyCycle = it[SignalTable.dutyCycle],
+                                        data = it[SignalTable.data],
+                                    )
+                                }
+                                .first()
+                        }
                         val response = SignalResponseModel(
                             signalResponse = SignalResponse(
                                 signalModel = signalModel,
