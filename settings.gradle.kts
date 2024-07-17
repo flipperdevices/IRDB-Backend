@@ -20,7 +20,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "backend"
 
 // database
-include(":modules:api-status")
+include(":modules:database")
 // core
 include(":modules:build-konfig")
 include(":modules:core")

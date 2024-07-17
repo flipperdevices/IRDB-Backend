@@ -12,9 +12,9 @@ dependencies {
     implementation(kotlin("test"))
     // Local
     implementation(projects.modules.buildKonfig)
-    implementation(projects.modules.apiStatus)
+    implementation(projects.modules.database)
     implementation(projects.modules.core)
     implementation(projects.modules.model)
-    implementation(projects.modules.apiStatus)
+    implementation(projects.modules.database)
     implementation(projects.modules.infrared)
 }

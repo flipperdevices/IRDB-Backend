@@ -1,5 +1,3 @@
-import ru.astrainteractive.gradleplugin.property.extension.ModelPropertyValueExt.requireProjectInfo
-
 plugins {
     id("org.jetbrains.kotlin.jvm")
     alias(libs.plugins.kotlin.serialization)
@@ -12,4 +10,3 @@ dependencies {
     // Local
     implementation(projects.modules.buildKonfig)
 }
-

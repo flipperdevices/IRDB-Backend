@@ -41,7 +41,7 @@ dependencies {
     implementation(projects.modules.buildKonfig)
     implementation(projects.modules.model)
     implementation(projects.modules.core)
-    implementation(projects.modules.apiStatus)
+    implementation(projects.modules.database)
     implementation(projects.modules.infrared)
     implementation(projects.modules.kenerator.ui)
     implementation(projects.modules.kenerator.sql)
