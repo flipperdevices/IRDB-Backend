@@ -124,7 +124,6 @@ internal class SignalRouteRegistry(
         categoryType: CategoryType,
         category: DeviceCategory
     ): SignalResponseModel {
-
         val order = transaction(database) {
             AllCategoryConfigGenerator
                 .generate(categoryType)
@@ -160,7 +159,6 @@ internal class SignalRouteRegistry(
             )
         }
 
-
         val response = SignalResponseModel(
             signalResponse = SignalResponse(
                 signalModel = signalModel,
@@ -171,7 +169,6 @@ internal class SignalRouteRegistry(
         )
         return response
     }
-
 
     private fun Routing.statusRoute() {
         post(

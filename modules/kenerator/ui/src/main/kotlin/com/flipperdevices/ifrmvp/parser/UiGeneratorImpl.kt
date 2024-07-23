@@ -14,7 +14,11 @@ class UiGeneratorImpl : UiGenerator {
         val signals = remoteContent
             .let(FlipperFileFormat.Companion::fromFileContent)
             .let(InfraredKeyParser::mapParsedKeyToInfraredRemotes)
-        val chunks = signals.windowed(MAX_ROWS * MAX_COLUMNS) { it }
+        val windowSize = MAX_ROWS * MAX_COLUMNS
+        val chunks = when {
+            signals.size > windowSize -> signals.windowed(windowSize) { it }
+            else -> listOf(signals)
+        }
         return PagesLayout(
             pages = chunks.map { signals ->
                 var x = -1

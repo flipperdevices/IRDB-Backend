@@ -9,6 +9,8 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
 import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
 import com.flipperdevices.ifrmvp.parser.model.RawIfrRemote
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.insert
@@ -123,44 +125,47 @@ internal class SignalTableApiImpl(
         Unit
     }.await()
 
+    private val limitedDispatcher = Dispatchers.IO.limitedParallelism(1)
     override suspend fun addSignal(
         brandId: Long,
         remote: RawIfrRemote
-    ): Long = suspendedTransactionAsync(db = database) {
+    ): Long = withContext(limitedDispatcher) {
+        suspendedTransactionAsync(db = database) {
 //        checkCategoryExists(categoryId)
 //        checkBrandExists(brandId)
 //        checkIrFileExists(irFileId)
 //
-        val getExistingId = {
-            println("EXISTING: $remote")
-            SignalTable.selectAll()
-                .andWhere { SignalTable.brandId eq brandId }
-                .andWhere { SignalTable.type eq remote.type }
-                .andWhere { SignalTable.protocol eq remote.protocol }
-                .andWhere { SignalTable.address eq remote.address }
-                .andWhere { SignalTable.command eq remote.command }
-                .andWhere { SignalTable.frequency eq remote.frequency }
-                .andWhere { SignalTable.dutyCycle eq remote.dutyCycle }
-                .andWhere { SignalTable.data eq remote.data }
-                .map { it[SignalTable.id] }
-                .firstOrNull()
-                ?.value
-                ?: error("Could not get remote: $remote")
-        }
-        runCatching {
-            SignalTable.insertAndGetId { statement ->
-                statement[SignalTable.brandId] = brandId
-                statement[SignalTable.name] = remote.name
-                statement[SignalTable.type] = remote.type
-                statement[SignalTable.protocol] = remote.protocol
-                statement[SignalTable.address] = remote.address
-                statement[SignalTable.command] = remote.command
-                statement[SignalTable.frequency] = remote.frequency
-                statement[SignalTable.dutyCycle] = remote.dutyCycle
-                statement[SignalTable.data] = remote.data
-            }?.value
-        }.getOrNull() ?: getExistingId.invoke()
-    }.await()
+            val getExistingId = {
+                println("EXISTING: $remote")
+                SignalTable.selectAll()
+                    .andWhere { SignalTable.brandId eq brandId }
+                    .andWhere { SignalTable.type eq remote.type }
+                    .andWhere { SignalTable.protocol eq remote.protocol }
+                    .andWhere { SignalTable.address eq remote.address }
+                    .andWhere { SignalTable.command eq remote.command }
+                    .andWhere { SignalTable.frequency eq remote.frequency }
+                    .andWhere { SignalTable.dutyCycle eq remote.dutyCycle }
+                    .andWhere { SignalTable.data eq remote.data }
+                    .map { it[SignalTable.id] }
+                    .firstOrNull()
+                    ?.value
+                    ?: error("Could not get remote: $remote")
+            }
+            runCatching {
+                SignalTable.insertAndGetId { statement ->
+                    statement[SignalTable.brandId] = brandId
+                    statement[SignalTable.name] = remote.name
+                    statement[SignalTable.type] = remote.type
+                    statement[SignalTable.protocol] = remote.protocol
+                    statement[SignalTable.address] = remote.address
+                    statement[SignalTable.command] = remote.command
+                    statement[SignalTable.frequency] = remote.frequency
+                    statement[SignalTable.dutyCycle] = remote.dutyCycle
+                    statement[SignalTable.data] = remote.data
+                }?.value
+            }.getOrNull() ?: getExistingId.invoke()
+        }.await()
+    }
 
     override suspend fun addCategoryMeta(
         categoryId: Long,
