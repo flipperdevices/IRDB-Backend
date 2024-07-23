@@ -10,10 +10,12 @@ import com.flipperdevices.ifrmvp.backend.model.SignalModel
 import com.flipperdevices.ifrmvp.backend.model.SignalRequestModel
 import com.flipperdevices.ifrmvp.backend.model.SignalResponse
 import com.flipperdevices.ifrmvp.backend.model.SignalResponseModel
-import com.flipperdevices.ifrmvp.generator.config.category.api.AllCategoryConfigGenerator
+import com.flipperdevices.ifrmvp.backend.route.signal.data.CategoryConfigRepository
+import com.flipperdevices.ifrmvp.backend.route.signal.data.DeviceKeyNamesRepository
+import com.flipperdevices.ifrmvp.backend.route.signal.data.InstantCategoryConfigRepository
+import com.flipperdevices.ifrmvp.backend.route.signal.data.InstantDeviceKeyNamesRepository
 import com.flipperdevices.ifrmvp.generator.config.category.model.CategoryConfiguration
 import com.flipperdevices.ifrmvp.generator.config.category.model.CategoryType
-import com.flipperdevices.ifrmvp.generator.config.device.api.any.AnyKeyNamesProvider
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
@@ -31,6 +33,8 @@ import org.jetbrains.exposed.sql.wrapAsExpression
 internal class SignalRouteRegistry(
     private val database: Database,
     private val tableDao: TableDao,
+    private val categoryConfigRepository: CategoryConfigRepository = InstantCategoryConfigRepository,
+    private val deviceKeyNamesRepository: DeviceKeyNamesRepository = InstantDeviceKeyNamesRepository
 ) : RouteRegistry {
 
     // Keep only those files, in which signals have been successfully passed
@@ -72,7 +76,7 @@ internal class SignalRouteRegistry(
                         .inSubQuery(includedFileIds)
                 }
         }
-        val keyNames = AnyKeyNamesProvider.getKeyNames(order.key)
+        val keyNames = deviceKeyNamesRepository.getDeviceKeyNames(order)
         return transaction(database) {
             SignalTable.selectAll()
                 .where { SignalTable.name inList keyNames }
@@ -124,12 +128,10 @@ internal class SignalRouteRegistry(
         categoryType: CategoryType,
         category: DeviceCategory
     ): SignalResponseModel {
-        val order = transaction(database) {
-            AllCategoryConfigGenerator
-                .generate(categoryType)
-                .orders
-                .getOrNull(index)
-        }
+        val order = categoryConfigRepository.getOrNull(
+            categoryType = categoryType,
+            index = index
+        )
 
         if (order == null) {
             val infraredFileId = transaction(database) {
