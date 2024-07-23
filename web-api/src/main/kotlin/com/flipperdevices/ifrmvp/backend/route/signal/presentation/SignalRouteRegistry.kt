@@ -16,9 +16,12 @@ import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.wrapAsExpression
 
 @Suppress("UnusedPrivateProperty")
 internal class SignalRouteRegistry(
@@ -69,10 +72,6 @@ internal class SignalRouteRegistry(
                             }
                         }
                 }
-                // [MAKEEVRSERG] signal id: 74480; name:power
-                // [MAKEEVRSERG] signal id: 75100; name:power
-                // [MAKEEVRSERG] signal id: 75148; name:power
-                // [MAKEEVRSERG] signal id: 75707; name:power
                 val includedInfraredFilesCount = transaction(database) { includedFileIds.count() }
                 when (includedInfraredFilesCount) {
                     0L -> {
@@ -91,16 +90,6 @@ internal class SignalRouteRegistry(
                     }
 
                     else -> {
-                        val includedSignalIds = transaction(database) {
-                            InfraredFileToSignalTable
-                                .select(InfraredFileToSignalTable.signalId)
-                                .groupBy(InfraredFileToSignalTable.signalId)
-                                .where {
-                                    InfraredFileToSignalTable
-                                        .infraredFileId
-                                        .inSubQuery(includedFileIds)
-                                }
-                        }
                         if (order == null) {
                             val infraredFileId = transaction(database) {
                                 includedFileIds
@@ -112,11 +101,21 @@ internal class SignalRouteRegistry(
                             context.respond(response)
                             return@post
                         }
+                        val includedSignalIdsQuery = transaction(database) {
+                            InfraredFileToSignalTable
+                                .select(InfraredFileToSignalTable.signalId)
+                                .groupBy(InfraredFileToSignalTable.signalId)
+                                .where {
+                                    InfraredFileToSignalTable
+                                        .infraredFileId
+                                        .inSubQuery(includedFileIds)
+                                }
+                        }
                         val keyNames = AnyKeyNamesProvider.getKeyNames(order.key)
                         val signalModel = transaction(database) {
                             SignalTable.selectAll()
                                 .where { SignalTable.name inList keyNames }
-                                .andWhere { SignalTable.id.inSubQuery(includedSignalIds) }
+                                .andWhere { SignalTable.id.inSubQuery(includedSignalIdsQuery) }
                                 .andWhere { SignalTable.brandId eq brand.id }
                                 .andWhere {
                                     val failedSignalIds = signalRequestModel.failedResults
@@ -128,6 +127,13 @@ internal class SignalRouteRegistry(
                                         .map(SignalRequestModel.SignalResultData::signalId)
                                     SignalTable.id.notInList(successfulSignalIds)
                                 }
+                                .orderBy(
+                                    wrapAsExpression<Long>(
+                                        InfraredFileToSignalTable
+                                            .select(InfraredFileToSignalTable.signalId.count())
+                                            .where { InfraredFileToSignalTable.signalId eq SignalTable.id }
+                                    ) to SortOrder.DESC
+                                )
                                 .limit(1)
                                 .map {
                                     SignalModel(
@@ -142,7 +148,7 @@ internal class SignalRouteRegistry(
                                             dutyCycle = it[SignalTable.dutyCycle],
                                             data = it[SignalTable.data],
                                         )
-                                    )
+                                    ).also { println("[MAKEEVRSERG]: $it") }
                                 }
                                 .first()
                         }
