@@ -1,6 +1,10 @@
+import ru.astrainteractive.gradleplugin.property.extension.ModelPropertyValueExt.requireProjectInfo
+
 plugins {
     id("org.jetbrains.kotlin.jvm")
+    application
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.gradle.shadow)
 }
 
 dependencies {
@@ -17,4 +21,22 @@ dependencies {
     implementation(projects.modules.model)
     implementation(projects.modules.database)
     implementation(projects.modules.infrared)
+    implementation(projects.modules.kenerator.sql)
+}
+
+application {
+    mainClass.set("com.flipperdevices.ifrmvp.generator.config.MainKt")
+}
+
+tasks.shadowJar {
+    isReproducibleFileOrder = true
+    mergeServiceFiles()
+    dependsOn(configurations)
+    archiveClassifier.set(null as String?)
+    from(sourceSets.main.get().output)
+    from(project.configurations.runtimeClasspath)
+
+    archiveVersion.set(requireProjectInfo.versionString)
+    archiveBaseName.set("${requireProjectInfo.name}-configgenerator")
+    File(rootDir, "jars").also(File::mkdirs).also(destinationDirectory::set)
 }
