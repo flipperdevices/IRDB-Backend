@@ -3,7 +3,7 @@ package com.flipperdevices.ifrmvp.generator.config.device.api.any
 import com.flipperdevices.ifrmvp.backend.model.DeviceKey
 import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvider
 
-object AnyKeyNamesProvider : DeviceKeyNamesProvider {
+object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
     @Suppress("LongMethod", "CyclomaticComplexMethod")
     override fun getKeyNames(key: DeviceKey): List<String> {
         return when (key) {

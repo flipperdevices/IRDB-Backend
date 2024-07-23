@@ -1,7 +1,7 @@
 package com.flipperdevices.ifrmvp.backend.route.signal.data
 
 import com.flipperdevices.ifrmvp.generator.config.category.model.CategoryConfiguration
-import com.flipperdevices.ifrmvp.generator.config.device.api.any.AnyKeyNamesProvider
+import com.flipperdevices.ifrmvp.generator.config.device.api.any.AnyDeviceKeyNamesProvider
 
 interface DeviceKeyNamesRepository {
     fun getDeviceKeyNames(order: CategoryConfiguration.OrderModel): List<String>
@@ -9,6 +9,6 @@ interface DeviceKeyNamesRepository {
 
 object InstantDeviceKeyNamesRepository : DeviceKeyNamesRepository {
     override fun getDeviceKeyNames(order: CategoryConfiguration.OrderModel): List<String> {
-        return AnyKeyNamesProvider.getKeyNames(order.key)
+        return AnyDeviceKeyNamesProvider.getKeyNames(order.key)
     }
 }
