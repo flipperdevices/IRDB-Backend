@@ -18,6 +18,15 @@ interface DatabaseFactory {
                         driver = dbConnection.driver
                     )
                 }
+
+                is DBConnection.Postgres -> {
+                    Database.connect(
+                        url = "jdbc:postgresql://${dbConnection.host}:${dbConnection.port}/${dbConnection.name}",
+                        driver = dbConnection.driver,
+                        user = dbConnection.user,
+                        password = dbConnection.password
+                    )
+                }
             }.also(configure)
         }
     }

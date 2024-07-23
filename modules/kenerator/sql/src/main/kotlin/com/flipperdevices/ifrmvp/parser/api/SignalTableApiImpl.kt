@@ -12,7 +12,6 @@ import com.flipperdevices.ifrmvp.parser.model.RawIfrRemote
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 internal class SignalTableApiImpl(

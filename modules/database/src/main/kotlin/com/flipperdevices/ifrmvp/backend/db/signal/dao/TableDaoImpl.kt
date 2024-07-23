@@ -1,5 +1,6 @@
 package com.flipperdevices.ifrmvp.backend.db.signal.dao
 
+import com.flipperdevices.ifrmvp.backend.db.signal.exception.TableDaoException
 import com.flipperdevices.ifrmvp.backend.db.signal.table.BrandTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryMetaTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryTable
@@ -37,9 +38,9 @@ internal class TableDaoImpl(private val database: Database) : TableDao {
                                     singularDisplayName = it[CategoryMetaTable.singularDisplayName],
                                 )
                             )
-                        }.first()
+                        }.firstOrNull() ?: throw TableDaoException.CategoryMeta(categoryId)
                 )
-            }.first()
+            }.firstOrNull() ?: throw TableDaoException.CategoryNotFound(categoryId)
     }
 
     override suspend fun getBrandById(
@@ -55,14 +56,16 @@ internal class TableDaoImpl(private val database: Database) : TableDao {
                     folderName = it[BrandTable.folderName],
                     categoryId = it[BrandTable.categoryId].value
                 )
-            }.first()
+            }.firstOrNull() ?: throw TableDaoException.BrandNotFound(brandId)
     }
 
     override suspend fun ifrFileById(
         irFileId: Long
     ): IfrFileModel = newSuspendedTransaction(db = database) {
-        InfraredFileTable.selectAll()
+        InfraredFileTable
+            .selectAll()
             .where { InfraredFileTable.id eq irFileId }
+            .limit(1)
             .map {
                 IfrFileModel(
                     id = it[InfraredFileTable.id].value,
@@ -70,6 +73,6 @@ internal class TableDaoImpl(private val database: Database) : TableDao {
                     fileName = it[InfraredFileTable.fileName],
                     folderName = it[InfraredFileTable.folderName]
                 )
-            }.first()
+            }.firstOrNull() ?: throw TableDaoException.IrFileNotFound(irFileId)
     }
 }

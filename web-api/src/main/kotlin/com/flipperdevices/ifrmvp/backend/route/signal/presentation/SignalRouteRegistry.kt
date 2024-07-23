@@ -55,21 +55,24 @@ internal class SignalRouteRegistry(
                         .select(InfraredFileToSignalTable.infraredFileId)
                         .groupBy(InfraredFileToSignalTable.infraredFileId)
                         .apply {
-                            if (signalRequestModel.successResults.isNotEmpty()) {
+                            val successSignalIds = signalRequestModel
+                                .successResults
+                                .map(SignalRequestModel.SignalResultData::signalId)
+                            if (successSignalIds.isNotEmpty()) {
                                 where {
                                     InfraredFileToSignalTable
                                         .signalId
-                                        .inList(
-                                            signalRequestModel.successResults.map(
-                                                SignalRequestModel.SignalResultData::signalId
-                                            )
-                                        )
+                                        .inList(successSignalIds)
                                 }
                             } else {
                                 this
                             }
                         }
                 }
+                // [MAKEEVRSERG] signal id: 74480; name:power
+                // [MAKEEVRSERG] signal id: 75100; name:power
+                // [MAKEEVRSERG] signal id: 75148; name:power
+                // [MAKEEVRSERG] signal id: 75707; name:power
                 val includedInfraredFilesCount = transaction(database) { includedFileIds.count() }
                 when (includedInfraredFilesCount) {
                     0L -> {
@@ -116,25 +119,32 @@ internal class SignalRouteRegistry(
                                 .andWhere { SignalTable.id.inSubQuery(includedSignalIds) }
                                 .andWhere { SignalTable.brandId eq brand.id }
                                 .andWhere {
-                                    SignalTable.id
-                                        .notInList(
-                                            signalRequestModel.failedResults.map(
-                                                SignalRequestModel.SignalResultData::signalId
-                                            )
-                                        )
+                                    val failedSignalIds = signalRequestModel.failedResults
+                                        .map(SignalRequestModel.SignalResultData::signalId)
+                                    SignalTable.id.notInList(failedSignalIds)
+                                }
+                                .andWhere {
+                                    val successfulSignalIds = signalRequestModel.successResults
+                                        .map(SignalRequestModel.SignalResultData::signalId)
+                                    SignalTable.id.notInList(successfulSignalIds)
                                 }
                                 .limit(1)
                                 .map {
+                                    println(
+                                        "[MAKEEVRSERG] signal id: ${it[SignalTable.id].value}; name:${it[SignalTable.name]}"
+                                    )
                                     SignalModel(
                                         id = it[SignalTable.id].value,
-                                        name = it[SignalTable.name],
-                                        type = it[SignalTable.type],
-                                        protocol = it[SignalTable.protocol],
-                                        address = it[SignalTable.address],
-                                        command = it[SignalTable.command],
-                                        frequency = it[SignalTable.frequency],
-                                        dutyCycle = it[SignalTable.dutyCycle],
-                                        data = it[SignalTable.data],
+                                        remote = SignalModel.FlipperRemote(
+                                            name = it[SignalTable.name],
+                                            type = it[SignalTable.type],
+                                            protocol = it[SignalTable.protocol],
+                                            address = it[SignalTable.address],
+                                            command = it[SignalTable.command],
+                                            frequency = it[SignalTable.frequency],
+                                            dutyCycle = it[SignalTable.dutyCycle],
+                                            data = it[SignalTable.data],
+                                        )
                                     )
                                 }
                                 .first()

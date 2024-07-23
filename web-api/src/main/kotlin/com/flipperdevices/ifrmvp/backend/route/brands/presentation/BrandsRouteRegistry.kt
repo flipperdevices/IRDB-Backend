@@ -19,7 +19,7 @@ internal class BrandsRouteRegistry(
                 val categoryId = context.request
                     .queryParameters["category_id"]
                     ?.toLongOrNull()
-                    ?: 0
+                    ?: -1
                 val brandsResponse = BrandsResponse(
                     brands = brandsRepository.getBrands(categoryId)
                         .sortedBy { brandModel -> brandModel.folderName.lowercase() }
