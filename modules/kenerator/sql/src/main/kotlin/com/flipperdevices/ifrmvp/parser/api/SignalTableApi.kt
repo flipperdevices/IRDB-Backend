@@ -28,9 +28,7 @@ internal interface SignalTableApi {
     )
 
     suspend fun addSignal(
-        categoryId: Long,
         brandId: Long,
-        irFileId: Long,
         remote: RawIfrRemote
     ): Long
 

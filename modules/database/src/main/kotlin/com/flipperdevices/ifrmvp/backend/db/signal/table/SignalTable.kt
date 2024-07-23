@@ -23,15 +23,18 @@ object SignalTable : LongIdTable("SIGNAL_TABLE") {
 
     init {
         uniqueIndex(
-            "signalindex",
+            brandId,
+            type,
+            frequency,
+            dutyCycle,
+            data
+        )
+        uniqueIndex(
             brandId,
             type,
             protocol,
             address,
             command,
-            frequency,
-            dutyCycle,
-            data
         )
     }
 }

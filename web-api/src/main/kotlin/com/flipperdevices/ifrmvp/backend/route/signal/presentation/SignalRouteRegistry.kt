@@ -130,9 +130,6 @@ internal class SignalRouteRegistry(
                                 }
                                 .limit(1)
                                 .map {
-                                    println(
-                                        "[MAKEEVRSERG] signal id: ${it[SignalTable.id].value}; name:${it[SignalTable.name]}"
-                                    )
                                     SignalModel(
                                         id = it[SignalTable.id].value,
                                         remote = SignalModel.FlipperRemote(
