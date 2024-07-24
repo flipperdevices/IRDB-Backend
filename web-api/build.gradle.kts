@@ -46,6 +46,7 @@ dependencies {
     implementation(projects.modules.kenerator.ui)
     implementation(projects.modules.kenerator.sql)
     implementation(projects.modules.kenerator.configuration)
+    implementation(projects.modules.kenerator.paths)
 }
 
 application {

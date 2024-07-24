@@ -1,7 +1,7 @@
 package com.flipperdevices.ifrmvp.generator.config.device.api
 
 import com.flipperdevices.bridge.dao.api.model.FlipperFileFormat
-import com.flipperdevices.ifrmvp.generator.config.device.model.DeviceConfiguration
+import com.flipperdevices.ifrmvp.backend.model.DeviceConfiguration
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
 import java.io.File

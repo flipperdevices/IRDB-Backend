@@ -3,6 +3,7 @@ package com.flipperdevices.ifrmvp.backend.route.signal.presentation
 import com.flipperdevices.ifrmvp.backend.core.route.RouteRegistry
 import com.flipperdevices.ifrmvp.backend.db.signal.dao.TableDao
 import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileToSignalTable
+import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalKeyTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.model.BrandModel
 import com.flipperdevices.ifrmvp.backend.model.DeviceCategory
@@ -14,8 +15,8 @@ import com.flipperdevices.ifrmvp.backend.route.signal.data.CategoryConfigReposit
 import com.flipperdevices.ifrmvp.backend.route.signal.data.DeviceKeyNamesRepository
 import com.flipperdevices.ifrmvp.backend.route.signal.data.InstantCategoryConfigRepository
 import com.flipperdevices.ifrmvp.backend.route.signal.data.InstantDeviceKeyNamesRepository
-import com.flipperdevices.ifrmvp.generator.config.category.model.CategoryConfiguration
-import com.flipperdevices.ifrmvp.generator.config.category.model.CategoryType
+import com.flipperdevices.ifrmvp.backend.model.CategoryConfiguration
+import com.flipperdevices.ifrmvp.backend.model.CategoryType
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond

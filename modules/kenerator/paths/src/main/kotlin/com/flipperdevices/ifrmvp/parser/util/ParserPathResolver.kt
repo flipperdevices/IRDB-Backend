@@ -1,7 +1,9 @@
 package com.flipperdevices.ifrmvp.parser.util
 
 import com.flipperdevices.ifrmvp.backend.envkonfig.EnvKonfig
+import com.flipperdevices.ifrmvp.backend.model.CategoryConfiguration
 import com.flipperdevices.ifrmvp.backend.model.CategoryMeta
+import com.flipperdevices.ifrmvp.backend.model.DeviceConfiguration
 import kotlinx.serialization.json.Json
 import java.io.File
 import kotlin.io.encoding.Base64
@@ -35,6 +37,15 @@ object ParserPathResolver {
      */
     fun categoryPath(category: String): File {
         return categoriesFolder.resolve(category)
+    }
+
+    fun categoryConfiguration(category: String): CategoryConfiguration {
+        val file = categoryConfigurationFile(category = category)
+        return Json.decodeFromString(file.readText())
+    }
+
+    fun categoryConfigurationFile(category: String): File {
+        return categoryPath(category).resolve("config.json")
     }
 
     /**
@@ -103,6 +114,27 @@ object ParserPathResolver {
     fun ifrFile(category: String, brand: String, ifrFolderName: String): File {
         val folder = brandPath(category, brand).resolve(ifrFolderName)
         return folder.resolve("$ifrFolderName.ir")
+    }
+
+    fun irFileConfiguration(
+        category: String,
+        brand: String,
+        ifrFolderName: String
+    ): DeviceConfiguration {
+        val file = irFileConfigurationFile(
+            category = category,
+            brand = brand,
+            ifrFolderName = ifrFolderName
+        )
+        return Json.decodeFromString(file.readText())
+    }
+
+    fun irFileConfigurationFile(
+        category: String,
+        brand: String,
+        ifrFolderName: String
+    ): File {
+        return brandPath(category, brand).resolve(ifrFolderName).resolve("config.json")
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.flipperdevices.ifrmvp.generator.config.device.api
 
 import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvider.Companion.getKey
-import com.flipperdevices.ifrmvp.generator.config.device.model.DeviceConfiguration
+import com.flipperdevices.ifrmvp.backend.model.DeviceConfiguration
 import java.io.File
 
 class DefaultDeviceConfigGenerator(private val keyNamesProvider: DeviceKeyNamesProvider) : DeviceConfigGenerator {

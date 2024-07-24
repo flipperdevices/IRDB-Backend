@@ -6,6 +6,7 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryMetaTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileToSignalTable
+import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalKeyTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
 import com.flipperdevices.ifrmvp.backend.envkonfig.model.DBConnection
@@ -32,6 +33,7 @@ internal class SignalDatabaseFactory(
                     InfraredFileTable,
                     InfraredFileToSignalTable,
                     SignalTable,
+                    SignalKeyTable,
                     UiPresetTable,
                 )
             }

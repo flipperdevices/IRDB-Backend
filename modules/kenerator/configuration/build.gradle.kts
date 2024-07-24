@@ -22,6 +22,7 @@ dependencies {
     implementation(projects.modules.database)
     implementation(projects.modules.infrared)
     implementation(projects.modules.kenerator.sql)
+    implementation(projects.modules.kenerator.paths)
 }
 
 application {

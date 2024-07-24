@@ -1,6 +1,5 @@
-package com.flipperdevices.ifrmvp.generator.config.category.model
+package com.flipperdevices.ifrmvp.backend.model
 
-import com.flipperdevices.ifrmvp.backend.model.DeviceKey
 import com.flipperdevices.ifrmvp.model.buttondata.ButtonData
 import com.flipperdevices.ifrmvp.model.serialization.ButtonDataSerializer
 import kotlinx.serialization.SerialName

@@ -5,7 +5,7 @@ import com.flipperdevices.ifrmvp.backend.db.signal.dao.TableDao
 import com.flipperdevices.ifrmvp.backend.route.key.data.KeyRouteRepository
 import com.flipperdevices.ifrmvp.backend.route.key.presentation.KeySwagger
 import com.flipperdevices.ifrmvp.generator.config.category.api.AllCategoryConfigGenerator
-import com.flipperdevices.ifrmvp.generator.config.category.model.CategoryType
+import com.flipperdevices.ifrmvp.backend.model.CategoryType
 import com.flipperdevices.ifrmvp.generator.config.device.api.DefaultDeviceConfigGenerator
 import com.flipperdevices.ifrmvp.generator.config.device.api.any.AnyDeviceKeyNamesProvider
 import io.github.smiley4.ktorswaggerui.dsl.routing.get

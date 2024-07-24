@@ -1,7 +1,7 @@
 package com.flipperdevices.ifrmvp.generator.config
 
 import com.flipperdevices.ifrmvp.generator.config.category.api.AllCategoryConfigGenerator
-import com.flipperdevices.ifrmvp.generator.config.category.model.CategoryType
+import com.flipperdevices.ifrmvp.backend.model.CategoryType
 import com.flipperdevices.ifrmvp.generator.config.device.api.DefaultDeviceConfigGenerator
 import com.flipperdevices.ifrmvp.generator.config.device.api.any.AnyDeviceKeyNamesProvider
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver

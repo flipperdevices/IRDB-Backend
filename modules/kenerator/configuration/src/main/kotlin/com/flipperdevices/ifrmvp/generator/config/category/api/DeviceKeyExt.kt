@@ -1,7 +1,7 @@
 package com.flipperdevices.ifrmvp.generator.config.category.api
 
 import com.flipperdevices.ifrmvp.backend.model.DeviceKey
-import com.flipperdevices.ifrmvp.generator.config.category.model.CategoryType
+import com.flipperdevices.ifrmvp.backend.model.CategoryType
 
 object DeviceKeyExt {
     @Suppress("LongMethod", "CyclomaticComplexMethod")

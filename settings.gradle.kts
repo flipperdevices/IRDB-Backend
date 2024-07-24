@@ -30,5 +30,6 @@ include(":modules:infrared")
 include(":modules:kenerator:configuration")
 include(":modules:kenerator:sql")
 include(":modules:kenerator:ui")
+include(":modules:kenerator:paths")
 // application
 include("web-api")

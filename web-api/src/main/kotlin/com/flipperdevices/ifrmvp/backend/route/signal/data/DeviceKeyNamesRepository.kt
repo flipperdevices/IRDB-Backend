@@ -1,6 +1,6 @@
 package com.flipperdevices.ifrmvp.backend.route.signal.data
 
-import com.flipperdevices.ifrmvp.generator.config.category.model.CategoryConfiguration
+import com.flipperdevices.ifrmvp.backend.model.CategoryConfiguration
 import com.flipperdevices.ifrmvp.generator.config.device.api.any.AnyDeviceKeyNamesProvider
 
 interface DeviceKeyNamesRepository {

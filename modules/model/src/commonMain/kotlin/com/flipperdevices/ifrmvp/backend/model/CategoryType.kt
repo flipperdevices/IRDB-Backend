@@ -1,4 +1,4 @@
-package com.flipperdevices.ifrmvp.generator.config.category.model
+package com.flipperdevices.ifrmvp.backend.model
 
 enum class CategoryType(val folderName: String) {
     A_V_RECEIVER("A_V_receiver"),
