@@ -20,7 +20,7 @@ private fun generateCategoriesConfigFiles() {
         .onEach { categoryFolder ->
             val categoryType = CategoryType.entries.first { it.folderName == categoryFolder.name }
             val config = AllCategoryConfigGenerator.generate(categoryType)
-            val configFile = categoryFolder.resolve("config.json")
+            val configFile = ParserPathResolver.categoryMetaPath(categoryFolder.name).resolve("config.json")
             if (configFile.exists()) configFile.delete()
             configFile.createNewFile()
             val string = json.encodeToString(config)

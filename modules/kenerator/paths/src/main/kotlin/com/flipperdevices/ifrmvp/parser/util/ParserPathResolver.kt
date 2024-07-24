@@ -45,7 +45,7 @@ object ParserPathResolver {
     }
 
     fun categoryConfigurationFile(category: String): File {
-        return categoryPath(category).resolve("config.json")
+        return categoryMetaPath(category).resolve("config.json")
     }
 
     /**
