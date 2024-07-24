@@ -15,9 +15,7 @@ import com.flipperdevices.ifrmvp.backend.model.SignalRequestModel
 import com.flipperdevices.ifrmvp.backend.model.SignalResponse
 import com.flipperdevices.ifrmvp.backend.model.SignalResponseModel
 import com.flipperdevices.ifrmvp.backend.route.signal.data.CategoryConfigRepository
-import com.flipperdevices.ifrmvp.backend.route.signal.data.DeviceKeyNamesRepository
-import com.flipperdevices.ifrmvp.backend.route.signal.data.InstantCategoryConfigRepository
-import com.flipperdevices.ifrmvp.backend.route.signal.data.InstantDeviceKeyNamesRepository
+import com.flipperdevices.ifrmvp.backend.route.signal.data.IRDBCategoryConfigRepository
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
@@ -36,8 +34,7 @@ import org.jetbrains.exposed.sql.wrapAsExpression
 internal class SignalRouteRegistry(
     private val database: Database,
     private val tableDao: TableDao,
-    private val categoryConfigRepository: CategoryConfigRepository = InstantCategoryConfigRepository,
-    private val deviceKeyNamesRepository: DeviceKeyNamesRepository = InstantDeviceKeyNamesRepository
+    private val categoryConfigRepository: CategoryConfigRepository = IRDBCategoryConfigRepository,
 ) : RouteRegistry {
 
     // Keep only those files, in which signals have been successfully passed
