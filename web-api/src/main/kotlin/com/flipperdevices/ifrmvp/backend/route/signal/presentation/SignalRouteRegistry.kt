@@ -2,6 +2,7 @@ package com.flipperdevices.ifrmvp.backend.route.signal.presentation
 
 import com.flipperdevices.ifrmvp.backend.core.route.RouteRegistry
 import com.flipperdevices.ifrmvp.backend.db.signal.dao.TableDao
+import com.flipperdevices.ifrmvp.backend.db.signal.exception.TableDaoException
 import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileToSignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalKeyTable
@@ -213,7 +214,7 @@ internal class SignalRouteRegistry(
                 val categoryType = CategoryType
                     .entries
                     .firstOrNull { it.folderName == category.folderName }
-                    ?: error("Could not find category with folderName ${category.folderName}")
+                    ?: throw TableDaoException.CategoryNotFound(category.id)
 
                 val includedFileIds = getIncludedFileIds(signalRequestModel)
                 val includedInfraredFilesCount = transaction(database) { includedFileIds.count() }
