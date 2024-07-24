@@ -2,10 +2,13 @@ package com.flipperdevices.ifrmvp.backend.route.signal.presentation
 
 import com.flipperdevices.ifrmvp.backend.core.route.RouteRegistry
 import com.flipperdevices.ifrmvp.backend.db.signal.dao.TableDao
+import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileToSignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalKeyTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.model.BrandModel
+import com.flipperdevices.ifrmvp.backend.model.CategoryConfiguration
+import com.flipperdevices.ifrmvp.backend.model.CategoryType
 import com.flipperdevices.ifrmvp.backend.model.DeviceCategory
 import com.flipperdevices.ifrmvp.backend.model.SignalModel
 import com.flipperdevices.ifrmvp.backend.model.SignalRequestModel
@@ -15,13 +18,12 @@ import com.flipperdevices.ifrmvp.backend.route.signal.data.CategoryConfigReposit
 import com.flipperdevices.ifrmvp.backend.route.signal.data.DeviceKeyNamesRepository
 import com.flipperdevices.ifrmvp.backend.route.signal.data.InstantCategoryConfigRepository
 import com.flipperdevices.ifrmvp.backend.route.signal.data.InstantDeviceKeyNamesRepository
-import com.flipperdevices.ifrmvp.backend.model.CategoryConfiguration
-import com.flipperdevices.ifrmvp.backend.model.CategoryType
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.andWhere
@@ -63,35 +65,63 @@ internal class SignalRouteRegistry(
 
     private suspend fun getSignalModel(
         signalRequestModel: SignalRequestModel,
-        includedFileIds: Query,
         order: CategoryConfiguration.OrderModel,
         brand: BrandModel
     ): SignalModel? {
-        val includedSignalIdsQuery = transaction(database) {
-            InfraredFileToSignalTable
-                .select(InfraredFileToSignalTable.signalId)
-                .groupBy(InfraredFileToSignalTable.signalId)
-                .where {
-                    InfraredFileToSignalTable
-                        .infraredFileId
-                        .inSubQuery(includedFileIds)
-                }
-        }
-        val keyNames = deviceKeyNamesRepository.getDeviceKeyNames(order)
         return transaction(database) {
-            SignalTable.selectAll()
-                .where { SignalTable.name inList keyNames }
-                .andWhere { SignalTable.id.inSubQuery(includedSignalIdsQuery) }
-                .andWhere { SignalTable.brandId eq brand.id }
-                .andWhere {
+            SignalTable
+                .join(
+                    otherTable = InfraredFileToSignalTable,
+                    joinType = JoinType.LEFT,
+                    onColumn = SignalTable.id,
+                    otherColumn = InfraredFileToSignalTable.signalId
+                )
+                .join(
+                    otherTable = InfraredFileTable,
+                    joinType = JoinType.LEFT,
+                    onColumn = InfraredFileToSignalTable.infraredFileId,
+                    otherColumn = InfraredFileTable.id
+                )
+                .join(
+                    otherTable = SignalKeyTable,
+                    joinType = JoinType.LEFT,
+                    onColumn = SignalTable.id,
+                    otherColumn = SignalKeyTable.signalId
+                )
+                .selectAll()
+                .where { SignalTable.brandId eq brand.id }
+                .andWhere { SignalKeyTable.deviceKey eq order.key }
+                .andWhere { SignalKeyTable.signalId eq SignalTable.id }
+                .apply {
                     val failedSignalIds = signalRequestModel.failedResults
                         .map(SignalRequestModel.SignalResultData::signalId)
-                    SignalTable.id.notInList(failedSignalIds)
+                    if (failedSignalIds.isEmpty()) {
+                        this
+                    } else {
+                        andWhere { SignalTable.id.notInList(failedSignalIds) }
+                    }
                 }
-                .andWhere {
+                .apply {
                     val successfulSignalIds = signalRequestModel.successResults
                         .map(SignalRequestModel.SignalResultData::signalId)
-                    SignalTable.id.notInList(successfulSignalIds)
+                    if (successfulSignalIds.isEmpty()) {
+                        this
+                    } else {
+                        andWhere { SignalTable.id.notInList(successfulSignalIds) }
+                    }
+                }
+                .apply {
+                    val successfulSignalIds = signalRequestModel.successResults
+                        .map(SignalRequestModel.SignalResultData::signalId)
+                    if (successfulSignalIds.isEmpty()) {
+                        this
+                    } else {
+                        andWhere {
+                            InfraredFileToSignalTable.infraredFileId inSubQuery InfraredFileToSignalTable
+                                .select(InfraredFileToSignalTable.infraredFileId)
+                                .where { InfraredFileToSignalTable.signalId inList successfulSignalIds }
+                        }
+                    }
                 }
                 .orderBy(
                     wrapAsExpression<Long>(
@@ -133,7 +163,6 @@ internal class SignalRouteRegistry(
             categoryType = categoryType,
             index = index
         )
-
         // todo When orders is empty we can't define the next key. Need to think how to bypass it or may be just log
         if (order == null) {
             val infraredFileId = transaction(database) {
@@ -148,7 +177,6 @@ internal class SignalRouteRegistry(
 
         val signalModel = getSignalModel(
             signalRequestModel = signalRequestModel,
-            includedFileIds = includedFileIds,
             order = order,
             brand = brand
         )

@@ -1,9 +1,9 @@
 package com.flipperdevices.ifrmvp.generator.config.category.api
 
-import com.flipperdevices.ifrmvp.backend.model.DeviceKey
-import com.flipperdevices.ifrmvp.generator.config.category.api.DeviceKeyExt.getAllowedCategories
 import com.flipperdevices.ifrmvp.backend.model.CategoryConfiguration
 import com.flipperdevices.ifrmvp.backend.model.CategoryType
+import com.flipperdevices.ifrmvp.backend.model.DeviceKey
+import com.flipperdevices.ifrmvp.generator.config.category.api.DeviceKeyExt.getAllowedCategories
 import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.TextButtonData
 

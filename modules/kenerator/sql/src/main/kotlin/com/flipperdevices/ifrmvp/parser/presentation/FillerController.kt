@@ -13,7 +13,6 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
-import java.io.File
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.exposed.sql.Database
@@ -22,6 +21,7 @@ import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.io.File
 
 internal class FillerController(private val database: Database) : CoroutineScope by IoCoroutineScope() {
 
