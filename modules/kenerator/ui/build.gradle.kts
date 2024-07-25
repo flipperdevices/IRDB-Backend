@@ -17,4 +17,5 @@ dependencies {
     implementation(projects.modules.model)
     implementation(projects.modules.database)
     implementation(projects.modules.infrared)
+    implementation(projects.modules.kenerator.configuration)
 }

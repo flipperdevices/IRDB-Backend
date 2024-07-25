@@ -10,6 +10,7 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileToSignalTab
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalKeyTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
+import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
@@ -144,10 +145,26 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                 brand = brand.name,
                                 ifrFolderName = irFile.parentFile.name
                             )
-                            SignalKeyTable.batchInsert(irFileConfiguration.keyMap.entries) { (baseKey, keyRef) ->
+                            SignalKeyTable.batchInsert(irFileConfiguration.keyMap.entries) { (baseKey, keyIdentifier) ->
                                 this[SignalKeyTable.infraredFileId] = irFileId
                                 this[SignalKeyTable.deviceKey] = baseKey
-                                this[SignalKeyTable.remoteKeyName] = keyRef.keyName
+                                when (keyIdentifier) {
+                                    IfrKeyIdentifier.Empty -> {
+                                        this[SignalKeyTable.type] = IfrKeyIdentifier.Empty.TYPE
+                                    }
+
+                                    is IfrKeyIdentifier.Name -> {
+                                        this[SignalKeyTable.remoteKeyName] = keyIdentifier.name
+                                        this[SignalKeyTable.type] = IfrKeyIdentifier.Name.TYPE
+                                    }
+
+                                    is IfrKeyIdentifier.Sha256 -> {
+                                        this[SignalKeyTable.remoteKeyName] = keyIdentifier.name
+                                        this[SignalKeyTable.type] = IfrKeyIdentifier.Sha256.TYPE
+                                        this[SignalKeyTable.hash] = keyIdentifier.hash
+                                    }
+                                }
+
                                 this[SignalKeyTable.signalId] = SignalTable
                                     .join(
                                         otherTable = InfraredFileToSignalTable,
@@ -158,7 +175,18 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                     .select(SignalTable.id)
                                     .where { SignalTable.brandId eq brandId }
                                     .andWhere { InfraredFileToSignalTable.infraredFileId eq irFileId }
-                                    .andWhere { SignalTable.name eq keyRef.keyName }
+                                    .apply {
+                                        when (keyIdentifier) {
+                                            IfrKeyIdentifier.Empty -> this
+                                            is IfrKeyIdentifier.Name -> {
+                                                andWhere { SignalTable.name eq keyIdentifier.name }
+                                            }
+
+                                            is IfrKeyIdentifier.Sha256 -> {
+                                                andWhere { SignalTable.name eq keyIdentifier.name }
+                                            }
+                                        }
+                                    }
                                     .map { it[SignalTable.id] }
                                     .also { assert(it.size == 1) }
                                     .first()

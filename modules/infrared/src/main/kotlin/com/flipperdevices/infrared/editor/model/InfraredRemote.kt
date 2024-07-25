@@ -1,9 +1,13 @@
 package com.flipperdevices.infrared.editor.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 sealed class InfraredRemote(
     val name: String,
     val type: String
 ) {
+    @Serializable
     data class Parsed(
         val nameInternal: String,
         val typeInternal: String,
@@ -12,6 +16,7 @@ sealed class InfraredRemote(
         val command: String,
     ) : InfraredRemote(nameInternal, typeInternal)
 
+    @Serializable
     data class Raw(
         val nameInternal: String,
         val typeInternal: String,

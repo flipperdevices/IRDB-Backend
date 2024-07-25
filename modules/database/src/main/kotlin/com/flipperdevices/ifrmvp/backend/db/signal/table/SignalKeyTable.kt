@@ -7,9 +7,9 @@ object SignalKeyTable : LongIdTable("SIGNAL_KEY") {
     val infraredFileId = reference("ir_file_id", InfraredFileTable)
     val signalId = reference("signal_id", SignalTable)
 
-    /**
-     * The name of brand folder
-     */
     val deviceKey = enumeration<DeviceKey>("device_key")
-    val remoteKeyName = text("remote_key_name")
+
+    val type = text("type")
+    val remoteKeyName = text("remote_key_name").nullable()
+    val hash = text("hash").nullable()
 }
