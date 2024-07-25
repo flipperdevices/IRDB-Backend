@@ -3,6 +3,7 @@ package com.flipperdevices.ifrmvp.backend.envkonfig
 import com.flipperdevices.ifrmvp.backend.buildkonfig.BuildKonfig
 import com.flipperdevices.ifrmvp.backend.envkonfig.model.DBConnection
 import java.net.InetAddress
+import java.util.logging.Logger
 
 object EnvKonfig {
     internal enum class DBType {
@@ -62,4 +63,12 @@ object EnvKonfig {
                 name = DbKonfig.DB_NAME
             )
         }
+    init {
+        val logger = Logger.getLogger("EnvKonfig")
+        logger.info("IR_DATABASE_PATH: $IR_DATABASE_PATH")
+        logger.info("FBACKEND_HOST: $FBACKEND_HOST")
+        logger.info("FBACKEND_PORT: $FBACKEND_PORT")
+        logger.info("DbKonfig.FBACKEND_DB_TYPE: ${DbKonfig.FBACKEND_DB_TYPE}")
+        logger.info("DbKonfig.FBACKEND_DB_FULL_PATH: ${DbKonfig.FBACKEND_DB_FULL_PATH}")
+    }
 }
