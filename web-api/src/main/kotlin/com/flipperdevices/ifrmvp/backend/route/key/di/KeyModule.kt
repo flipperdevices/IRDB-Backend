@@ -11,7 +11,9 @@ interface KeyModule {
     val keyRouteRepository: KeyRouteRepository
 
     class Default(signalApiModule: SignalApiModule) : KeyModule {
-        override val keyRouteRepository: KeyRouteRepository = KeyRouteRepositoryImpl(signalApiModule.database)
+        override val keyRouteRepository = KeyRouteRepositoryImpl(
+            tableDao = signalApiModule.tableDao
+        )
         override val registry: RouteRegistry by lazy {
             KeyRouteRegistry(
                 keyRouteRepository,

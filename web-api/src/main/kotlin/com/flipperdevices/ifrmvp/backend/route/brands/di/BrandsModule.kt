@@ -12,7 +12,8 @@ interface BrandsModule {
         override val registry: RouteRegistry by lazy {
             BrandsRouteRegistry(
                 brandsRepository = BrandsRepositoryImpl(
-                    database = signalApiModule.database
+                    database = signalApiModule.database,
+                    tableDao = signalApiModule.tableDao
                 )
             )
         }

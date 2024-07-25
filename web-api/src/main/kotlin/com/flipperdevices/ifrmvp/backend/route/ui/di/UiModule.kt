@@ -3,6 +3,7 @@ package com.flipperdevices.ifrmvp.backend.route.ui.di
 import com.flipperdevices.ifrmvp.backend.core.route.RouteRegistry
 import com.flipperdevices.ifrmvp.backend.db.signal.di.SignalApiModule
 import com.flipperdevices.ifrmvp.backend.route.key.di.KeyModule
+import com.flipperdevices.ifrmvp.backend.route.ui.data.UiFileRepositoryImpl
 import com.flipperdevices.ifrmvp.backend.route.ui.presentation.UiRouteRegistry
 import com.flipperdevices.ifrmvp.parser.UiGeneratorImpl
 
@@ -15,9 +16,12 @@ interface UiModule {
     ) : UiModule {
         override val registry: RouteRegistry by lazy {
             UiRouteRegistry(
-                signalApiModule.database,
                 keyRouteRepository = keyModule.keyRouteRepository,
-                uiGenerator = UiGeneratorImpl()
+                uiGenerator = UiGeneratorImpl(),
+                uiFileRepository = UiFileRepositoryImpl(
+                    tableDao = signalApiModule.tableDao,
+                    database = signalApiModule.database
+                )
             )
         }
     }

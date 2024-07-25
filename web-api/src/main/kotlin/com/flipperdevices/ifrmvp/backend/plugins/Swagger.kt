@@ -35,7 +35,8 @@ fun Application.configureSwagger() {
             generator = { type ->
                 type
                     // process type using kotlinx-serialization instead of reflection
-                    // requires additional dependency "io.github.smiley4:schema-kenerator-kotlinx-serialization:<VERSION>"
+                    // requires additional dependency
+                    // "io.github.smiley4:schema-kenerator-kotlinx-serialization:<VERSION>"
                     // see https://github.com/SMILEY4/schema-kenerator for more information
                     .processKotlinxSerialization()
                     .generateSwaggerSchema()

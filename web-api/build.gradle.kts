@@ -39,12 +39,14 @@ dependencies {
     implementation(libs.exposed.dao)
     // Services
     implementation(projects.modules.buildKonfig)
-    implementation(projects.modules.sharedUiModel)
-    implementation(projects.modules.sharedBackendModel)
+    implementation(projects.modules.model)
     implementation(projects.modules.core)
-    implementation(projects.modules.apiStatus)
-    implementation(projects.modules.parser)
-    implementation(projects.modules.uiGenerator)
+    implementation(projects.modules.database)
+    implementation(projects.modules.infrared)
+    implementation(projects.modules.kenerator.ui)
+    implementation(projects.modules.kenerator.sql)
+    implementation(projects.modules.kenerator.configuration)
+    implementation(projects.modules.kenerator.paths)
 }
 
 application {

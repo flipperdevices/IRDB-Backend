@@ -10,4 +10,8 @@ internal object KSystem {
         }
         return value
     }
+
+    fun requireEnv(key: String): String {
+        return getenvOrNull(key) ?: error { "Environment not found: $key" }
+    }
 }

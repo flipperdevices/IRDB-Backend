@@ -6,16 +6,16 @@ import io.ktor.http.HttpStatusCode
 
 internal object KeySwagger {
     fun OpenApiRoute.createSwaggerDefinition() {
-        description = "Get json content of UI file"
+        description = "Get content of .IR file"
         request {
             queryParameter<Long>("ifr_file_id") {
-                description = "Unique id of ifr file"
+                description = "Unique id of .ir file"
                 required = true
             }
         }
         response {
             HttpStatusCode.OK to {
-                description = "Content of IR"
+                description = "Content of IR file"
                 body<IfrFileContentResponse> {
                     description = "Content of IR file"
                 }
