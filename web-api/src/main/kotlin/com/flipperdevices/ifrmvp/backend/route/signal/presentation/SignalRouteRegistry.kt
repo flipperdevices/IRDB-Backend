@@ -20,6 +20,7 @@ import com.flipperdevices.ifrmvp.backend.route.signal.data.IRDBCategoryConfigRep
 import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
 import com.flipperdevices.ifrmvp.model.buttondata.SingleKeyButtonData
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
@@ -236,7 +237,8 @@ internal class SignalRouteRegistry(
                 val includedInfraredFilesCount = transaction(database) { includedFileIds.count() }
                 when (includedInfraredFilesCount) {
                     0L -> {
-                        TODO()
+                        context.respond(HttpStatusCode.NoContent)
+                        return@post
                     }
 
                     1L -> {
