@@ -14,7 +14,6 @@ class KeyRouteRepositoryImpl(
 
         val categoryFolderName = categoryModel.folderName
         val brandFolderName = brandModel.folderName
-        println("Category :$categoryFolderName brand: $brandFolderName ifr: ${ifrFileModel.fileName}")
         val file = ParserPathResolver.ifrFile(
             category = categoryFolderName,
             brand = brandFolderName,

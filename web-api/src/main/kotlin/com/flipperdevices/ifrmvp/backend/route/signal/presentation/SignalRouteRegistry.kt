@@ -159,7 +159,7 @@ internal class SignalRouteRegistry(
                             dutyCycle = it[SignalTable.dutyCycle],
                             data = it[SignalTable.data],
                         )
-                    ).also { println("[MAKEEVRSERG]: $it") }
+                    )
                 }
                 .firstOrNull()
         }
@@ -224,7 +224,6 @@ internal class SignalRouteRegistry(
             body = {
                 @Suppress("UnusedPrivateProperty")
                 val signalRequestModel = context.receive<SignalRequestModel>()
-                println("REQUEST: $signalRequestModel")
 
                 val brand = tableDao.getBrandById(signalRequestModel.brandId)
                 val category = tableDao.getCategoryById(brand.categoryId)
