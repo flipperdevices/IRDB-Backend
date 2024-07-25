@@ -17,6 +17,8 @@ import com.flipperdevices.ifrmvp.backend.model.SignalResponse
 import com.flipperdevices.ifrmvp.backend.model.SignalResponseModel
 import com.flipperdevices.ifrmvp.backend.route.signal.data.CategoryConfigRepository
 import com.flipperdevices.ifrmvp.backend.route.signal.data.IRDBCategoryConfigRepository
+import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
+import com.flipperdevices.ifrmvp.model.buttondata.SingleKeyButtonData
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
@@ -27,6 +29,7 @@ import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.count
+import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.wrapAsExpression
@@ -88,6 +91,19 @@ internal class SignalRouteRegistry(
                 )
                 .selectAll()
                 .where { SignalTable.brandId eq brand.id }
+                .apply {
+                    val singleButtonData = order.data as? SingleKeyButtonData
+                    when (val identifier = singleButtonData?.keyIdentifier) {
+                        is IfrKeyIdentifier.Sha256 -> {
+                            andWhere {
+                                SignalKeyTable.deviceKey.eq(order.key)
+                                    .or { SignalKeyTable.hash.eq(identifier.hash) }
+                            }
+                        }
+
+                        else -> andWhere { SignalKeyTable.deviceKey.eq(order.key) }
+                    }
+                }
                 .andWhere { SignalKeyTable.deviceKey eq order.key }
                 .andWhere { SignalKeyTable.signalId eq SignalTable.id }
                 .apply {

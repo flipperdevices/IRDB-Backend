@@ -10,9 +10,13 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileToSignalTab
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalKeyTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
+import com.flipperdevices.ifrmvp.backend.model.SignalModel
 import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
+import com.flipperdevices.infrared.editor.encoding.ByteArrayEncoder
+import com.flipperdevices.infrared.editor.encoding.JvmEncoder
 import com.flipperdevices.infrared.editor.model.InfraredRemote
+import com.flipperdevices.infrared.editor.util.InfraredRemoteEncoder
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -97,18 +101,21 @@ internal class FillerController(private val database: Database) : CoroutineScope
                             val signals = irFile.readText()
                                 .let(FlipperFileFormat::fromFileContent)
                                 .let(InfraredKeyParser::mapParsedKeyToInfraredRemotes)
-                            SignalTable.batchInsert(signals, ignore = true) {
-                                val parsedRemote = it as? InfraredRemote.Parsed
-                                val rawRemote = it as? InfraredRemote.Raw
+                            SignalTable.batchInsert(signals, ignore = true) { remote ->
+                                val parsedRemote = remote as? InfraredRemote.Parsed
+                                val rawRemote = remote as? InfraredRemote.Raw
                                 this[SignalTable.brandId] = brandId
-                                this[SignalTable.name] = it.name
-                                this[SignalTable.type] = it.type
+                                this[SignalTable.name] = remote.name
+                                this[SignalTable.type] = remote.type
                                 this[SignalTable.protocol] = parsedRemote?.protocol
                                 this[SignalTable.address] = parsedRemote?.address
                                 this[SignalTable.command] = parsedRemote?.command
                                 this[SignalTable.frequency] = rawRemote?.frequency
                                 this[SignalTable.dutyCycle] = rawRemote?.dutyCycle
                                 this[SignalTable.data] = rawRemote?.data
+                                val byteArray = InfraredRemoteEncoder.encode(remote)
+                                val hash = JvmEncoder(ByteArrayEncoder.Algorithm.SHA_256).encode(byteArray)
+                                this[SignalTable.hash] = hash
                             }
                             // ManyToMany file to signal references
                             val irFileId = InfraredFileTable
@@ -184,6 +191,7 @@ internal class FillerController(private val database: Database) : CoroutineScope
 
                                             is IfrKeyIdentifier.Sha256 -> {
                                                 andWhere { SignalTable.name eq keyIdentifier.name }
+                                                    .andWhere { SignalTable.hash eq keyIdentifier.hash }
                                             }
                                         }
                                     }
