@@ -9,4 +9,5 @@ dependencies {
     implementation(libs.kotlin.serialization.json)
     // Local
     implementation(projects.modules.buildKonfig)
+    implementation(projects.modules.model)
 }

@@ -1,6 +1,6 @@
 package com.flipperdevices.infrared.editor.encoding
 
-internal interface ByteArrayEncoder {
+interface ByteArrayEncoder {
     val algorithm: Algorithm
 
     fun encode(byteArray: ByteArray): String
