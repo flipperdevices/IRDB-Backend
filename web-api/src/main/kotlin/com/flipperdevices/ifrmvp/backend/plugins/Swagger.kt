@@ -57,7 +57,6 @@ fun Application.configureSwagger() {
             }
         }
         server {
-            url = "${EnvKonfig.FBACKEND_HOST}:${EnvKonfig.FBACKEND_PORT}"
             description = "Web-Api server"
             variable("version") {
                 default = BuildKonfig.VERSION_NAME
