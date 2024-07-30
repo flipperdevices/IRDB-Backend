@@ -13,6 +13,12 @@ internal object BrandsSwagger {
                 description = "Unique id of the category"
                 required = true
             }
+            queryParameter<String>("query") {
+                description = "Entry string of brand name. " +
+                        "For example, writing 'sam' - will return every brand that contains this string. " +
+                        "Case insensitive."
+                required = true
+            }
         }
         response {
             HttpStatusCode.OK to {
