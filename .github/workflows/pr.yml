@@ -51,7 +51,7 @@ jobs:
         with:
           arguments: :modules:kenerator:configuration:run
   check_db_configuration:
-    name: "Check config generation is fine"
+    name: "Check sql generation is fine"
     runs-on: ubuntu-latest
     needs: [ validate_gradle_wrapper ]
     steps:
