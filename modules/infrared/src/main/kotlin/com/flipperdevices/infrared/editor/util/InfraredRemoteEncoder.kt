@@ -19,7 +19,7 @@ object InfraredRemoteEncoder {
         val raw = this as? InfraredRemote.Raw
         val parsed = this as? InfraredRemote.Parsed
         return SignalModel.FlipperRemote(
-            name = this.name,
+            name = null.orEmpty(), // the name should not affect hash
             type = this.type,
             protocol = parsed?.protocol,
             address = parsed?.address,
@@ -30,31 +30,8 @@ object InfraredRemoteEncoder {
         )
     }
 
-    private fun SignalModel.FlipperRemote.toInfraredRemote(): InfraredRemote {
-        return runCatching {
-            InfraredRemote.Parsed(
-                nameInternal = name,
-                typeInternal = type,
-                protocol = protocol ?: error("Not parsed remote"),
-                address = address ?: error("Not parsed remote"),
-                command = command ?: error("Not parsed remote")
-            )
-        }.getOrNull() ?: InfraredRemote.Raw(
-            nameInternal = name,
-            typeInternal = type,
-            frequency = frequency ?: error("Not raw remote"),
-            dutyCycle = dutyCycle ?: error("Not raw remote"),
-            data = data ?: error("Not raw remote")
-        )
-    }
-
     fun encode(remote: InfraredRemote): ByteArray {
         val fRemote = remote.toFlipperRemote()
         return json.encodeToString(fRemote).encodeToByteArray()
-    }
-
-    fun decode(byteArray: ByteArray): InfraredRemote {
-        val fRemote: SignalModel.FlipperRemote = json.decodeFromString(byteArray.decodeToString())
-        return fRemote.toInfraredRemote()
     }
 }

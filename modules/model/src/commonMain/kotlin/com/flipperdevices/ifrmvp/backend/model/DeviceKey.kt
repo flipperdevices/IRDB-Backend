@@ -84,6 +84,9 @@ enum class DeviceKey {
     // Camera
     FAR,
 
+    // Camera
+    SHUTTER,
+
     // DVD
     PAUSE,
 

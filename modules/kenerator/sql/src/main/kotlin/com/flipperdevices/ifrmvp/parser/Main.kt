@@ -8,6 +8,7 @@ import kotlinx.coroutines.runBlocking
 
 fun main() {
     runParser()
+//    fixIrdbStructure()
 }
 
 fun runParser() {
@@ -17,8 +18,97 @@ fun runParser() {
         )
     )
     runBlocking {
-        parserModule.fillerController.fillDatabase().join()
+        parserModule.fillerController.fillDatabase()
     }
+}
+
+fun fixIrdbStructure() {
+    val folder = ParserPathResolver.irDbFolderFolder
+        .parentFile
+        .resolve("Flipper-IRDB")
+    val requiredCategories = listOf(
+        "Air_Purifiers",
+        "Cameras",
+        "DVD_Players",
+        "Fans",
+        "Projectors",
+        "TVs"
+    )
+    // delete non-required categories
+    folder.listFiles()
+        .orEmpty()
+        .filter { !requiredCategories.contains(it.name) }
+        .onEach { it.deleteRecursively() }
+    folder.listFiles()
+        .orEmpty()
+        .filter { it.isDirectory }
+        .filter { requiredCategories.contains(it.name) }
+        .onEach { category ->
+            // remove non-directory files in categories
+            category.listFiles()
+                .orEmpty()
+                .filter { !it.isDirectory }
+                .onEach { it.delete() }
+            category.listFiles()
+                .orEmpty()
+                .filter { it.isDirectory }
+                .filter { !it.name.contains("unknown",true) }
+                .onEach { brand ->
+                    brand.listFiles()
+                        .orEmpty()
+                        .filter { it.isFile }
+                        .filter { it.extension == "ir" }
+                        .filter { !it.name.contains("unknown", true) }
+                        .filter { !it.name.contains("config", true) }
+                        .filter { !it.nameWithoutExtension.equals(brand.name, true) }
+                        .filter { it.nameWithoutExtension.any { it.isDigit() } }
+                        .onEach { model ->
+                            fun String.replaceInvalidChars(): String {
+                                return this
+                                    .replace("-","")
+                                    .replace(" ","_")
+                            }
+                            val modelFolder = brand.resolve(model.nameWithoutExtension.replaceInvalidChars())
+                            modelFolder.mkdir()
+                            model.copyTo(modelFolder.resolve(model.name.replaceInvalidChars()))
+                            model.delete()
+                        }
+
+                    // remove non-ir files
+                    brand.listFiles()
+                        .orEmpty()
+                        .filter { it.extension!=".ir" }
+                        .onEach { it.delete() }
+                    // remove non-filtered files and empty folders
+                    brand.listFiles()
+                        .orEmpty()
+                        .filterNot { !it.name.contains("unknown", true) }
+                        .filterNot { !it.name.contains("config", true) }
+                        .filterNot { !it.nameWithoutExtension.equals(brand.name, true) }
+                        .filterNot { it.nameWithoutExtension.any { it.isDigit() } }
+                        .onEach {
+                            it.delete()
+                            if (it.parentFile.listFiles().isNullOrEmpty()) it.parentFile.deleteRecursively()
+                        }
+                    // remove empty folders
+                    brand.listFiles()
+                        .orEmpty()
+                        .filter { it.isDirectory }
+                        .filter { it.listFiles().isNullOrEmpty() }
+                        .onEach { it.deleteRecursively() }
+                }
+
+            category.listFiles()
+                .orEmpty()
+                .filterNot { !it.name.contains("unknown",true) }
+                .onEach { it.deleteRecursively() }
+            // remove empty folders
+            category.listFiles()
+                .orEmpty()
+                .filter { it.isDirectory }
+                .filter { it.listFiles().isNullOrEmpty() }
+                .onEach { it.deleteRecursively() }
+        }
 }
 
 /**

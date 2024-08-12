@@ -30,7 +30,7 @@ import java.io.File
 
 internal class FillerController(private val database: Database) : CoroutineScope by IoCoroutineScope() {
 
-    fun fillDatabase() = launch {
+    suspend fun fillDatabase() {
         transaction(database) {
             // insert all categories
             CategoryTable.batchInsert(ParserPathResolver.categories) { categoriesFolder ->
@@ -131,7 +131,7 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                 SignalTable
                                     .select(SignalTable.id)
                                     .where { SignalTable.brandId eq brandId }
-                                    .andWhere { SignalTable.name eq it.name }
+//                                    .andWhere { SignalTable.name eq it.name }
                                     .andWhere { SignalTable.type eq it.type }
                                     .andWhere { SignalTable.protocol eq parsedRemote?.protocol }
                                     .andWhere { SignalTable.address eq parsedRemote?.address }
@@ -140,7 +140,12 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                     .andWhere { SignalTable.dutyCycle eq rawRemote?.dutyCycle }
                                     .andWhere { SignalTable.data eq rawRemote?.data }
                                     .map { it[SignalTable.id] }
-                                    .first()
+                                    .firstOrNull() ?: error(
+                                    """
+                                        The list is emoty for brand: ${brand.name} category: ${categoryFolder} file: ${irFile.name};
+                                        name: ${it.name}
+                                    """.trimIndent()
+                                )
                             }
                             InfraredFileToSignalTable.batchInsert(signalIds) {
                                 this[InfraredFileToSignalTable.infraredFileId] = irFileId
@@ -152,6 +157,9 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                 brand = brand.name,
                                 ifrFolderName = irFile.parentFile.name
                             )
+                            if (irFileConfiguration.keyMap.entries.isEmpty()) {
+                                error("Configuration file for ${irFile} is empty")
+                            }
                             SignalKeyTable.batchInsert(irFileConfiguration.keyMap.entries) { (baseKey, keyIdentifier) ->
                                 this[SignalKeyTable.infraredFileId] = irFileId
                                 this[SignalKeyTable.deviceKey] = baseKey
@@ -160,10 +168,7 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                         this[SignalKeyTable.type] = IfrKeyIdentifier.Empty.TYPE
                                     }
 
-                                    is IfrKeyIdentifier.Name -> {
-                                        this[SignalKeyTable.remoteKeyName] = keyIdentifier.name
-                                        this[SignalKeyTable.type] = IfrKeyIdentifier.Name.TYPE
-                                    }
+                                    is IfrKeyIdentifier.Name -> error("Identifying by name is not possible!")
 
                                     is IfrKeyIdentifier.Sha256 -> {
                                         this[SignalKeyTable.remoteKeyName] = keyIdentifier.name
@@ -185,19 +190,21 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                     .apply {
                                         when (keyIdentifier) {
                                             IfrKeyIdentifier.Empty -> this
-                                            is IfrKeyIdentifier.Name -> {
-                                                andWhere { SignalTable.name eq keyIdentifier.name }
-                                            }
 
                                             is IfrKeyIdentifier.Sha256 -> {
-                                                andWhere { SignalTable.name eq keyIdentifier.name }
-                                                    .andWhere { SignalTable.hash eq keyIdentifier.hash }
+                                                andWhere { SignalTable.hash eq keyIdentifier.hash }
                                             }
+
+                                            is IfrKeyIdentifier.Name -> error("Identifying by name is not possible!")
                                         }
                                     }
                                     .map { it[SignalTable.id] }
                                     .also { assert(it.size == 1) }
-                                    .first()
+                                    .firstOrNull() ?: error(
+                                    """
+                                        Could not resolve identifier ${keyIdentifier} for file ${irFile}
+                                    """.trimIndent()
+                                )
                             }
                         }
                     }
