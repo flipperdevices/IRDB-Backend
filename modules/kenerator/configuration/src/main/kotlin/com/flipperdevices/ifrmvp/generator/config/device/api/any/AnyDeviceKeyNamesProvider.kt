@@ -6,32 +6,40 @@ import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvi
 object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
     @Suppress("LongMethod", "CyclomaticComplexMethod")
     override fun getKeyNames(key: DeviceKey): List<String> {
+        // NOT CASE-SENSITIVE!!!
         return when (key) {
             DeviceKey.PWR -> listOf(
+                "power",
                 "pwr",
                 "power",
                 "power_r",
                 "on",
+                "on_off",
+                "on/off",
             )
 
             DeviceKey.VOL_DOWN -> listOf(
                 "vol-",
-                "vol-_r"
+                "vol-_r",
+                "voldown"
             )
 
             DeviceKey.VOL_UP -> listOf(
                 "vol+",
-                "vol+_r"
+                "vol+_r",
+                "volup"
             )
 
             DeviceKey.CH_UP -> listOf(
                 "ch+",
-                "ch+_r"
+                "ch+_r",
+                "ch_next"
             )
 
             DeviceKey.CH_DOWN -> listOf(
                 "ch-",
-                "ch-_r"
+                "ch-_r",
+                "ch_prev"
             )
 
             DeviceKey.FOCUS_MORE -> listOf(
@@ -133,7 +141,8 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
 
             DeviceKey.FAN_SPEED -> listOf(
                 "fanspeed",
-                "fan_speed"
+                "fan_speed",
+                "speed"
             )
 
             DeviceKey.NEAR -> listOf(
@@ -150,7 +159,8 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             )
 
             DeviceKey.WIND_SPEED -> listOf(
-                "wind_speed"
+                "wind_speed",
+                "strength"
             )
 
             DeviceKey.MODE -> listOf(
@@ -159,11 +169,17 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             )
 
             DeviceKey.FAN_SPEED_UP -> listOf(
-                "fanspeed+"
+                "fanspeed+",
+                "fan+",
+                "fan_up",
+                "speed_up"
             )
 
             DeviceKey.FAN_SPEED_DOWN -> listOf(
-                "fanspeed-"
+                "fanspeed-",
+                "fan-",
+                "fan_dn",
+                "speed_down"
             )
 
             DeviceKey.SHAKE_WIND -> listOf(
@@ -175,16 +191,29 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             )
 
             DeviceKey.TEMPERATURE_UP -> listOf(
-                "temperature_up"
+                "temperature_up",
+                "heat+",
+                "heat_hi",
+                "temp+",
+                "heat_up"
             )
 
             DeviceKey.TEMPERATURE_DOWN -> listOf(
-                "temperature_down"
+                "temperature_down",
+                "heat-",
+                "heat_lo",
+                "temp-",
+                "heat_down"
             )
 
             DeviceKey.ENERGY_SAVE -> listOf(
                 "energy save",
                 "energy save_r"
+            )
+
+            DeviceKey.SHUTTER -> listOf(
+                "shutter",
+                "trigger"
             )
         }
     }

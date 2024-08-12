@@ -40,6 +40,7 @@ private fun generateDevicesConfigFiles() {
                     ).onEach { irFile ->
                         val config = DefaultDeviceConfigGenerator(AnyDeviceKeyNamesProvider)
                             .generate(irFile)
+                        if (config.keyMap.isEmpty()) error("Config file for ${irFile} is empty")
                         val configFile = irFile.parentFile.resolve("config.json")
                         val string = json.encodeToString(config)
                         configFile.writeText(string)

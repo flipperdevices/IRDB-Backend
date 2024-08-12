@@ -8,7 +8,9 @@ interface DeviceKeyNamesProvider {
     companion object {
         fun DeviceKeyNamesProvider.getKey(keyName: String): DeviceKey? {
             return DeviceKey.entries
-                .firstOrNull { deviceKey -> getKeyNames(deviceKey).contains(keyName) }
+                .firstOrNull { deviceKey ->
+                    getKeyNames(deviceKey).any { it.equals(keyName, true) }
+                }
         }
     }
 }

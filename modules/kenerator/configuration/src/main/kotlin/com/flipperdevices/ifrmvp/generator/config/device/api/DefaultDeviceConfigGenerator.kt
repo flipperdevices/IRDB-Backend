@@ -11,16 +11,12 @@ import java.io.File
 class DefaultDeviceConfigGenerator(private val keyNamesProvider: DeviceKeyNamesProvider) : DeviceConfigGenerator {
     override fun generate(irFile: File): DeviceConfiguration {
         val remotes = DeviceConfigGenerator.parseRemotes(irFile)
-        val remoteNameToCount = remotes.groupBy { it.name }
         val deviceKeyToInstance = remotes.mapNotNull {
             val name = it.name
             val deviceKey = keyNamesProvider.getKey(name) ?: return@mapNotNull null
             val byteArray = InfraredRemoteEncoder.encode(it)
             val hash = JvmEncoder(ByteArrayEncoder.Algorithm.SHA_256).encode(byteArray)
-            val identifier = when {
-                (remoteNameToCount[name]?.size ?: 0) > 1 -> IfrKeyIdentifier.Sha256(name = name, hash = hash)
-                else -> IfrKeyIdentifier.Name(name = name)
-            }
+            val identifier = IfrKeyIdentifier.Sha256(name = name, hash = hash)
             deviceKey to identifier
         }.associate { pair -> pair }
         return DeviceConfiguration(deviceKeyToInstance)

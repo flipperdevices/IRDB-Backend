@@ -195,6 +195,10 @@ object DeviceKeyExt {
             DeviceKey.ENERGY_SAVE -> listOf(
                 CategoryType.FAN
             )
+
+            DeviceKey.SHUTTER -> listOf(
+                CategoryType.CAMERA
+            )
         }
     }
 }
