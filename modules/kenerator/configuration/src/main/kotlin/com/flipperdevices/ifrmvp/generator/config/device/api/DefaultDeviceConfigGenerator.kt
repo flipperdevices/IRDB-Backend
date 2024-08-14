@@ -5,7 +5,7 @@ import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvi
 import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
 import com.flipperdevices.infrared.editor.encoding.ByteArrayEncoder
 import com.flipperdevices.infrared.editor.encoding.JvmEncoder
-import com.flipperdevices.infrared.editor.util.InfraredRemoteEncoder
+import com.flipperdevices.infrared.editor.encoding.InfraredRemoteEncoder
 import java.io.File
 
 class DefaultDeviceConfigGenerator(private val keyNamesProvider: DeviceKeyNamesProvider) : DeviceConfigGenerator {

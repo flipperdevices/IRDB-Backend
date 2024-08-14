@@ -10,16 +10,14 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileToSignalTab
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalKeyTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
-import com.flipperdevices.ifrmvp.backend.model.SignalModel
 import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import com.flipperdevices.infrared.editor.encoding.ByteArrayEncoder
 import com.flipperdevices.infrared.editor.encoding.JvmEncoder
 import com.flipperdevices.infrared.editor.model.InfraredRemote
-import com.flipperdevices.infrared.editor.util.InfraredRemoteEncoder
+import com.flipperdevices.infrared.editor.encoding.InfraredRemoteEncoder
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.andWhere
