@@ -199,6 +199,11 @@ object DeviceKeyExt {
             DeviceKey.SHUTTER -> listOf(
                 CategoryType.CAMERA
             )
+
+            DeviceKey.OK -> listOf(
+                CategoryType.BOX,
+                CategoryType.TVS
+            )
         }
     }
 }

@@ -21,25 +21,37 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             DeviceKey.VOL_DOWN -> listOf(
                 "vol-",
                 "vol-_r",
-                "voldown"
+                "voldown",
+                "vol_dn"
             )
 
             DeviceKey.VOL_UP -> listOf(
                 "vol+",
                 "vol+_r",
-                "volup"
+                "volup",
+                "vol_up"
             )
 
             DeviceKey.CH_UP -> listOf(
                 "ch+",
                 "ch+_r",
-                "ch_next"
+                "ch_next",
+                "chn_up",
+                "chann_up",
+                "chan up",
+                "up",
+                "next"
             )
 
             DeviceKey.CH_DOWN -> listOf(
                 "ch-",
                 "ch-_r",
-                "ch_prev"
+                "ch_prev",
+                "chn_down",
+                "chann_down",
+                "chan down",
+                "down",
+                "prev"
             )
 
             DeviceKey.FOCUS_MORE -> listOf(
@@ -214,6 +226,12 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             DeviceKey.SHUTTER -> listOf(
                 "shutter",
                 "trigger"
+            )
+
+            DeviceKey.OK -> listOf(
+                "ok",
+                "enter",
+                "center"
             )
         }
     }

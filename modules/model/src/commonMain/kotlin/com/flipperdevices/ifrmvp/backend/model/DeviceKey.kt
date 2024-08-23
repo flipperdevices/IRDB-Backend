@@ -6,8 +6,11 @@ package com.flipperdevices.ifrmvp.backend.model
  * The keys have comments in which devices they are present
  */
 enum class DeviceKey {
-    // TV, Air_Purifiers, Box, DVD, Fan, Projector
+    // TV, Air_Purifiers, Box, DVD, Fan, Projector, Camera
     PWR,
+
+    // Camera
+    SHUTTER,
 
     // TV, Box, Camera, DVD, Projector
     VOL_UP,
@@ -84,9 +87,6 @@ enum class DeviceKey {
     // Camera
     FAR,
 
-    // Camera
-    SHUTTER,
-
     // DVD
     PAUSE,
 
@@ -115,5 +115,8 @@ enum class DeviceKey {
     TEMPERATURE_DOWN,
 
     // Fan
-    ENERGY_SAVE
+    ENERGY_SAVE,
+
+    // Box, TV
+    OK
 }

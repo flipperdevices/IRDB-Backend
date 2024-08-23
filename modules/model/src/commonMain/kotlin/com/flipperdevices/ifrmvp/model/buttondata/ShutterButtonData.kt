@@ -5,16 +5,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class IconButtonData(
+data class ShutterButtonData(
     @SerialName("key_id")
     override val keyIdentifier: IfrKeyIdentifier = IfrKeyIdentifier.Empty,
-    @SerialName("icon_id")
-    val iconId: IconType
 ) : SingleKeyButtonData {
-    override val type: ButtonData.ButtonType = ButtonData.ButtonType.ICON
-
-    enum class IconType {
-        BACK, HOME, INFO, MORE, MUTE,
-        POWER, COOL, HEAT, FAN, CAMERA
-    }
+    override val type: ButtonData.ButtonType = ButtonData.ButtonType.SHUTTER
 }

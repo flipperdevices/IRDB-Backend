@@ -5,6 +5,8 @@ import com.flipperdevices.ifrmvp.backend.model.CategoryType
 import com.flipperdevices.ifrmvp.backend.model.DeviceKey
 import com.flipperdevices.ifrmvp.generator.config.category.api.DeviceKeyExt.getAllowedCategories
 import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData
+import com.flipperdevices.ifrmvp.model.buttondata.PowerButtonData
+import com.flipperdevices.ifrmvp.model.buttondata.ShutterButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.TextButtonData
 
 object AllCategoryConfigGenerator {
@@ -20,7 +22,7 @@ object AllCategoryConfigGenerator {
             orders = DeviceKey.entries.mapIndexed { index, key ->
                 when (key) {
                     DeviceKey.PWR -> CategoryConfiguration.OrderModel(
-                        data = IconButtonData(iconId = IconButtonData.IconType.POWER),
+                        data = PowerButtonData(),
                         message = "Does %s turns on?",
                         key = key,
                         index = index,
@@ -78,6 +80,13 @@ object AllCategoryConfigGenerator {
                     DeviceKey.ZOOM_DOWN -> CategoryConfiguration.OrderModel(
                         message = "Does key zoom less?",
                         data = TextButtonData(text = "-"),
+                        key = key,
+                        index = index,
+                    )
+
+                    DeviceKey.SHUTTER -> CategoryConfiguration.OrderModel(
+                        message = "Did %s take a photo?",
+                        data = IconButtonData(iconId = IconButtonData.IconType.CAMERA),
                         key = key,
                         index = index,
                     )

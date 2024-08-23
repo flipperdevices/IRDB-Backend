@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NavigationButtonData(
+data class OkNavigationButtonData(
     @SerialName("up_key_id")
     val upKeyIdentifier: IfrKeyIdentifier,
     @SerialName("left_key_id")
@@ -14,6 +14,8 @@ data class NavigationButtonData(
     val downKeyIdentifier: IfrKeyIdentifier,
     @SerialName("right_key_id")
     val rightKeyIdentifier: IfrKeyIdentifier,
+    @SerialName("ok_key_id")
+    val okKeyIdentifier: IfrKeyIdentifier,
 ) : ButtonData {
-    override val type: ButtonData.ButtonType = ButtonData.ButtonType.NAVIGATION
+    override val type: ButtonData.ButtonType = ButtonData.ButtonType.OK_NAVIGATION
 }
