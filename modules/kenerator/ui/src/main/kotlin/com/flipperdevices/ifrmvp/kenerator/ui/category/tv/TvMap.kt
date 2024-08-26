@@ -5,10 +5,10 @@ import com.flipperdevices.ifrmvp.model.IfrButton.Position
 import com.flipperdevices.ifrmvp.model.buttondata.ButtonData.ButtonType
 
 internal class TvMap : BrandMap by BrandMap.Default(
-    buildMap = {
+    getMap = {
         ButtonType.entries.associateWith {
             when (it) {
-                ButtonType.POWER -> listOf(
+                ButtonType.POWER -> mutableListOf(
                     Position(x = 0, y = 0)
                 )
 
@@ -20,23 +20,23 @@ internal class TvMap : BrandMap by BrandMap.Default(
                     Position(x = 4, y = 0).run(::add)
                     (0..4).map { x -> Position(x = x, y = 1) }.run(::addAll)
                     (0..4).map { x -> Position(x = x, y = 10) }.run(::addAll)
-                }
+                }.toMutableList()
 
-                ButtonType.CHANNEL -> listOf(
+                ButtonType.CHANNEL -> mutableListOf(
                     Position(x = 0, y = 7, containerHeight = 3, containerWidth = 1)
                 )
 
                 ButtonType.OK_NAVIGATION,
-                ButtonType.NAVIGATION -> listOf(
+                ButtonType.NAVIGATION -> mutableListOf(
                     Position(x = 1, y = 3, containerHeight = 3, containerWidth = 3)
                 )
 
-                ButtonType.VOLUME -> listOf(
+                ButtonType.VOLUME -> mutableListOf(
                     Position(x = 4, y = 7, containerHeight = 3, containerWidth = 1)
                 )
 
-                ButtonType.SHUTTER -> emptyList()
+                ButtonType.SHUTTER -> mutableListOf()
             }
-        }
+        }.toMutableMap()
     }
 )

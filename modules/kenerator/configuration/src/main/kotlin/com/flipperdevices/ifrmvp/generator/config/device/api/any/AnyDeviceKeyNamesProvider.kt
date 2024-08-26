@@ -238,6 +238,7 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             DeviceKey.FAN_SPEED_UP -> listOf(
                 "fanspeed+",
                 "fan+",
+                "fan +",
                 "fan_up",
                 "speed_up"
             )
@@ -245,6 +246,7 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             DeviceKey.FAN_SPEED_DOWN -> listOf(
                 "fanspeed-",
                 "fan-",
+                "fan -",
                 "fan_dn",
                 "speed_down"
             )
@@ -313,7 +315,7 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             )
 
             DeviceKey.COLD_WIND -> listOf(
-                "COLD WIND",
+                "cold wind",
             )
 
             DeviceKey.COOL -> listOf(
@@ -349,12 +351,12 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             )
 
             DeviceKey.HEAT_ADD -> listOf(
-                "Heat_hi",
+                "heat_hi",
                 "heat+"
             )
 
             DeviceKey.HEAT_REDUCE -> listOf(
-                "Heat_lo",
+                "heat_lo",
                 "heat-"
             )
 

@@ -11,7 +11,7 @@ import com.flipperdevices.infrared.editor.model.InfraredRemote
 internal object RemotesListExt {
     fun List<InfraredRemote>.findByKey(key: DeviceKey): InfraredRemote? {
         val keyNames = AnyDeviceKeyNamesProvider.getKeyNames(key)
-        return firstOrNull { keyNames.contains(it.name.lowercase()) }
+        return firstOrNull { keyNames.map(String::lowercase).contains(it.name.lowercase()) }
     }
 
     fun List<InfraredRemote>.findNavigationRemote(): NavigationButton? {

@@ -29,38 +29,36 @@ class ProjectorUiGenerator {
                     buttons = listOfNotNull(
                         signals.findByKey(DeviceKey.PWR)
                             ?.let { PowerButtonData(keyIdentifier = Name(it.name)) },
-                        signals.findByKey(DeviceKey.OFF)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "OFF") },
-                        signals.findByKey(DeviceKey.MUTE)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.MUTE) },
-                        signals.findByKey(DeviceKey.TV)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TV") },
-                        signals.findByKey(DeviceKey.MENU)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "MENU") },
-                        signals.findByKey(DeviceKey.BACK)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.BACK) },
-                        signals.findByKey(DeviceKey.HOME)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.HOME) },
-                        signals.findByKey(DeviceKey.FOCUS_LESS)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FOCUS_LESS") },
                         signals.findByKey(DeviceKey.FOCUS_MORE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FOCUS_MORE") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "F+") },
+                        signals.findByKey(DeviceKey.FOCUS_LESS)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "F-") },
                         signals.findByKey(DeviceKey.ZOOM_UP)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "ZOOM_UP") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "Z+") },
                         signals.findByKey(DeviceKey.ZOOM_DOWN)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "ZOOM_DOWN") },
-                        signals.findByKey(DeviceKey.EXIT)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "EXIT") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "Z-") },
                         signals.findByKey(DeviceKey.RESET)
                             ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "RESET") },
-                        signals.findByKey(DeviceKey.PREVIOUS)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "PREVIOUS") },
-                        signals.findByKey(DeviceKey.NEXT)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "NEXT") },
+                        signals.findByKey(DeviceKey.INFO)
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.INFO)},
+                        signals.findByKey(DeviceKey.EXIT)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "EXIT") },
+                        signals.findByKey(DeviceKey.MENU)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "MENU") },
+                        signals.findByKey(DeviceKey.HOME)
+                            ?.let {IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.HOME)},
                         signals.findByKey(DeviceKey.BACK)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "BACK") },
-                        signals.findByKey(DeviceKey.MODE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "MODE") },
+                            ?.let {IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.BACK)},
+                        signals.findByKey(DeviceKey.MUTE)
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.MUTE) },
+                        signals.findByKey(DeviceKey.FAR)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAR") },
+                        signals.findByKey(DeviceKey.NEAR)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "NEAR") },
+                        signals.findByKey(DeviceKey.BRIGHTNESS_UP)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "BR+") },
+                        signals.findByKey(DeviceKey.BRIGHTNESS_DOWN)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "BR-") },
                         signals.findVolumeButton()
                             ?.let { VolumeButtonData(Name(it.add.name), Name(it.reduce.name)) },
                         signals.findChannelButton()

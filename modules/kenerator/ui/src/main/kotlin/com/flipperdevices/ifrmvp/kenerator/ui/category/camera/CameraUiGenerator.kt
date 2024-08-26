@@ -33,6 +33,34 @@ class CameraUiGenerator {
                             ?.let { PowerButtonData(keyIdentifier = Name(it.name)) },
                         signals.findByKey(DeviceKey.SHUTTER)
                             ?.let { ShutterButtonData(keyIdentifier = Name(it.name)) },
+                        signals.findByKey(DeviceKey.ZOOM_UP)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "Z+") },
+                        signals.findByKey(DeviceKey.ZOOM_DOWN)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "Z-") },
+                        signals.findByKey(DeviceKey.RESET)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "RESET") },
+                        signals.findByKey(DeviceKey.NEXT)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "NEXT") },
+                        signals.findByKey(DeviceKey.PREVIOUS)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "PREV") },
+                        signals.findByKey(DeviceKey.REW)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "PREV") },
+                        signals.findByKey(DeviceKey.INFO)
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.INFO)},
+                        signals.findByKey(DeviceKey.EXIT)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "EXIT") },
+                        signals.findByKey(DeviceKey.MENU)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "MENU") },
+                        signals.findByKey(DeviceKey.HOME)
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.HOME) },
+                        signals.findByKey(DeviceKey.BACK)
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.BACK)},
+                        signals.findByKey(DeviceKey.FAR)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAR") },
+                        signals.findByKey(DeviceKey.NEAR)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "NEAR") },
+                        signals.findByKey(DeviceKey.SHUTTER)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "SHUTTER") },
                         signals.findOkNavigationRemote()
                             ?.let {
                                 OkNavigationButtonData(

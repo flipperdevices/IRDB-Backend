@@ -30,32 +30,45 @@ class FanUiGenerator {
                     buttons = listOfNotNull(
                         signals.findByKey(DeviceKey.PWR)
                             ?.let { PowerButtonData(keyIdentifier = Name(it.name)) },
-                        signals.findByKey(DeviceKey.SHAKE_WIND)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "SHAKE_WIND") },
-                        signals.findByKey(DeviceKey.WIND_TYPE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "WIND_TYPE") },
-                        signals.findByKey(DeviceKey.WIND_SPEED)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "WIND_SPEED") },
-                        signals.findByKey(DeviceKey.FAN_SPEED)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAN_SPEED") },
-                        signals.findByKey(DeviceKey.FAN_SPEED_UP)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAN_SPEED_UP") },
-                        signals.findByKey(DeviceKey.FAN_SPEED_DOWN)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAN_SPEED_DOWN") },
+
                         signals.findByKey(DeviceKey.MUTE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "MUTE") },
-                        signals.findByKey(DeviceKey.TEMPERATURE_UP)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TEMPERATURE_UP") },
-                        signals.findByKey(DeviceKey.TEMPERATURE_DOWN)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TEMPERATURE_DOWN") },
-                        signals.findByKey(DeviceKey.ENERGY_SAVE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "ENERGY_SAVE") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.MUTE)},
                         signals.findByKey(DeviceKey.MODE)
                             ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "MODE") },
+                        signals.findByKey(DeviceKey.FAN_MEDIUM)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAN_MEDIUM") },
+                        signals.findByKey(DeviceKey.FAN_HIGH)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAN_HIGH") },
+                        signals.findByKey(DeviceKey.FAN_LOW)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAN_LOW") },
+                        signals.findByKey(DeviceKey.LIGHT)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "LIGHT") },
+                        signals.findByKey(DeviceKey.FAN_SPEED_UP)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAN_SPEED_UP") },
+                        signals.findByKey(DeviceKey.TIMER_REDUCE)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TIMER_REDUCE") },
+                        signals.findByKey(DeviceKey.OSCILLATE)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "OSCILLATE") },
                         signals.findByKey(DeviceKey.TIMER)
                             ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TIMER") },
-                        signals.findByKey(DeviceKey.COLD_WIND)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "COLD_WIND") },
+                        signals.findByKey(DeviceKey.TIMER_ADD)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TIMER_ADD") },
+                        signals.findByKey(DeviceKey.TEMPERATURE_DOWN)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TEMPERATURE_DOWN") },
+                        signals.findByKey(DeviceKey.TEMPERATURE_UP)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TEMPERATURE_UP") },
+                        signals.findByKey(DeviceKey.ENERGY_SAVE)
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "ENERGY_SAVE") },
+                        signals.findOkNavigationRemote()
+                            ?.let {
+                                OkNavigationButtonData(
+                                    upKeyIdentifier = Name(it.up.name),
+                                    leftKeyIdentifier = Name(it.left.name),
+                                    rightKeyIdentifier = Name(it.right.name),
+                                    downKeyIdentifier = Name(it.down.name),
+                                    okKeyIdentifier = Name(it.ok.name)
+                                )
+                            },
                     ).let(map::transform)
                 )
             )
