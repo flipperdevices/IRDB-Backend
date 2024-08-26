@@ -23,7 +23,7 @@ object AirPurifierCategoryConfigGenerator {
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Is it oscillated?",
-                    data = TextButtonData(text = "V+"),
+                    data = TextButtonData(text = "OSC"),
                     key = DeviceKey.OSCILLATE,
                     index = ++i,
                 ),
@@ -41,7 +41,7 @@ object AirPurifierCategoryConfigGenerator {
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Does it swing?",
-                    data = TextButtonData(text = "FS-"),
+                    data = TextButtonData(text = "SW"),
                     key = DeviceKey.SWING,
                     index = ++i,
                 ),

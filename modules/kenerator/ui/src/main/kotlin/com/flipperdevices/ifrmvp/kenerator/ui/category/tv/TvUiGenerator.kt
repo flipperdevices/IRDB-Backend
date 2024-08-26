@@ -29,21 +29,27 @@ class TvUiGenerator {
                         signals.findByKey(DeviceKey.PWR)
                             ?.let { PowerButtonData(keyIdentifier = Name(it.name)) },
                         signals.findByKey(DeviceKey.RECORD)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "RECORD") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.RECORD) },
+                        signals.findByKey(DeviceKey.MENU)
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.MENU) },
+                        signals.findByKey(DeviceKey.EXIT)
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.EXIT) },
+                        signals.findByKey(DeviceKey.BACK)
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.BACK) },
                         signals.findByKey(DeviceKey.FOCUS_MORE)
                             ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "F+") },
                         signals.findByKey(DeviceKey.FOCUS_LESS)
                             ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "F-") },
                         signals.findByKey(DeviceKey.ZOOM_UP)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "Z+") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.ZOOM_IN) },
                         signals.findByKey(DeviceKey.ZOOM_DOWN)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "Z-") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.ZOOM_OUT) },
                         signals.findByKey(DeviceKey.RESET)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "RESET") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.RESET) },
                         signals.findByKey(DeviceKey.BRIGHTNESS_UP)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "BR+") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.BRIGHT_MORE) },
                         signals.findByKey(DeviceKey.RECORD)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "BR-") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.BRIGHT_LESS) },
                         signals.findChannelButton()
                             ?.let { ChannelButtonData(Name(it.next.name), Name(it.prev.name)) },
                         signals.findOkNavigationRemote()

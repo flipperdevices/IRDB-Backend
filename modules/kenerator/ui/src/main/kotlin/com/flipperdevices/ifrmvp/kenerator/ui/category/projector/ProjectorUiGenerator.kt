@@ -34,17 +34,17 @@ class ProjectorUiGenerator {
                         signals.findByKey(DeviceKey.FOCUS_LESS)
                             ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "F-") },
                         signals.findByKey(DeviceKey.ZOOM_UP)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "Z+") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.ZOOM_IN) },
                         signals.findByKey(DeviceKey.ZOOM_DOWN)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "Z-") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.ZOOM_OUT) },
                         signals.findByKey(DeviceKey.RESET)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "RESET") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.RESET) },
                         signals.findByKey(DeviceKey.INFO)
                             ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.INFO)},
                         signals.findByKey(DeviceKey.EXIT)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "EXIT") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.EXIT) },
                         signals.findByKey(DeviceKey.MENU)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "MENU") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.MENU) },
                         signals.findByKey(DeviceKey.HOME)
                             ?.let {IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.HOME)},
                         signals.findByKey(DeviceKey.BACK)
@@ -56,9 +56,9 @@ class ProjectorUiGenerator {
                         signals.findByKey(DeviceKey.NEAR)
                             ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "NEAR") },
                         signals.findByKey(DeviceKey.BRIGHTNESS_UP)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "BR+") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.BRIGHT_MORE) },
                         signals.findByKey(DeviceKey.BRIGHTNESS_DOWN)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "BR-") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.BRIGHT_LESS) },
                         signals.findVolumeButton()
                             ?.let { VolumeButtonData(Name(it.add.name), Name(it.reduce.name)) },
                         signals.findChannelButton()

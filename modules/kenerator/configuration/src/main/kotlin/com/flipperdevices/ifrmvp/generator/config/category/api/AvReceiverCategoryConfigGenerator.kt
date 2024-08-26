@@ -23,13 +23,13 @@ object AvReceiverCategoryConfigGenerator {
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Does volume go up?",
-                    data = TextButtonData(text = "V+"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.VOL_UP),
                     key = DeviceKey.VOL_UP,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Does volume go down?",
-                    data = TextButtonData(text = "V-"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.VOL_DOWN),
                     key = DeviceKey.VOL_DOWN,
                     index = ++i,
                 ),
@@ -41,7 +41,7 @@ object AvReceiverCategoryConfigGenerator {
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Is menu opened?",
-                    data = TextButtonData(text = "Menu"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.MENU),
                     key = DeviceKey.MENU,
                     index = ++i,
                 )

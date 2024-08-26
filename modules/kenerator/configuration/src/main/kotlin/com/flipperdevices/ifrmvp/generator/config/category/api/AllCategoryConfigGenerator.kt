@@ -30,28 +30,28 @@ object AllCategoryConfigGenerator {
 
                     DeviceKey.VOL_UP -> CategoryConfiguration.OrderModel(
                         message = "Does volume go up?",
-                        data = TextButtonData(text = "+"),
+                        data = IconButtonData(iconId = IconButtonData.IconType.VOL_UP),
                         key = key,
                         index = index,
                     )
 
                     DeviceKey.VOL_DOWN -> CategoryConfiguration.OrderModel(
                         message = "Does volume go down?",
-                        data = TextButtonData(text = "-"),
+                        data = IconButtonData(iconId = IconButtonData.IconType.VOL_DOWN),
                         key = key,
                         index = index,
                     )
 
                     DeviceKey.CH_UP -> CategoryConfiguration.OrderModel(
                         message = "Does channel go next?",
-                        data = TextButtonData(text = "+"),
+                        data = TextButtonData(text = "CH+"),
                         key = key,
                         index = index,
                     )
 
                     DeviceKey.CH_DOWN -> CategoryConfiguration.OrderModel(
                         message = "Does channel go previous?",
-                        data = TextButtonData(text = "-"),
+                        data = TextButtonData(text = "CH-"),
                         key = key,
                         index = index,
                     )
@@ -72,14 +72,14 @@ object AllCategoryConfigGenerator {
 
                     DeviceKey.ZOOM_UP -> CategoryConfiguration.OrderModel(
                         message = "Does key zoom more?",
-                        data = TextButtonData(text = "+"),
+                        data = IconButtonData(iconId = IconButtonData.IconType.ZOOM_IN),
                         key = key,
                         index = index,
                     )
 
                     DeviceKey.ZOOM_DOWN -> CategoryConfiguration.OrderModel(
                         message = "Does key zoom less?",
-                        data = TextButtonData(text = "-"),
+                        data = IconButtonData(iconId = IconButtonData.IconType.ZOOM_OUT),
                         key = key,
                         index = index,
                     )

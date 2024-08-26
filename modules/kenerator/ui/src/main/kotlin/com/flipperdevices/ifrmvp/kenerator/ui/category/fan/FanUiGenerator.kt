@@ -34,31 +34,31 @@ class FanUiGenerator {
                         signals.findByKey(DeviceKey.MUTE)
                             ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.MUTE)},
                         signals.findByKey(DeviceKey.MODE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "MODE") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.MODE) },
                         signals.findByKey(DeviceKey.FAN_MEDIUM)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAN_MEDIUM") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "F2") },
                         signals.findByKey(DeviceKey.FAN_HIGH)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAN_HIGH") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "F3") },
                         signals.findByKey(DeviceKey.FAN_LOW)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAN_LOW") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "F1") },
                         signals.findByKey(DeviceKey.LIGHT)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "LIGHT") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.LIGHT) },
                         signals.findByKey(DeviceKey.FAN_SPEED_UP)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAN_SPEED_UP") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "F+") },
                         signals.findByKey(DeviceKey.TIMER_REDUCE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TIMER_REDUCE") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TM-") },
                         signals.findByKey(DeviceKey.OSCILLATE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "OSCILLATE") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "OSC") },
                         signals.findByKey(DeviceKey.TIMER)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TIMER") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TM") },
                         signals.findByKey(DeviceKey.TIMER_ADD)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TIMER_ADD") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TM+") },
                         signals.findByKey(DeviceKey.TEMPERATURE_DOWN)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TEMPERATURE_DOWN") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "T-") },
                         signals.findByKey(DeviceKey.TEMPERATURE_UP)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "TEMPERATURE_UP") },
+                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "T+") },
                         signals.findByKey(DeviceKey.ENERGY_SAVE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "ENERGY_SAVE") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.ENERGY_SAVE) },
                         signals.findOkNavigationRemote()
                             ?.let {
                                 OkNavigationButtonData(

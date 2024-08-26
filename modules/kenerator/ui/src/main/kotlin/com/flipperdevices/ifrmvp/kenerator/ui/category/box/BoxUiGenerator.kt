@@ -36,9 +36,9 @@ class BoxUiGenerator {
                         signals.findByKey(DeviceKey.FOCUS_MORE)
                             ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "F+") },
                         signals.findByKey(DeviceKey.NEXT)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "NEXT") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.NEXT) },
                         signals.findByKey(DeviceKey.PREVIOUS)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "PREV") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.PREVIOUS) },
                         signals.findByKey(DeviceKey.REW)
                             ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "REV") },
                         signals.findByKey(DeviceKey.TV)
@@ -48,31 +48,31 @@ class BoxUiGenerator {
                         signals.findByKey(DeviceKey.INFO)
                             ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.INFO) },
                         signals.findByKey(DeviceKey.EXIT)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "EXIT") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.EXIT) },
                         signals.findByKey(DeviceKey.MENU)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "MENU") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.MENU) },
                         signals.findByKey(DeviceKey.HOME)
                             ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.HOME)},
                         signals.findByKey(DeviceKey.BACK)
                             ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.BACK)},
                         signals.findByKey(DeviceKey.PAUSE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "PAUSE") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.PAUSE) },
                         signals.findByKey(DeviceKey.PLAY)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "PLAY") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.PLAY) },
                         signals.findByKey(DeviceKey.STOP)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "STOP") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.STOP) },
                         signals.findByKey(DeviceKey.MUTE)
                             ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.MUTE) },
                         signals.findByKey(DeviceKey.SET)
                             ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "SET") },
                         signals.findByKey(DeviceKey.DELETE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "DELETE") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.DELETE) },
                         signals.findByKey(DeviceKey.VOD)
                             ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "VOD") },
                         signals.findByKey(DeviceKey.LIVE_TV)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "LIVE_TV") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.LIVE_TV) },
                         signals.findByKey(DeviceKey.FAVORITE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "FAVORITE") },
+                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.FAVORITE) },
                         signals.findVolumeButton()
                             ?.let { VolumeButtonData(Name(it.add.name), Name(it.reduce.name)) },
                         signals.findChannelButton()

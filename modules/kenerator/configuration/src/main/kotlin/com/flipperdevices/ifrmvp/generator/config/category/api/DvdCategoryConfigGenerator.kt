@@ -35,13 +35,13 @@ object DvdCategoryConfigGenerator {
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Does volume go up?",
-                    data = TextButtonData(text = "V+"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.VOL_UP),
                     key = DeviceKey.VOL_UP,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Does volume go down?",
-                    data = TextButtonData(text = "V-"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.VOL_DOWN),
                     key = DeviceKey.VOL_DOWN,
                     index = ++i,
                 ),
@@ -53,7 +53,7 @@ object DvdCategoryConfigGenerator {
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Is it ejected?",
-                    data = TextButtonData(text = "EJECT"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.EJECT),
                     key = DeviceKey.EJECT,
                     index = ++i,
                 ),
