@@ -1,7 +1,6 @@
-package com.flipperdevices.ifrmvp.kenerator.ui.tv
+package com.flipperdevices.ifrmvp.kenerator.ui.category.tv
 
 import com.flipperdevices.ifrmvp.backend.model.DeviceKey
-import com.flipperdevices.ifrmvp.kenerator.ui.avreceiver.AvReceiverMap
 import com.flipperdevices.ifrmvp.kenerator.ui.core.BrandMap
 import com.flipperdevices.ifrmvp.kenerator.ui.util.RemotesListExt.findByKey
 import com.flipperdevices.ifrmvp.kenerator.ui.util.RemotesListExt.findChannelButton
@@ -20,7 +19,7 @@ import com.flipperdevices.ifrmvp.model.buttondata.VolumeButtonData
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 
 class TvUiGenerator {
-    private val map: BrandMap = AvReceiverMap()
+    private val map: BrandMap = TvMap()
 
     fun generate(signals: List<InfraredRemote>): PagesLayout {
         return PagesLayout(

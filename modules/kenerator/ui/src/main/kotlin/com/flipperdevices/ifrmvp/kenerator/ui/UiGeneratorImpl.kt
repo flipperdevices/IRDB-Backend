@@ -3,8 +3,14 @@ package com.flipperdevices.ifrmvp.kenerator.ui
 import com.flipperdevices.bridge.dao.api.model.FlipperFileFormat
 import com.flipperdevices.ifrmvp.backend.db.signal.dao.TableDao
 import com.flipperdevices.ifrmvp.backend.model.CategoryType
-import com.flipperdevices.ifrmvp.kenerator.ui.camera.CameraUiGenerator
-import com.flipperdevices.ifrmvp.kenerator.ui.avreceiver.AvReceiverUiGenerator
+import com.flipperdevices.ifrmvp.kenerator.ui.category.airpurifier.AirPurifierUiGenerator
+import com.flipperdevices.ifrmvp.kenerator.ui.category.camera.CameraUiGenerator
+import com.flipperdevices.ifrmvp.kenerator.ui.category.avreceiver.AvReceiverUiGenerator
+import com.flipperdevices.ifrmvp.kenerator.ui.category.box.BoxUiGenerator
+import com.flipperdevices.ifrmvp.kenerator.ui.category.dvd.DvdUiGenerator
+import com.flipperdevices.ifrmvp.kenerator.ui.category.fan.FanUiGenerator
+import com.flipperdevices.ifrmvp.kenerator.ui.category.projector.ProjectorUiGenerator
+import com.flipperdevices.ifrmvp.kenerator.ui.category.tv.TvUiGenerator
 import com.flipperdevices.ifrmvp.model.PagesLayout
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
@@ -44,13 +50,13 @@ class UiGeneratorImpl(private val tableDao: TableDao) : UiGenerator {
 
         return when (categoryType) {
             CategoryType.A_V_RECEIVER -> AvReceiverUiGenerator().generate(signals)
-            CategoryType.AIR_PURIFIERS -> TODO()
-            CategoryType.BOX -> TODO()
+            CategoryType.AIR_PURIFIERS -> AirPurifierUiGenerator().generate(signals)
+            CategoryType.BOX -> BoxUiGenerator().generate(signals)
             CategoryType.CAMERA -> CameraUiGenerator().generate(signals)
-            CategoryType.DVD -> TODO()
-            CategoryType.FAN -> TODO()
-            CategoryType.PROJECTOR -> TODO()
-            CategoryType.TVS -> AvReceiverUiGenerator().generate(signals)
+            CategoryType.DVD -> DvdUiGenerator().generate(signals)
+            CategoryType.FAN -> FanUiGenerator().generate(signals)
+            CategoryType.PROJECTOR -> ProjectorUiGenerator().generate(signals)
+            CategoryType.TVS -> TvUiGenerator().generate(signals)
         }
     }
 }
