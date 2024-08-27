@@ -23,7 +23,6 @@ internal fun Application.module(rootModule: RootModule, logger: Logger) {
             rootModule.signalModule.registry,
             rootModule.keyModule.registry,
             rootModule.uiModule.registry,
-            rootModule.configGenModule.registry,
             rootModule.infraredsModule.registry
         ).forEach { routeRegistry -> routeRegistry.register(this) }
     }

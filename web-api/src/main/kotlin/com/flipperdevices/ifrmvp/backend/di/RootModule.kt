@@ -5,7 +5,6 @@ import com.flipperdevices.ifrmvp.backend.db.signal.di.SignalApiModule
 import com.flipperdevices.ifrmvp.backend.envkonfig.EnvKonfig
 import com.flipperdevices.ifrmvp.backend.route.brands.di.BrandsModule
 import com.flipperdevices.ifrmvp.backend.route.categories.di.CategoriesModule
-import com.flipperdevices.ifrmvp.backend.route.configgen.di.ConfigGenModule
 import com.flipperdevices.ifrmvp.backend.route.infrareds.di.InfraredsModule
 import com.flipperdevices.ifrmvp.backend.route.key.di.KeyModule
 import com.flipperdevices.ifrmvp.backend.route.signal.di.SignalModule
@@ -22,7 +21,6 @@ interface RootModule {
     val signalModule: SignalModule
     val keyModule: KeyModule
     val uiModule: UiModule
-    val configGenModule: ConfigGenModule
     val infraredsModule: InfraredsModule
 
     class Default : RootModule {
@@ -51,12 +49,6 @@ interface RootModule {
         override val uiModule: UiModule by lazy {
             UiModule.Default(
                 signalApiModule = signalApiModule,
-            )
-        }
-        override val configGenModule: ConfigGenModule by lazy {
-            ConfigGenModule.Default(
-                keyModule = keyModule,
-                apiModule = signalApiModule
             )
         }
         override val infraredsModule: InfraredsModule by lazy {
