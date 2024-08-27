@@ -4,7 +4,6 @@ import com.flipperdevices.bridge.dao.api.model.FlipperFileFormat
 import com.flipperdevices.ifrmvp.backend.model.CategoryType
 import com.flipperdevices.ifrmvp.backend.model.DeviceKey
 import com.flipperdevices.ifrmvp.generator.config.category.api.AirPurifierCategoryConfigGenerator
-import com.flipperdevices.ifrmvp.generator.config.category.api.AllCategoryConfigGenerator
 import com.flipperdevices.ifrmvp.generator.config.category.api.AvReceiverCategoryConfigGenerator
 import com.flipperdevices.ifrmvp.generator.config.category.api.BoxCategoryConfigGenerator
 import com.flipperdevices.ifrmvp.generator.config.category.api.CameraCategoryConfigGenerator
