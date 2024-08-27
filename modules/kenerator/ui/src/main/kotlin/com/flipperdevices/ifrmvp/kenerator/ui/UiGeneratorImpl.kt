@@ -3,14 +3,10 @@ package com.flipperdevices.ifrmvp.kenerator.ui
 import com.flipperdevices.bridge.dao.api.model.FlipperFileFormat
 import com.flipperdevices.ifrmvp.backend.db.signal.dao.TableDao
 import com.flipperdevices.ifrmvp.backend.model.CategoryType
-import com.flipperdevices.ifrmvp.kenerator.ui.category.airpurifier.AirPurifierUiGenerator
-import com.flipperdevices.ifrmvp.kenerator.ui.category.camera.CameraUiGenerator
-import com.flipperdevices.ifrmvp.kenerator.ui.category.avreceiver.AvReceiverUiGenerator
-import com.flipperdevices.ifrmvp.kenerator.ui.category.box.BoxUiGenerator
-import com.flipperdevices.ifrmvp.kenerator.ui.category.dvd.DvdUiGenerator
-import com.flipperdevices.ifrmvp.kenerator.ui.category.fan.FanUiGenerator
-import com.flipperdevices.ifrmvp.kenerator.ui.category.projector.ProjectorUiGenerator
-import com.flipperdevices.ifrmvp.kenerator.ui.category.tv.TvUiGenerator
+import com.flipperdevices.ifrmvp.kenerator.ui.category.DefaultUiGenerator
+import com.flipperdevices.ifrmvp.kenerator.ui.category.camera.CameraMap
+import com.flipperdevices.ifrmvp.kenerator.ui.category.fan.FanMap
+import com.flipperdevices.ifrmvp.kenerator.ui.category.tv.TvMap
 import com.flipperdevices.ifrmvp.model.PagesLayout
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
@@ -49,14 +45,14 @@ class UiGeneratorImpl(private val tableDao: TableDao) : UiGenerator {
         println("infraredFileModel: ${category.folderName}/${brand.folderName}/${infraredFileModel.fileName} ")
 
         return when (categoryType) {
-            CategoryType.A_V_RECEIVER -> AvReceiverUiGenerator().generate(signals)
-            CategoryType.AIR_PURIFIERS -> AirPurifierUiGenerator().generate(signals)
-            CategoryType.BOX -> BoxUiGenerator().generate(signals)
-            CategoryType.CAMERA -> CameraUiGenerator().generate(signals)
-            CategoryType.DVD -> DvdUiGenerator().generate(signals)
-            CategoryType.FAN -> FanUiGenerator().generate(signals)
-            CategoryType.PROJECTOR -> ProjectorUiGenerator().generate(signals)
-            CategoryType.TVS -> TvUiGenerator().generate(signals)
+            CategoryType.A_V_RECEIVER -> DefaultUiGenerator(TvMap()).generate(signals)
+            CategoryType.AIR_PURIFIERS -> DefaultUiGenerator(FanMap()).generate(signals)
+            CategoryType.BOX -> DefaultUiGenerator(TvMap()).generate(signals)
+            CategoryType.CAMERA -> DefaultUiGenerator(CameraMap()).generate(signals)
+            CategoryType.DVD -> DefaultUiGenerator(TvMap()).generate(signals)
+            CategoryType.FAN -> DefaultUiGenerator(FanMap()).generate(signals)
+            CategoryType.PROJECTOR -> DefaultUiGenerator(TvMap()).generate(signals)
+            CategoryType.TVS -> DefaultUiGenerator(TvMap()).generate(signals)
         }
     }
 }

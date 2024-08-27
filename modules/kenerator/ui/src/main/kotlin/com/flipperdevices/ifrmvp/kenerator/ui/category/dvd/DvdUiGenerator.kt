@@ -29,36 +29,6 @@ class DvdUiGenerator {
             pages = listOf(
                 PageLayout(
                     buttons = listOfNotNull(
-                        signals.findByKey(DeviceKey.PWR)
-                            ?.let { PowerButtonData(keyIdentifier = Name(it.name)) },
-                        signals.findByKey(DeviceKey.FOCUS_MORE)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "F+") },
-                        signals.findByKey(DeviceKey.FOCUS_LESS)
-                            ?.let { TextButtonData(keyIdentifier = Name(it.name), text = "F-") },
-                        signals.findByKey(DeviceKey.ZOOM_UP)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.ZOOM_OUT) },
-                        signals.findByKey(DeviceKey.ZOOM_DOWN)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.ZOOM_IN) },
-                        signals.findByKey(DeviceKey.RESET)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.RESET) },
-                        signals.findByKey(DeviceKey.PREVIOUS)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.PREVIOUS) },
-                        signals.findByKey(DeviceKey.NEXT)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.NEXT) },
-                        signals.findByKey(DeviceKey.EJECT)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.EJECT) },
-                        signals.findByKey(DeviceKey.PAUSE)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.PAUSE) },
-                        signals.findByKey(DeviceKey.PLAY)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.PLAY) },
-                        signals.findByKey(DeviceKey.STOP)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.STOP) },
-                        signals.findByKey(DeviceKey.MUTE)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.MUTE) },
-                        signals.findByKey(DeviceKey.BRIGHTNESS_UP)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.BRIGHT_MORE) },
-                        signals.findByKey(DeviceKey.BRIGHTNESS_DOWN)
-                            ?.let { IconButtonData(keyIdentifier = Name(it.name), iconId = IconType.BRIGHT_LESS) },
                         signals.findVolumeButton()
                             ?.let { VolumeButtonData(Name(it.add.name), Name(it.reduce.name)) },
                         signals.findChannelButton()
