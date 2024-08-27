@@ -7,14 +7,13 @@ import com.flipperdevices.ifrmvp.kenerator.ui.util.RemotesListExt.findChannelBut
 import com.flipperdevices.ifrmvp.kenerator.ui.util.RemotesListExt.findNavigationRemote
 import com.flipperdevices.ifrmvp.kenerator.ui.util.RemotesListExt.findOkNavigationRemote
 import com.flipperdevices.ifrmvp.kenerator.ui.util.RemotesListExt.findVolumeButton
-import com.flipperdevices.ifrmvp.kenerator.ui.util.RemotesListExt.identifier
-import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier.Name
 import com.flipperdevices.ifrmvp.model.PageLayout
 import com.flipperdevices.ifrmvp.model.PagesLayout
 import com.flipperdevices.ifrmvp.model.buttondata.ChannelButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.NavigationButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.OkNavigationButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.VolumeButtonData
+import com.flipperdevices.infrared.editor.encoding.InfraredRemoteEncoder.identifier
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 
 class DefaultUiGenerator(private val map: BrandMap) {

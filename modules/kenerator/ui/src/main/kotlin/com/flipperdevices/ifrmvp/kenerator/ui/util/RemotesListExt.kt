@@ -6,17 +6,13 @@ import com.flipperdevices.ifrmvp.kenerator.ui.button.ChannelButton
 import com.flipperdevices.ifrmvp.kenerator.ui.button.NavigationButton
 import com.flipperdevices.ifrmvp.kenerator.ui.button.OkNavigationButton
 import com.flipperdevices.ifrmvp.kenerator.ui.button.VolButton
-import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
-import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier.Name
 import com.flipperdevices.ifrmvp.model.buttondata.ButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData.IconType
 import com.flipperdevices.ifrmvp.model.buttondata.PowerButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.ShutterButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.TextButtonData
-import com.flipperdevices.infrared.editor.encoding.ByteArrayEncoder
-import com.flipperdevices.infrared.editor.encoding.InfraredRemoteEncoder
-import com.flipperdevices.infrared.editor.encoding.JvmEncoder
+import com.flipperdevices.infrared.editor.encoding.InfraredRemoteEncoder.identifier
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 
 internal object RemotesListExt {
@@ -57,13 +53,6 @@ internal object RemotesListExt {
             reduce = findByKey(DeviceKey.VOL_DOWN) ?: return null,
         )
     }
-
-    val InfraredRemote.identifier: IfrKeyIdentifier
-        get() {
-            val byteArray = InfraredRemoteEncoder.encode(this)
-            val sha256 = JvmEncoder(ByteArrayEncoder.Algorithm.SHA_256).encode(byteArray)
-            return IfrKeyIdentifier.Sha256(name, sha256)
-        }
 
     fun List<InfraredRemote>.findButtonsData(): List<ButtonData> {
         val remotes = this

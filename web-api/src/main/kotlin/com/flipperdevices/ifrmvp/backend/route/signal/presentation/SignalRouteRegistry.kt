@@ -178,6 +178,7 @@ internal class SignalRouteRegistry(
             categoryType = categoryType,
             index = index
         )
+        println("Getting order: $order index: $index")
         // todo When orders is empty we can't define the next key. Need to think how to bypass it or may be just log
         if (order == null) {
             val infraredFileId = transaction(database) {
@@ -224,6 +225,7 @@ internal class SignalRouteRegistry(
             body = {
                 @Suppress("UnusedPrivateProperty")
                 val signalRequestModel = context.receive<SignalRequestModel>()
+                println("signalRequestModel: ${signalRequestModel}")
 
                 val brand = tableDao.getBrandById(signalRequestModel.brandId)
                 val category = tableDao.getCategoryById(brand.categoryId)
