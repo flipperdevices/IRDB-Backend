@@ -299,7 +299,8 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             DeviceKey.SHUTTER -> listOf(
                 "shutter",
                 "trigger",
-                "photo"
+                "photo",
+                "picture"
             )
 
             DeviceKey.OK -> listOf(
