@@ -6,114 +6,70 @@ package com.flipperdevices.ifrmvp.backend.model
  * The keys have comments in which devices they are present
  */
 enum class DeviceKey {
-    // TV, Air_Purifiers, Box, DVD, Fan, Projector
     PWR,
-
-    // TV, Box, Camera, DVD, Projector
-    VOL_UP,
-
-    // TV, Box, Camera, DVD, Projector
-    VOL_DOWN,
-
-    // TV, Box
-    CH_UP,
-
-    // TV, Box
-    CH_DOWN,
-
-    // Projector
-    FOCUS_MORE,
-
-    // Projector
-    FOCUS_LESS,
-
-    // Projector
-    ZOOM_UP,
-
-    // Projector
-    ZOOM_DOWN,
-
-    // Projector
-    RESET,
-
-    // A_V_receiver, Box, Camera, DVD, Projector
-    DOWN,
-
-    // A_V_receiver, Box, Camera, DVD, Projector
-    UP,
-
-    // A_V_receiver, Box, Camera, DVD, Projector
-    RIGHT,
-
-    // A_V_receiver, Box, Camera, DVD, Projector
-    LEFT,
-
-    // A_V_receiver, Camera, DVD
-    NEXT,
-
-    // A_V_receiver, Camera, DVD
-    PREVIOUS,
-
-    // A_V_receiver
-    TV,
-
-    // A_V_receiver
-    AUX,
-
-    // A_V_receiver, Box, DVD
-    HOME,
-
-    // A_V_receiver, Box, Camera, Projector
-    BACK,
-
-    // A_V_receiver, Camera, DVD, Projector
-    MENU,
-
-    // A_V_receiver, DVD
-    PLAY,
-
-    // A_V_receiver, Air_Purifiers, DVD, Fan, Projector
-    MUTE,
-
-    // Air_Purifiers
-    FAN_SPEED,
-
-    // Camera
-    NEAR,
-
-    // Camera
-    FAR,
-
-    // Camera
     SHUTTER,
-
-    // DVD
+    VOL_UP,
+    VOL_DOWN,
+    CH_UP,
+    CH_DOWN,
+    FOCUS_MORE,
+    FOCUS_LESS,
+    ZOOM_UP,
+    ZOOM_DOWN,
+    RESET,
+    DOWN,
+    UP,
+    RIGHT,
+    LEFT,
+    NEXT,
+    PREVIOUS,
+    TV,
+    AUX,
+    HOME,
+    BACK,
+    MENU,
+    PLAY,
+    MUTE,
+    EJECT,
+    FAN_SPEED,
+    NEAR,
+    FAR,
     PAUSE,
-
-    // Fan
+    RECORD,
     WIND_SPEED,
-
-    // Fan
     MODE,
-
-    // Fan
+    LIGHT,
+    FAN_MEDIUM,
+    FAN_HIGH,
+    FAN_LOW,
+    STOP,
+    EXIT,
+    INFO,
+    TIMER,
+    OSCILLATE,
+    TIMER_ADD,
+    TIMER_REDUCE,
     FAN_SPEED_UP,
-
-    // Fan
     FAN_SPEED_DOWN,
-
-    // Fan
+    SLEEP,
     SHAKE_WIND,
-
-    // Fan
+    SWING,
+    OFF,
+    BRIGHTNESS_UP,
+    BRIGHTNESS_DOWN,
+    COLD_WIND,
+    COOL,
     WIND_TYPE,
-
-    // Fan
     TEMPERATURE_UP,
-
-    // Fan
     TEMPERATURE_DOWN,
-
-    // Fan
-    ENERGY_SAVE
+    HEAT_ADD,
+    HEAT_REDUCE,
+    ENERGY_SAVE,
+    OK,
+    REW,
+    SET,
+    DELETE,
+    VOD,
+    LIVE_TV,
+    FAVORITE
 }

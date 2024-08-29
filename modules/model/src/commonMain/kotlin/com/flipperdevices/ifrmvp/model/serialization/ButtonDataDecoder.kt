@@ -5,6 +5,9 @@ import com.flipperdevices.ifrmvp.model.buttondata.ButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.ChannelButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.NavigationButtonData
+import com.flipperdevices.ifrmvp.model.buttondata.OkNavigationButtonData
+import com.flipperdevices.ifrmvp.model.buttondata.PowerButtonData
+import com.flipperdevices.ifrmvp.model.buttondata.ShutterButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.TextButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.UnknownButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.VolumeButtonData
@@ -30,8 +33,8 @@ internal class ButtonDataDecoder(private val json: Json) {
                 json.decodeFromJsonElement<ChannelButtonData>(jsonObject)
             }
 
-            ButtonData.ButtonType.NAVIGATION -> {
-                json.decodeFromJsonElement<NavigationButtonData>(jsonObject)
+            ButtonData.ButtonType.OK_NAVIGATION -> {
+                json.decodeFromJsonElement<OkNavigationButtonData>(jsonObject)
             }
 
             ButtonData.ButtonType.VOLUME -> {
@@ -41,6 +44,17 @@ internal class ButtonDataDecoder(private val json: Json) {
             ButtonData.ButtonType.UNKNOWN, null -> UnknownButtonData
             ButtonData.ButtonType.ICON -> {
                 json.decodeFromJsonElement<IconButtonData>(jsonObject)
+            }
+
+            ButtonData.ButtonType.SHUTTER -> {
+                json.decodeFromJsonElement<ShutterButtonData>(jsonObject)
+            }
+
+            ButtonData.ButtonType.NAVIGATION -> {
+                json.decodeFromJsonElement<NavigationButtonData>(jsonObject)
+            }
+            ButtonData.ButtonType.POWER -> {
+                json.decodeFromJsonElement<PowerButtonData>(jsonObject)
             }
         }
     }

@@ -11,55 +11,105 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             DeviceKey.PWR -> listOf(
                 "power",
                 "pwr",
+                "pwron",
                 "power",
                 "power_r",
                 "on",
                 "on_off",
                 "on/off",
+                "power_on",
+                "power on",
+                "powertoggle"
             )
 
             DeviceKey.VOL_DOWN -> listOf(
                 "vol-",
                 "vol-_r",
-                "voldown"
+                "voldown",
+                "voldwn",
+                "vol_dn",
+                "vold",
+                "volume_down",
+                "volume down",
+                "vol_donw",
+                "vol_dwn",
+                "amp vol-",
+                "cent_volume_down",
+                "ch_vol-",
+                "master volume-",
+                "mastervol-",
             )
 
             DeviceKey.VOL_UP -> listOf(
                 "vol+",
                 "vol+_r",
-                "volup"
+                "volup",
+                "vol_up",
+                "volu",
+                "volume_up",
+                "volume up",
+                "amp vol-",
+                "cent_volume_up",
+                "ch_vol+",
+                "master volume+",
+                "mastervol-",
             )
 
             DeviceKey.CH_UP -> listOf(
                 "ch+",
                 "ch+_r",
-                "ch_next"
+                "ch_next",
+                "chn_up",
+                "chann_up",
+                "chan up",
+                "up",
+                "next",
+                "up/ch+",
+                "tv_ch+",
             )
 
             DeviceKey.CH_DOWN -> listOf(
                 "ch-",
                 "ch-_r",
-                "ch_prev"
+                "ch_prev",
+                "chn_down",
+                "chann_down",
+                "chan down",
+                "down",
+                "prev",
+                "tv_ch-",
             )
 
             DeviceKey.FOCUS_MORE -> listOf(
-                "focus-"
+                "focus-",
+                "focus_dwn",
+                "focusing-"
             )
 
             DeviceKey.FOCUS_LESS -> listOf(
-                "focus+"
+                "focus+",
+                "focus_up",
+                "focusing+"
             )
 
             DeviceKey.ZOOM_UP -> listOf(
                 "zoom+",
+                "ezoom+",
                 "zoom_up",
-                "digital zoom+"
+                "digital zoom+",
+                "zoom_in",
+                "ezoom_in",
+                "zoomin"
             )
 
             DeviceKey.ZOOM_DOWN -> listOf(
                 "zoom-",
+                "ezoom-",
                 "zoom_down",
-                "digital zoom-"
+                "digital zoom-",
+                "zoom out",
+                "zoom_out",
+                "ezoom_out"
             )
 
             DeviceKey.RESET -> listOf(
@@ -112,14 +162,18 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
                 "input aux_r"
             )
 
+            DeviceKey.REW -> listOf(
+                "rew",
+            )
+
             DeviceKey.HOME -> listOf(
                 "home",
-                "home_r"
+                "home_r",
             )
 
             DeviceKey.BACK -> listOf(
                 "back",
-                "back_r"
+                "back_r",
             )
 
             DeviceKey.MENU -> listOf(
@@ -132,6 +186,15 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             DeviceKey.PLAY -> listOf(
                 "play",
                 "play_r"
+            )
+
+            DeviceKey.EJECT -> listOf(
+                "eject",
+            )
+
+            DeviceKey.STOP -> listOf(
+                "stop",
+                "stop_r"
             )
 
             DeviceKey.MUTE -> listOf(
@@ -163,6 +226,10 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
                 "strength"
             )
 
+            DeviceKey.RECORD -> listOf(
+                "record",
+            )
+
             DeviceKey.MODE -> listOf(
                 "mode",
                 "mode_r"
@@ -171,6 +238,7 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             DeviceKey.FAN_SPEED_UP -> listOf(
                 "fanspeed+",
                 "fan+",
+                "fan +",
                 "fan_up",
                 "speed_up"
             )
@@ -178,8 +246,25 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             DeviceKey.FAN_SPEED_DOWN -> listOf(
                 "fanspeed-",
                 "fan-",
+                "fan -",
                 "fan_dn",
                 "speed_down"
+            )
+
+            DeviceKey.SLEEP -> listOf(
+                "sleep"
+            )
+
+            DeviceKey.FAN_MEDIUM -> listOf(
+                "medium"
+            )
+
+            DeviceKey.FAN_HIGH -> listOf(
+                "high"
+            )
+
+            DeviceKey.FAN_LOW -> listOf(
+                "low"
             )
 
             DeviceKey.SHAKE_WIND -> listOf(
@@ -213,7 +298,119 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
 
             DeviceKey.SHUTTER -> listOf(
                 "shutter",
-                "trigger"
+                "trigger",
+                "photo",
+                "picture"
+            )
+
+            DeviceKey.OK -> listOf(
+                "ok",
+                "enter",
+                "center",
+                "apply",
+                "sure"
+            )
+
+            DeviceKey.TIMER -> listOf(
+                "timer"
+            )
+
+            DeviceKey.COLD_WIND -> listOf(
+                "cold wind",
+            )
+
+            DeviceKey.COOL -> listOf(
+                "cool",
+            )
+
+            DeviceKey.TIMER_ADD -> listOf(
+                "timer+"
+            )
+
+            DeviceKey.OSCILLATE -> listOf(
+                "oscillate",
+                "osc",
+                "oscillation",
+                "oscilate",
+                "oscil"
+            )
+
+            DeviceKey.TIMER_REDUCE -> listOf(
+                "timer-"
+            )
+
+            DeviceKey.SWING -> listOf(
+                "swing"
+            )
+
+            DeviceKey.OFF -> listOf(
+                "off",
+                "power_off",
+                "power off",
+                "poweroff",
+                "pwroff"
+            )
+
+            DeviceKey.HEAT_ADD -> listOf(
+                "heat_hi",
+                "heat+"
+            )
+
+            DeviceKey.HEAT_REDUCE -> listOf(
+                "heat_lo",
+                "heat-"
+            )
+
+            DeviceKey.EXIT -> listOf(
+                "exit",
+            )
+
+            DeviceKey.INFO -> listOf(
+                "info",
+            )
+
+            DeviceKey.BRIGHTNESS_UP -> listOf(
+                "+brightness",
+                "bright_up",
+                "brightness up",
+                "brightness_up"
+            )
+
+            DeviceKey.BRIGHTNESS_DOWN -> listOf(
+                "-brightness",
+                "brightness_down",
+                "brightness_dn"
+
+            )
+
+            DeviceKey.SET -> listOf(
+                "set"
+            )
+
+            DeviceKey.DELETE -> listOf(
+                "del",
+                "delete"
+            )
+
+            DeviceKey.VOD -> listOf(
+                "vod"
+            )
+
+            DeviceKey.LIVE_TV -> listOf(
+                "live tv",
+                "live tv_r",
+                "livetv",
+                "tv",
+                "letv"
+            )
+
+            DeviceKey.FAVORITE -> listOf(
+                "favorites",
+                "favorite"
+            )
+
+            DeviceKey.LIGHT -> listOf(
+                "light"
             )
         }
     }

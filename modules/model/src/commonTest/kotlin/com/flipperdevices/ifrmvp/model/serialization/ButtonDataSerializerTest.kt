@@ -25,7 +25,7 @@ class ButtonDataSerializerTest {
         IfrButton(
             data = IconButtonData(
                 keyIdentifier = IfrKeyIdentifier.Name("Hello"),
-                iconId = IconButtonData.IconType.POWER
+                iconId = IconButtonData.IconType.FAN
             ),
             position = IfrButton.Position(0, 0)
         ).run(::assertSerializable)

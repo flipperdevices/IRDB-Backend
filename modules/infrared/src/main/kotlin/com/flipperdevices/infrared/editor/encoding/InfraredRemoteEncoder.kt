@@ -1,5 +1,6 @@
 package com.flipperdevices.infrared.editor.encoding
 
+import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 
 /**
@@ -8,7 +9,7 @@ import com.flipperdevices.infrared.editor.model.InfraredRemote
  *  Then we flatten it to have single byte array.
  */
 object InfraredRemoteEncoder {
-    fun encode(remote: InfraredRemote): ByteArray {
+    private fun encode(remote: InfraredRemote): ByteArray {
         val bytesList = when (remote) {
             is InfraredRemote.Parsed -> listOf(
                 remote.type,
@@ -28,4 +29,10 @@ object InfraredRemoteEncoder {
             .flatMap(ByteArray::asList)
             .toByteArray()
     }
+    val InfraredRemote.identifier: IfrKeyIdentifier.Sha256
+        get() {
+            val byteArray = InfraredRemoteEncoder.encode(this)
+            val sha256 = JvmEncoder(ByteArrayEncoder.Algorithm.SHA_256).encode(byteArray)
+            return IfrKeyIdentifier.Sha256(name, sha256)
+        }
 }

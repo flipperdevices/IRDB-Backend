@@ -1,10 +1,22 @@
 package com.flipperdevices.ifrmvp.generator.config
 
+import com.flipperdevices.bridge.dao.api.model.FlipperFileFormat
 import com.flipperdevices.ifrmvp.backend.model.CategoryType
-import com.flipperdevices.ifrmvp.generator.config.category.api.AllCategoryConfigGenerator
+import com.flipperdevices.ifrmvp.backend.model.DeviceKey
+import com.flipperdevices.ifrmvp.generator.config.category.api.AirPurifierCategoryConfigGenerator
+import com.flipperdevices.ifrmvp.generator.config.category.api.AvReceiverCategoryConfigGenerator
+import com.flipperdevices.ifrmvp.generator.config.category.api.BoxCategoryConfigGenerator
+import com.flipperdevices.ifrmvp.generator.config.category.api.CameraCategoryConfigGenerator
+import com.flipperdevices.ifrmvp.generator.config.category.api.DeviceKeyExt
+import com.flipperdevices.ifrmvp.generator.config.category.api.DeviceKeyExt.getAllowedCategories
+import com.flipperdevices.ifrmvp.generator.config.category.api.DvdCategoryConfigGenerator
+import com.flipperdevices.ifrmvp.generator.config.category.api.FanCategoryConfigGenerator
+import com.flipperdevices.ifrmvp.generator.config.category.api.ProjectorCategoryConfigGenerator
+import com.flipperdevices.ifrmvp.generator.config.category.api.TvsCategoryConfigGenerator
 import com.flipperdevices.ifrmvp.generator.config.device.api.DefaultDeviceConfigGenerator
 import com.flipperdevices.ifrmvp.generator.config.device.api.any.AnyDeviceKeyNamesProvider
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
+import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -19,7 +31,16 @@ private fun generateCategoriesConfigFiles() {
         .categories
         .onEach { categoryFolder ->
             val categoryType = CategoryType.entries.first { it.folderName == categoryFolder.name }
-            val config = AllCategoryConfigGenerator.generate(categoryType)
+            val config = when (categoryType) {
+                CategoryType.A_V_RECEIVER -> AvReceiverCategoryConfigGenerator.generate(categoryType)
+                CategoryType.AIR_PURIFIERS -> AirPurifierCategoryConfigGenerator.generate(categoryType)
+                CategoryType.BOX -> BoxCategoryConfigGenerator.generate(categoryType)
+                CategoryType.CAMERA -> CameraCategoryConfigGenerator.generate(categoryType)
+                CategoryType.DVD -> DvdCategoryConfigGenerator.generate(categoryType)
+                CategoryType.FAN -> FanCategoryConfigGenerator.generate(categoryType)
+                CategoryType.PROJECTOR -> ProjectorCategoryConfigGenerator.generate(categoryType)
+                CategoryType.TVS -> TvsCategoryConfigGenerator.generate(categoryType)
+            }
             val configFile = ParserPathResolver.categoryMetaPath(categoryFolder.name).resolve("config.json")
             if (configFile.exists()) configFile.delete()
             configFile.createNewFile()
@@ -49,7 +70,46 @@ private fun generateDevicesConfigFiles() {
         }
 }
 
+fun printAllKeys() {
+
+    val keyNames = DeviceKey.entries.associateWith { AnyDeviceKeyNamesProvider.getKeyNames(it) }
+    val namesToCategories = mutableMapOf<String, MutableSet<String>>()
+    val nameToCount = mutableMapOf<String, Int>()
+    ParserPathResolver
+        .categories
+        .filter { it.name.equals("TVs", true) }
+        .flatMap { categoryFolder ->
+            ParserPathResolver.brands(categoryFolder.name)
+                .flatMap { brandFolder ->
+                    ParserPathResolver.brandIfrFiles(
+                        category = categoryFolder.name,
+                        brand = brandFolder.name
+                    ).flatMap { irFile ->
+                        val signals = irFile
+                            .readText()
+                            .let(FlipperFileFormat.Companion::fromFileContent)
+                            .let(InfraredKeyParser::mapParsedKeyToInfraredRemotes)
+                            .onEach { signal ->
+                                val set = namesToCategories[signal.name.lowercase()] ?: mutableSetOf()
+                                set.add(categoryFolder.name)
+                                namesToCategories[signal.name.lowercase()] = set
+                                nameToCount[signal.name.lowercase()] = (nameToCount[signal.name.lowercase()] ?: 0) + 1
+                            }
+                        signals
+                    }
+                }
+        }.distinctBy { it.name.lowercase() }
+//        .sortedBy { it.name.lowercase() }
+        .sortedByDescending { nameToCount[it.name.lowercase()] }
+        .onEach { key ->
+            val filteredMap = keyNames.filterValues { it.map { it.lowercase() }.contains(key.name.lowercase()) }
+            println("${key.name.lowercase()} -> ${nameToCount[key.name.lowercase()]} ${namesToCategories[key.name.lowercase()]}  -> ${filteredMap.map { (k, v) -> "$k - ${k.getAllowedCategories()} -${v}" }}")
+        }
+
+}
+
 fun main() {
     generateCategoriesConfigFiles()
     generateDevicesConfigFiles()
+//    printAllKeys()
 }
