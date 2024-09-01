@@ -19,6 +19,7 @@ object InfraredRemoteEncoder {
             )
 
             is InfraredRemote.Raw -> listOf(
+                remote.type,
                 remote.frequency,
                 remote.dutyCycle,
                 remote.data
