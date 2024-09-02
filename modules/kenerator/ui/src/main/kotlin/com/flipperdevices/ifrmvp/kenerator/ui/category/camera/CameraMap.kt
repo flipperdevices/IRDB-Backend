@@ -6,6 +6,17 @@ import com.flipperdevices.ifrmvp.model.buttondata.ButtonData.ButtonType
 
 internal class CameraMap : BrandMap by BrandMap.Default(
     getMap = {
+        val singleButtonLocations = buildList {
+            Position(x = 0, y = 0).run(::add)
+            Position(x = 1, y = 0).run(::add)
+            Position(x = 3, y = 0).run(::add)
+            Position(x = 4, y = 0).run(::add)
+            (0..4).map { x -> Position(x = x, y = 1) }.run(::addAll)
+            (0..4).map { x -> Position(x = x, y = 10) }.run(::addAll)
+        }.toMutableList()
+        val navigationLocations = mutableListOf(
+            Position(x = 1, y = 7, containerHeight = 3, containerWidth = 3)
+        )
         ButtonType.entries.associateWith {
             when (it) {
                 ButtonType.POWER -> mutableListOf(
@@ -15,14 +26,7 @@ internal class CameraMap : BrandMap by BrandMap.Default(
                 ButtonType.UNKNOWN,
                 ButtonType.TEXT,
                 ButtonType.ICON,
-                ButtonType.BASE64_IMAGE -> buildList {
-                    Position(x = 0, y = 0).run(::add)
-                    Position(x = 1, y = 0).run(::add)
-                    Position(x = 3, y = 0).run(::add)
-                    Position(x = 4, y = 0).run(::add)
-                    (0..4).map { x -> Position(x = x, y = 1) }.run(::addAll)
-                    (0..4).map { x -> Position(x = x, y = 10) }.run(::addAll)
-                }.toMutableList()
+                ButtonType.BASE64_IMAGE -> singleButtonLocations
 
 
                 ButtonType.SHUTTER -> mutableListOf(
@@ -30,9 +34,7 @@ internal class CameraMap : BrandMap by BrandMap.Default(
                 )
 
                 ButtonType.OK_NAVIGATION,
-                ButtonType.NAVIGATION -> mutableListOf(
-                    Position(x = 1, y = 7, containerHeight = 3, containerWidth = 3)
-                )
+                ButtonType.NAVIGATION -> navigationLocations
 
 
                 ButtonType.VOLUME,
