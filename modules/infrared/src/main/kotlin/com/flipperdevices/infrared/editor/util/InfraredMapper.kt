@@ -37,7 +37,7 @@ object InfraredMapper {
 
             remotes.forEachIndexed { index, remote ->
                 append("\n")
-                append("#")
+                append("# ")
                 append("\n")
                 append("$KEY_NAME: ${remote.name}")
                 append("\n")
