@@ -16,6 +16,7 @@ import com.flipperdevices.ifrmvp.generator.config.category.api.TvsCategoryConfig
 import com.flipperdevices.ifrmvp.generator.config.device.api.DefaultDeviceConfigGenerator
 import com.flipperdevices.ifrmvp.generator.config.device.api.any.AnyDeviceKeyNamesProvider
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
+import com.flipperdevices.infrared.editor.util.InfraredMapper
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -108,8 +109,29 @@ fun printAllKeys() {
 
 }
 
+private fun filterSameInfraredFiles() {
+    ParserPathResolver.categories
+        .forEach { category ->
+            ParserPathResolver.brands(category.name)
+                .forEach { brand ->
+                    ParserPathResolver.brandIfrFiles(
+                        category = category.name,
+                        brand = brand.name
+                    ).forEach { irFile ->
+                        val remotes = InfraredMapper.parseRemotes(irFile)
+                        val distinctRemotes = remotes.distinctBy { it }
+                        val sameRemotesCount = remotes.size - distinctRemotes.size
+                        if (sameRemotesCount < 0) error("wtf")
+                        if (sameRemotesCount == 0) return@forEach
+                        irFile.writeText(InfraredMapper.toInfraredFormat(distinctRemotes))
+                    }
+                }
+        }
+}
+
 fun main() {
     generateCategoriesConfigFiles()
     generateDevicesConfigFiles()
 //    printAllKeys()
+//    filterSameInfraredFiles()
 }
