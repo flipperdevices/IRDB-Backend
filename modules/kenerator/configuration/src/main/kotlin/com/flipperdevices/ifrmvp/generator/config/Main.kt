@@ -130,8 +130,8 @@ private fun filterSameInfraredFiles() {
 }
 
 fun main() {
-//    generateCategoriesConfigFiles()
-//    generateDevicesConfigFiles()
+    generateCategoriesConfigFiles()
+    generateDevicesConfigFiles()
 //    printAllKeys()
-    filterSameInfraredFiles()
+//    filterSameInfraredFiles()
 }
