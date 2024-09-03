@@ -3,18 +3,20 @@ package com.flipperdevices.infrared.editor.viewmodel
 import com.flipperdevices.bridge.dao.api.model.FlipperFileFormat
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 
-private const val KEY_NAME = "name"
-private const val KEY_TYPE = "type"
-private const val KEY_TYPE_RAW = "raw"
-private const val KEY_TYPE_PARSED = "parsed"
+internal const val FULL_IR_FILETYPE = "Filetype: IR signals file"
+internal const val FULL_VERSION_1 = "Version: 1"
+internal const val KEY_NAME = "name"
+internal const val KEY_TYPE = "type"
+internal const val KEY_TYPE_RAW = "raw"
+internal const val KEY_TYPE_PARSED = "parsed"
 
-private const val KEY_PROTOCOL = "protocol"
-private const val KEY_ADDRESS = "address"
-private const val KEY_COMMAND = "command"
+internal const val KEY_PROTOCOL = "protocol"
+internal const val KEY_ADDRESS = "address"
+internal const val KEY_COMMAND = "command"
 
-private const val KEY_FREQUENCY = "frequency"
-private const val KEY_DUTY_CYCLE = "duty_cycle"
-private const val KEY_DATA = "data"
+internal const val KEY_FREQUENCY = "frequency"
+internal const val KEY_DUTY_CYCLE = "duty_cycle"
+internal const val KEY_DATA = "data"
 
 private val allFields = listOf(
     KEY_NAME,
