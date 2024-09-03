@@ -12,7 +12,7 @@ FROM openjdk:24-slim as parser
 
 WORKDIR /app/
 
-COPY --from=builder /app/jars/IfrBackend-parser-*.jar parser.jar
+COPY --from=builder /app/jars/IRDBBackend-parser-*.jar parser.jar
 
 COPY IRDB IRDB
 
@@ -24,7 +24,7 @@ RUN java -jar parser.jar
 
 FROM openjdk:24-slim
 
-COPY --from=builder /app/jars/IfrBackend-web-*.jar web.jar
+COPY --from=builder /app/jars/IRDBBackend-web-*.jar web.jar
 COPY --from=parser /app/output/database.mv.db database.mv.db
 
 COPY IRDB IRDB
