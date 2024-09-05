@@ -41,13 +41,13 @@ object TvsCategoryConfigGenerator {
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Does it sho next channel?",
-                    data = TextButtonData(text = "CH+"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.CH_UP),
                     key = DeviceKey.CH_UP,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Does it show previous channel?",
-                    data = TextButtonData(text = "CH-"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.CH_DOWN),
                     key = DeviceKey.CH_DOWN,
                     index = ++i,
                 ),

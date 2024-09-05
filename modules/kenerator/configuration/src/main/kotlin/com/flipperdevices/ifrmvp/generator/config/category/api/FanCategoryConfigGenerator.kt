@@ -29,7 +29,7 @@ object FanCategoryConfigGenerator {
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Does it enable wind shake?",
-                    data = TextButtonData(text = "SH"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.SHAKE_WIND),
                     key = DeviceKey.SHAKE_WIND,
                     index = ++i,
                 ),
@@ -48,14 +48,14 @@ object FanCategoryConfigGenerator {
 
                 CategoryConfiguration.OrderModel(
                     message = "Does it increase fan speed?",
-                    data = TextButtonData(text = "SP+"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.FAN_SPEED_UP),
                     key = DeviceKey.FAN_SPEED_UP,
                     index = ++i,
                 ),
 
                 CategoryConfiguration.OrderModel(
                     message = "Does it decrease fan speed?",
-                    data = TextButtonData(text = "SP-"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.FAN_SPEED_DOWN),
                     key = DeviceKey.FAN_SPEED_DOWN,
                     index = ++i,
                 ),
@@ -67,7 +67,7 @@ object FanCategoryConfigGenerator {
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Is it oscillated?",
-                    data = TextButtonData(text = "OSC"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.OSCILLATE),
                     key = DeviceKey.OSCILLATE,
                     index = ++i,
                 ),
@@ -91,25 +91,25 @@ object FanCategoryConfigGenerator {
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Is timer increased?",
-                    data = TextButtonData(text = "T+"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.TIMER_ADD),
                     key = DeviceKey.TIMER_ADD,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Is timer decreased?",
-                    data = TextButtonData(text = "T-"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.TIMER_REDUCE),
                     key = DeviceKey.TIMER_REDUCE,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Does it swing?",
-                    data = TextButtonData(text = "SWING"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.SWING),
                     key = DeviceKey.SWING,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Does it go to sleep?",
-                    data = TextButtonData(text = "SLEEP"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.SLEEP),
                     key = DeviceKey.SLEEP,
                     index = ++i,
                 )

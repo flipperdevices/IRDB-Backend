@@ -23,13 +23,13 @@ object DvdCategoryConfigGenerator {
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Does it open next channel?",
-                    data = TextButtonData(text = "CH+"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.CH_UP),
                     key = DeviceKey.CH_UP,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
                     message = "Does it open previous channel?",
-                    data = TextButtonData(text = "CH-"),
+                    data = IconButtonData(iconId = IconButtonData.IconType.CH_DOWN),
                     key = DeviceKey.CH_DOWN,
                     index = ++i,
                 ),
