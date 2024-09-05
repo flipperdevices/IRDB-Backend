@@ -22,6 +22,7 @@ internal class InfraredsRepository(
                         brandId = it[InfraredFileTable.brandId].value,
                         fileName = it[InfraredFileTable.fileName],
                         folderName = it[InfraredFileTable.folderName],
+                        signalCount = it[InfraredFileTable.signalCount]
                     )
                 }
         }

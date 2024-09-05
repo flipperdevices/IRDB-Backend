@@ -17,6 +17,9 @@ import com.flipperdevices.ifrmvp.backend.model.SignalResponse
 import com.flipperdevices.ifrmvp.backend.model.SignalResponseModel
 import com.flipperdevices.ifrmvp.backend.route.signal.data.CategoryConfigRepository
 import com.flipperdevices.ifrmvp.backend.route.signal.data.IRDBCategoryConfigRepository
+import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvider
+import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvider.Companion.getKey
+import com.flipperdevices.ifrmvp.generator.config.device.api.any.AnyDeviceKeyNamesProvider
 import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
 import com.flipperdevices.ifrmvp.model.buttondata.SingleKeyButtonData
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
@@ -42,18 +45,33 @@ internal class SignalRouteRegistry(
     private val categoryConfigRepository: CategoryConfigRepository = IRDBCategoryConfigRepository,
 ) : RouteRegistry {
 
-    // Keep only those files, in which signals have been successfully passed
-    private fun getIncludedFileIds(signalRequestModel: SignalRequestModel): Query {
+    /**
+     * Keep only those files, in which signals have been successfully passed
+     *
+     * SELECT INFRARED_FILE."id", INFRARED_FILE."signal_count"
+     * FROM INFRARED_FILE JOIN INFRARED_FILE_TO_SIGNAL on INFRARED_FILE_TO_SIGNAL."infrared_file_id" = INFRARED_FILE."id"
+     * group by INFRARED_FILE."id"
+     * order by INFRARED_FILE."signal_count" desc
+     */
+    private fun getIncludedFileIds(signalRequestModel: SignalRequestModel, brandId: Long): Query {
         return transaction(database) {
-            InfraredFileToSignalTable
-                .select(InfraredFileToSignalTable.infraredFileId)
-                .groupBy(InfraredFileToSignalTable.infraredFileId)
+            InfraredFileTable
+                .join(
+                    otherTable = InfraredFileToSignalTable,
+                    onColumn = InfraredFileTable.id,
+                    otherColumn = InfraredFileToSignalTable.infraredFileId,
+                    joinType = JoinType.INNER
+                )
+                .select(InfraredFileTable.id, InfraredFileTable.signalCount)
+                .groupBy(InfraredFileTable.id)
+                .orderBy(InfraredFileTable.signalCount to SortOrder.DESC)
+                .where { InfraredFileTable.brandId eq brandId }
                 .apply {
                     val successSignalIds = signalRequestModel
                         .successResults
                         .map(SignalRequestModel.SignalResultData::signalId)
                     if (successSignalIds.isNotEmpty()) {
-                        where {
+                        andWhere {
                             InfraredFileToSignalTable
                                 .signalId
                                 .inList(successSignalIds)
@@ -170,7 +188,7 @@ internal class SignalRouteRegistry(
         includedFileIds: Query,
         brand: BrandModel,
         // Index of successful results
-        index: Int = signalRequestModel.successResults.size,
+        index: Int = signalRequestModel.successResults.size + signalRequestModel.skippedResults.size,
         categoryType: CategoryType,
         category: DeviceCategory
     ): SignalResponseModel {
@@ -183,7 +201,7 @@ internal class SignalRouteRegistry(
         if (order == null) {
             val infraredFileId = transaction(database) {
                 includedFileIds
-                    .map { it[InfraredFileToSignalTable.infraredFileId] }
+                    .map { it[InfraredFileTable.id] }
                     .first()
                     .value
             }
@@ -191,12 +209,23 @@ internal class SignalRouteRegistry(
             return response
         }
 
+        val skippedKeys = transaction(database) {
+            SignalTable
+                .selectAll()
+                .where { SignalTable.id inList signalRequestModel.skippedResults.map(SignalRequestModel.SignalResultData::signalId) }
+                .mapNotNull {
+                    val keyName = it[SignalTable.name]
+                    AnyDeviceKeyNamesProvider.getKey(keyName)
+                }
+        }
+
         val signalModel = getSignalModel(
             signalRequestModel = signalRequestModel,
             order = order,
             brand = brand
         )
-        if (signalModel == null) {
+
+        if (signalModel == null || skippedKeys.contains(order.key)) {
             return findSignal(
                 signalRequestModel = signalRequestModel,
                 includedFileIds = includedFileIds,
@@ -234,8 +263,9 @@ internal class SignalRouteRegistry(
                     .firstOrNull { it.folderName == category.folderName }
                     ?: throw TableDaoException.CategoryNotFound(category.id)
 
-                val includedFileIds = getIncludedFileIds(signalRequestModel)
+                val includedFileIds = getIncludedFileIds(signalRequestModel, brand.id)
                 val includedInfraredFilesCount = transaction(database) { includedFileIds.count() }
+                println("#root includedInfraredFilesCount=$includedInfraredFilesCount")
                 when (includedInfraredFilesCount) {
                     0L -> {
                         context.respond(HttpStatusCode.NoContent)
@@ -245,7 +275,7 @@ internal class SignalRouteRegistry(
                     1L -> {
                         val infraredFileId = transaction(database) {
                             includedFileIds
-                                .map { it[InfraredFileToSignalTable.infraredFileId] }
+                                .map { it[InfraredFileTable.id] }
                                 .first()
                                 .value
                         }

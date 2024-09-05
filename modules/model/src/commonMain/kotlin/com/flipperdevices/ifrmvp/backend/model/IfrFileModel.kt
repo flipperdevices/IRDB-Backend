@@ -12,5 +12,7 @@ data class IfrFileModel(
     @SerialName("file_name")
     val fileName: String,
     @SerialName("folder_name")
-    val folderName: String
+    val folderName: String,
+    @SerialName("signal_count")
+    val signalCount: Int
 )

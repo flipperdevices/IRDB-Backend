@@ -14,6 +14,7 @@ import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import com.flipperdevices.infrared.editor.encoding.InfraredRemoteEncoder.identifier
 import com.flipperdevices.infrared.editor.model.InfraredRemote
+import com.flipperdevices.infrared.editor.util.InfraredMapper
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
 import java.io.File
 import kotlinx.coroutines.CoroutineScope
@@ -78,6 +79,7 @@ internal class FillerController(private val database: Database) : CoroutineScope
                             this[InfraredFileTable.brandId] = brandId
                             this[InfraredFileTable.fileName] = it.name
                             this[InfraredFileTable.folderName] = it.parentFile.name
+                            this[InfraredFileTable.signalCount] = InfraredMapper.parseRemotes(it).size
                         }
                         // Presets
                         val uiFiles = irFiles.mapNotNull { irFile ->
