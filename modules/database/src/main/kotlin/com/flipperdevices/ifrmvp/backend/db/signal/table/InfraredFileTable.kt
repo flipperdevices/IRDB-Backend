@@ -20,4 +20,6 @@ object InfraredFileTable : LongIdTable("INFRARED_FILE") {
      * The name of .IR file folder
      */
     val folderName = text("folder_name")
+
+    val signalCount = integer("signal_count")
 }

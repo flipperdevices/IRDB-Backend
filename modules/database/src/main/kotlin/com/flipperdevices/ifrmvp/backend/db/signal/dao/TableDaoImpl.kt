@@ -71,7 +71,8 @@ internal class TableDaoImpl(private val database: Database) : TableDao {
                     id = it[InfraredFileTable.id].value,
                     brandId = it[InfraredFileTable.brandId].value,
                     fileName = it[InfraredFileTable.fileName],
-                    folderName = it[InfraredFileTable.folderName]
+                    folderName = it[InfraredFileTable.folderName],
+                    signalCount = it[InfraredFileTable.signalCount]
                 )
             }.firstOrNull() ?: throw TableDaoException.IrFileNotFound(irFileId)
     }
