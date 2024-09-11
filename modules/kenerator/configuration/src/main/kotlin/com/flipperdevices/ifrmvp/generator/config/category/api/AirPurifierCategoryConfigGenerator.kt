@@ -17,30 +17,30 @@ object AirPurifierCategoryConfigGenerator {
             orders = listOf(
                 CategoryConfiguration.OrderModel(
                     data = PowerButtonData(),
-                    message = "Does %s turns on?",
+                    message = "Does the air purifier turn on/off?",
                     key = DeviceKey.PWR,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
-                    message = "Is it oscillated?",
+                    message = "Is the air purifier oscillating (swinging)?",
                     data = IconButtonData(iconId = IconButtonData.IconType.OSCILLATE),
                     key = DeviceKey.OSCILLATE,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
-                    message = "Is Fan speed increased?",
+                    message = "Has the fan speed increased?",
                     data = IconButtonData(iconId = IconButtonData.IconType.FAN_SPEED_UP),
                     key = DeviceKey.FAN_SPEED_UP,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
-                    message = "Is Fan speed decreased?",
+                    message = "Has the fan speed decreased?",
                     data = IconButtonData(iconId = IconButtonData.IconType.FAN_SPEED_DOWN),
                     key = DeviceKey.FAN_SPEED_DOWN,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
-                    message = "Does it swing?",
+                    message = "Is the air purifier swinging?",
                     data = IconButtonData(iconId = IconButtonData.IconType.SWING),
                     key = DeviceKey.SWING,
                     index = ++i,

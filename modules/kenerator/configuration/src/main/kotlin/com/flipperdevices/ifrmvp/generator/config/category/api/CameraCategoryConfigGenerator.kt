@@ -17,30 +17,30 @@ object CameraCategoryConfigGenerator {
             orders = listOf(
                 CategoryConfiguration.OrderModel(
                     data = PowerButtonData(),
-                    message = "Does %s turns on?",
+                    message = "Does the camera turn on/off?",
                     key = DeviceKey.PWR,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
-                    message = "Did it take a photo?",
+                    message = "Has the camera taken a photo?",
                     data = IconButtonData(iconId = IconButtonData.IconType.CAMERA),
                     key = DeviceKey.SHUTTER,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
-                    message = "Does it zoom in?",
+                    message = "Has the camera zoomed in?",
                     data = IconButtonData(iconId = IconButtonData.IconType.ZOOM_IN),
                     key = DeviceKey.ZOOM_UP,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
-                    message = "Does it zoom out?",
+                    message = "Has the camera zoomed out?",
                     data = IconButtonData(iconId = IconButtonData.IconType.ZOOM_OUT),
                     key = DeviceKey.ZOOM_DOWN,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
-                    message = "Is menu opened?",
+                    message = "Has the menu shown?",
                     data = IconButtonData(iconId = IconButtonData.IconType.MENU),
                     key = DeviceKey.MENU,
                     index = ++i,
