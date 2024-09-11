@@ -68,11 +68,11 @@ internal object RemotesListExt {
 
 
                 DeviceKey.FOCUS_MORE -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "F+")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.FOCUS_MORE)
                 }
 
                 DeviceKey.FOCUS_LESS -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "F-")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.FOCUS_LESS)
                 }
 
                 DeviceKey.ZOOM_UP -> remotes.findByKey(deviceKey)?.let { remote ->
@@ -97,11 +97,11 @@ internal object RemotesListExt {
                 }
 
                 DeviceKey.TV -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "TV")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.TV)
                 }
 
                 DeviceKey.AUX -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "AUX")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.AUX)
                 }
 
                 DeviceKey.HOME -> remotes.findByKey(deviceKey)?.let { remote ->
@@ -129,15 +129,15 @@ internal object RemotesListExt {
                 }
 
                 DeviceKey.FAN_SPEED -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "FS")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.FAN_SPEED)
                 }
 
                 DeviceKey.NEAR -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "NEAR")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.NEAR)
                 }
 
                 DeviceKey.FAR -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "FAR")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.FAR)
                 }
 
                 DeviceKey.PAUSE -> remotes.findByKey(deviceKey)?.let { remote ->
@@ -146,11 +146,11 @@ internal object RemotesListExt {
 
 
                 DeviceKey.WIND_SPEED -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "W+")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.WIND_SPEED)
                 }
 
                 DeviceKey.MODE -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "MODE")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.MODE)
                 }
 
                 DeviceKey.LIGHT -> remotes.findByKey(deviceKey)?.let { remote ->
@@ -158,15 +158,15 @@ internal object RemotesListExt {
                 }
 
                 DeviceKey.FAN_MEDIUM -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "F2")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.FAN_MEDIUM)
                 }
 
                 DeviceKey.FAN_HIGH -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "F3")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.FAN_HIGH)
                 }
 
                 DeviceKey.FAN_LOW -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "F1")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.FAN_LOW)
                 }
 
                 DeviceKey.STOP -> remotes.findByKey(deviceKey)?.let { remote ->
@@ -182,43 +182,43 @@ internal object RemotesListExt {
                 }
 
                 DeviceKey.TIMER -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "T")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.TIMER)
                 }
 
                 DeviceKey.OSCILLATE -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "OSC")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.OSCILLATE)
                 }
 
                 DeviceKey.TIMER_ADD -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "TM+")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.TIMER_ADD)
                 }
 
                 DeviceKey.TIMER_REDUCE -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "TM-")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.TIMER_REDUCE)
                 }
 
                 DeviceKey.FAN_SPEED_UP -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "SP+")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.FAN_SPEED_UP)
                 }
 
                 DeviceKey.FAN_SPEED_DOWN -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "SP-")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.FAN_SPEED_DOWN)
                 }
 
                 DeviceKey.SLEEP -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "SLEEP")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.SLEEP)
                 }
 
                 DeviceKey.SHAKE_WIND -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "SHK")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.SHAKE_WIND)
                 }
 
                 DeviceKey.SWING -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "SWING")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.SWING)
                 }
 
                 DeviceKey.OFF -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "OFF")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.FAN_OFF)
                 }
 
                 DeviceKey.BRIGHTNESS_UP -> remotes.findByKey(deviceKey)?.let { remote ->
@@ -230,31 +230,31 @@ internal object RemotesListExt {
                 }
 
                 DeviceKey.COLD_WIND -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "COLD_WIND")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.COLD_WIND)
                 }
 
                 DeviceKey.COOL -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "COOL")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.COOL)
                 }
 
                 DeviceKey.WIND_TYPE -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "WT")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.WIND_TYPE)
                 }
 
                 DeviceKey.TEMPERATURE_UP -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "T+")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.TEMPERATURE_UP)
                 }
 
                 DeviceKey.TEMPERATURE_DOWN -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "T-")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.TEMPERATURE_DOWN)
                 }
 
                 DeviceKey.HEAT_ADD -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "H+")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.HEAT_ADD)
                 }
 
                 DeviceKey.HEAT_REDUCE -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "H-")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.HEAT_REDUCE)
                 }
 
                 DeviceKey.ENERGY_SAVE -> remotes.findByKey(deviceKey)?.let { remote ->
@@ -263,11 +263,11 @@ internal object RemotesListExt {
 
 
                 DeviceKey.REW -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "REW")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.REWIND)
                 }
 
                 DeviceKey.SET -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "SET")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.SETTINGS)
                 }
 
                 DeviceKey.DELETE -> remotes.findByKey(deviceKey)?.let { remote ->
@@ -275,7 +275,7 @@ internal object RemotesListExt {
                 }
 
                 DeviceKey.VOD -> remotes.findByKey(deviceKey)?.let { remote ->
-                    TextButtonData(keyIdentifier = remote.identifier, text = "VOD")
+                    IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.VOD)
                 }
 
                 DeviceKey.LIVE_TV -> remotes.findByKey(deviceKey)?.let { remote ->

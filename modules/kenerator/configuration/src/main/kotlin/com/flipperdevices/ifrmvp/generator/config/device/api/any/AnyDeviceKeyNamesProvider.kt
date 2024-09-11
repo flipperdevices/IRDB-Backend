@@ -62,7 +62,6 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
                 "chn_up",
                 "chann_up",
                 "chan up",
-                "up",
                 "up/ch+",
                 "tv_ch+",
             )
@@ -74,7 +73,6 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
                 "chn_down",
                 "chann_down",
                 "chan down",
-                "down",
                 "tv_ch-",
             )
 
@@ -275,18 +273,12 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
 
             DeviceKey.TEMPERATURE_UP -> listOf(
                 "temperature_up",
-                "heat+",
-                "heat_hi",
                 "temp+",
-                "heat_up"
             )
 
             DeviceKey.TEMPERATURE_DOWN -> listOf(
                 "temperature_down",
-                "heat-",
-                "heat_lo",
                 "temp-",
-                "heat_down"
             )
 
             DeviceKey.ENERGY_SAVE -> listOf(
@@ -350,13 +342,15 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             )
 
             DeviceKey.HEAT_ADD -> listOf(
+                "heat+",
                 "heat_hi",
-                "heat+"
+                "heat_up",
             )
 
             DeviceKey.HEAT_REDUCE -> listOf(
+                "heat_down",
+                "heat-",
                 "heat_lo",
-                "heat-"
             )
 
             DeviceKey.EXIT -> listOf(

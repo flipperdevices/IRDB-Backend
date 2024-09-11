@@ -17,30 +17,30 @@ object AvReceiverCategoryConfigGenerator {
             orders = listOf(
                 CategoryConfiguration.OrderModel(
                     data = PowerButtonData(),
-                    message = "Does %s turns on?",
+                    message = "Does the AV receiver turn on/off?",
                     key = DeviceKey.PWR,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
-                    message = "Does volume go up?",
+                    message = "Has the volume increased?",
                     data = IconButtonData(iconId = IconButtonData.IconType.VOL_UP),
                     key = DeviceKey.VOL_UP,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
-                    message = "Does volume go down?",
+                    message = "Has the volume decreased?",
                     data = IconButtonData(iconId = IconButtonData.IconType.VOL_DOWN),
                     key = DeviceKey.VOL_DOWN,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
-                    message = "Is volume muted?",
+                    message = "Has the volume been muted?",
                     data = IconButtonData(iconId = IconButtonData.IconType.MUTE),
                     key = DeviceKey.MUTE,
                     index = ++i,
                 ),
                 CategoryConfiguration.OrderModel(
-                    message = "Is menu opened?",
+                    message = "Has the menu shown?",
                     data = IconButtonData(iconId = IconButtonData.IconType.MENU),
                     key = DeviceKey.MENU,
                     index = ++i,
