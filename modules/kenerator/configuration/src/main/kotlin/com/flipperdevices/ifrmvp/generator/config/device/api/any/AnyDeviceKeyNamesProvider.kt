@@ -62,7 +62,6 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
                 "chn_up",
                 "chann_up",
                 "chan up",
-                "up",
                 "up/ch+",
                 "tv_ch+",
             )
@@ -74,7 +73,6 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
                 "chn_down",
                 "chann_down",
                 "chan down",
-                "down",
                 "tv_ch-",
             )
 
