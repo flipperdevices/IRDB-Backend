@@ -126,7 +126,9 @@ object ParserPathResolver {
             brand = brand,
             ifrFolderName = ifrFolderName
         )
-        return Json.decodeFromString(file.readText())
+        return kotlin.runCatching { Json.decodeFromString<DeviceConfiguration>(file.readText()) }
+            .onFailure { println("Could not parse file ${file.absoluteFile}") }
+            .getOrThrow()
     }
 
     fun irFileConfigurationFile(

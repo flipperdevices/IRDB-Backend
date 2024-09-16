@@ -119,6 +119,11 @@ internal class SignalRouteRegistry(
                                     .or { SignalKeyTable.hash.eq(identifier.hash) }
                             }
                         }
+                        is IfrKeyIdentifier.Name -> {
+                            andWhere {
+                                SignalKeyTable.remoteKeyName.eq(identifier.name)
+                            }
+                        }
 
                         else -> andWhere { SignalKeyTable.deviceKey.eq(order.key) }
                     }

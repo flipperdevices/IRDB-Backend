@@ -24,6 +24,7 @@ object SignalTable : LongIdTable("SIGNAL_TABLE") {
 
     init {
         uniqueIndex(
+            name,
             brandId,
             type,
             frequency,
@@ -31,6 +32,7 @@ object SignalTable : LongIdTable("SIGNAL_TABLE") {
             data
         )
         uniqueIndex(
+            name,
             brandId,
             type,
             protocol,
