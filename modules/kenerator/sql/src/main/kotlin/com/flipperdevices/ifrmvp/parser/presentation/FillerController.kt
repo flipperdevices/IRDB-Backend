@@ -164,7 +164,10 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                         this[SignalKeyTable.type] = IfrKeyIdentifier.Empty.TYPE
                                     }
 
-                                    is IfrKeyIdentifier.Name -> error("Identifying by name is not possible!")
+                                    is IfrKeyIdentifier.Name -> {
+                                        this[SignalKeyTable.remoteKeyName] = keyIdentifier.name
+                                        this[SignalKeyTable.type] = IfrKeyIdentifier.Name.TYPE
+                                    }
 
                                     is IfrKeyIdentifier.Sha256 -> {
                                         this[SignalKeyTable.remoteKeyName] = keyIdentifier.name
@@ -191,7 +194,9 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                                 andWhere { SignalTable.hash eq keyIdentifier.hash }
                                             }
 
-                                            is IfrKeyIdentifier.Name -> error("Identifying by name is not possible!")
+                                            is IfrKeyIdentifier.Name -> {
+                                                andWhere { SignalTable.name eq keyIdentifier.name }
+                                            }
                                         }
                                     }
                                     .map { it[SignalTable.id] }
