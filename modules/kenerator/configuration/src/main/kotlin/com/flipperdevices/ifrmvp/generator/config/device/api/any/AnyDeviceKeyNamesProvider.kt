@@ -38,6 +38,7 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
                 "ch_vol-",
                 "master volume-",
                 "mastervol-",
+                "vol_down"
             )
 
             DeviceKey.VOL_UP -> listOf(
@@ -371,7 +372,8 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             DeviceKey.BRIGHTNESS_DOWN -> listOf(
                 "-brightness",
                 "brightness_down",
-                "brightness_dn"
+                "brightness_dn",
+                "bright_down"
 
             )
 
