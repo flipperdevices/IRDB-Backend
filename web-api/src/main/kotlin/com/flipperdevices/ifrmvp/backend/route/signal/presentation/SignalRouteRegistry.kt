@@ -293,7 +293,7 @@ internal class SignalRouteRegistry(
 
                 val includedFileIds = getIncludedFileIds(signalRequestModel, brand.id)
                 val includedInfraredFilesCount = transaction(database) { includedFileIds.count() }
-                println("#root includedInfraredFilesCount=$includedInfraredFilesCount -> ${transaction(database) { includedFileIds.map { it[InfraredFileTable.id] } }}")
+                println("#root includedInfraredFilesCount=$includedInfraredFilesCount")
                 when (includedInfraredFilesCount) {
                     0L -> {
                         context.respond(HttpStatusCode.NoContent)
