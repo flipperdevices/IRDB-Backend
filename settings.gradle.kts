@@ -26,6 +26,7 @@ include(":modules:build-konfig")
 include(":modules:core")
 include(":modules:model")
 include(":modules:infrared")
+include(":modules:resources")
 // generators
 include(":modules:kenerator:configuration")
 include(":modules:kenerator:sql")

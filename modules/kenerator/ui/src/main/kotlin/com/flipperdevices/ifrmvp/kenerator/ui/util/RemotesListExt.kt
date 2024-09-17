@@ -6,12 +6,13 @@ import com.flipperdevices.ifrmvp.kenerator.ui.button.ChannelButton
 import com.flipperdevices.ifrmvp.kenerator.ui.button.NavigationButton
 import com.flipperdevices.ifrmvp.kenerator.ui.button.OkNavigationButton
 import com.flipperdevices.ifrmvp.kenerator.ui.button.VolButton
+import com.flipperdevices.ifrmvp.model.buttondata.Base64ImageButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.ButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData.IconType
 import com.flipperdevices.ifrmvp.model.buttondata.PowerButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.ShutterButtonData
-import com.flipperdevices.ifrmvp.model.buttondata.TextButtonData
+import com.flipperdevices.ifrmvp.resources.CoreR
 import com.flipperdevices.infrared.editor.encoding.InfraredRemoteEncoder.identifier
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 
@@ -284,6 +285,10 @@ internal object RemotesListExt {
 
                 DeviceKey.FAVORITE -> remotes.findByKey(deviceKey)?.let { remote ->
                     IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.FAVORITE)
+                }
+
+                DeviceKey.INPUT -> remotes.findByKey(deviceKey)?.let { remote ->
+                    Base64ImageButtonData(keyIdentifier = remote.identifier, pngBase64 = CoreR.inputImage.toBase64())
                 }
 
                 DeviceKey.RECORD -> remotes.findByKey(deviceKey)?.let { remote ->
