@@ -54,13 +54,21 @@ internal class SignalRouteRegistry(
      * order by INFRARED_FILE."signal_count" desc
      */
     private fun getIncludedFileIds(signalRequestModel: SignalRequestModel, brandId: Long): Query {
+        val excludedFileIds = transaction(database) {
+            InfraredFileToSignalTable.select(InfraredFileToSignalTable.infraredFileId)
+                .where {
+                    InfraredFileToSignalTable.signalId inList
+                            signalRequestModel.failedResults
+                                .map(SignalRequestModel.SignalResultData::signalId)
+                }.map { it[InfraredFileToSignalTable.infraredFileId].value }
+        }
         return transaction(database) {
             InfraredFileTable
                 .join(
                     otherTable = InfraredFileToSignalTable,
                     onColumn = InfraredFileTable.id,
                     otherColumn = InfraredFileToSignalTable.infraredFileId,
-                    joinType = JoinType.INNER
+                    joinType = JoinType.LEFT
                 )
                 .select(InfraredFileTable.id, InfraredFileTable.signalCount)
                 .groupBy(InfraredFileTable.id)
@@ -70,15 +78,29 @@ internal class SignalRouteRegistry(
                     val successSignalIds = signalRequestModel
                         .successResults
                         .map(SignalRequestModel.SignalResultData::signalId)
-                    if (successSignalIds.isNotEmpty()) {
-                        andWhere {
+                    var nextQuery = this
+                    nextQuery = if (successSignalIds.isNotEmpty()) {
+                        nextQuery.andWhere {
                             InfraredFileToSignalTable
                                 .signalId
                                 .inList(successSignalIds)
                         }
                     } else {
-                        this
+                        nextQuery
                     }
+                    val failedSignalIds = signalRequestModel
+                        .failedResults
+                        .map(SignalRequestModel.SignalResultData::signalId)
+                    nextQuery = if (failedSignalIds.isNotEmpty()) {
+                        nextQuery.andWhere {
+                            InfraredFileToSignalTable
+                                .infraredFileId
+                                .notInList(excludedFileIds)
+                        }
+                    } else {
+                        nextQuery
+                    }
+                    nextQuery
                 }
         }
     }
@@ -119,6 +141,7 @@ internal class SignalRouteRegistry(
                                     .or { SignalKeyTable.hash.eq(identifier.hash) }
                             }
                         }
+
                         is IfrKeyIdentifier.Name -> {
                             andWhere {
                                 SignalKeyTable.remoteKeyName.eq(identifier.name)
