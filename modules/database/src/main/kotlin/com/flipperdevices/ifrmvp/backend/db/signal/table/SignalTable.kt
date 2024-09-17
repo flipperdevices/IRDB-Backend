@@ -12,7 +12,6 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 object SignalTable : LongIdTable("SIGNAL_TABLE") {
     val brandId = reference("brand_id", BrandTable)
 
-    val name = text("name")
     val type = text("type")
     val protocol = text("protocol").nullable()
     val address = text("address").nullable()
