@@ -191,6 +191,13 @@ object DeviceKeyExt {
             DeviceKey.FAVORITE -> listOf(
                 CategoryType.BOX
             )
+
+            DeviceKey.INPUT -> listOf(
+                CategoryType.BOX,
+                CategoryType.DVD,
+                CategoryType.TVS,
+
+                )
         }
     }
 }

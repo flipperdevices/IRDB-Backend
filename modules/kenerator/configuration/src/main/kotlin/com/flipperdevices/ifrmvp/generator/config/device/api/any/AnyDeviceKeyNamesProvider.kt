@@ -1,7 +1,10 @@
 package com.flipperdevices.ifrmvp.generator.config.device.api.any
 
+import com.flipperdevices.ifrmvp.backend.model.DeviceConfiguration
 import com.flipperdevices.ifrmvp.backend.model.DeviceKey
 import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvider
+import java.io.File
+import kotlinx.serialization.json.Json
 
 object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
     @Suppress("LongMethod", "CyclomaticComplexMethod")
@@ -406,6 +409,28 @@ object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
             DeviceKey.LIGHT -> listOf(
                 "light"
             )
+
+            DeviceKey.INPUT -> listOf(
+                "input",
+                "input_r",
+                "input method",
+                "next_input",
+                "pipinput_r",
+                "pipinput",
+                "input_next",
+                "input_source"
+            )
         }
+    }
+}
+
+// For docs
+fun main() {
+    DeviceKey.entries.forEach { deviceKey ->
+        println("#### ${deviceKey.name}")
+        AnyDeviceKeyNamesProvider.getKeyNames(deviceKey).forEach { alias ->
+            println("- $alias")
+        }
+        println()
     }
 }
