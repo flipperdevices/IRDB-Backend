@@ -6,6 +6,7 @@ import com.flipperdevices.ifrmvp.backend.db.signal.exception.TableDaoException
 import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileToSignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalKeyTable
+import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalNameAliasTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.model.BrandModel
 import com.flipperdevices.ifrmvp.backend.model.CategoryConfiguration
@@ -196,7 +197,7 @@ internal class SignalRouteRegistry(
                     SignalModel(
                         id = it[SignalTable.id].value,
                         remote = SignalModel.FlipperRemote(
-                            name = it[SignalTable.name],
+                            name = "empty",
                             type = it[SignalTable.type],
                             protocol = it[SignalTable.protocol],
                             address = it[SignalTable.address],
@@ -238,13 +239,13 @@ internal class SignalRouteRegistry(
         }
 
         val skippedKeys = transaction(database) {
-            SignalTable
+            SignalNameAliasTable
                 .selectAll()
-                .where { SignalTable.id inList signalRequestModel.skippedResults.map(SignalRequestModel.SignalResultData::signalId) }
+                .where { SignalNameAliasTable.id inList signalRequestModel.skippedResults.map(SignalRequestModel.SignalResultData::signalId) }
                 .mapNotNull {
-                    val keyName = it[SignalTable.name]
+                    val keyName = it[SignalNameAliasTable.signalName]
                     AnyDeviceKeyNamesProvider.getKey(keyName)
-                }
+                }.distinct()
         }
 
         val signalModel = getSignalModel(

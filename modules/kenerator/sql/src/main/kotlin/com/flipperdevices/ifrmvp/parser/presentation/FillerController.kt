@@ -8,6 +8,7 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.CategoryTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileToSignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalKeyTable
+import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalNameAliasTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
 import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
@@ -17,7 +18,10 @@ import com.flipperdevices.infrared.editor.model.InfraredRemote
 import com.flipperdevices.infrared.editor.util.InfraredMapper
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
 import java.io.File
+import kotlin.math.sign
+import kotlin.time.measureTime
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.andWhere
@@ -103,7 +107,6 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                 val parsedRemote = remote as? InfraredRemote.Parsed
                                 val rawRemote = remote as? InfraredRemote.Raw
                                 this[SignalTable.brandId] = brandId
-                                this[SignalTable.name] = remote.name
                                 this[SignalTable.type] = remote.type
                                 this[SignalTable.protocol] = parsedRemote?.protocol
                                 this[SignalTable.address] = parsedRemote?.address
@@ -143,6 +146,12 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                     """.trimIndent()
                                 )
                             }
+
+                            SignalNameAliasTable.batchInsert(signalIds.zip(signals), ignore = true) {
+                                this[SignalNameAliasTable.signalName] = it.second.name
+                                this[SignalNameAliasTable.signalId] = it.first.value
+                            }
+
                             InfraredFileToSignalTable.batchInsert(signalIds) {
                                 this[InfraredFileToSignalTable.infraredFileId] = irFileId
                                 this[InfraredFileToSignalTable.signalId] = it
@@ -164,7 +173,10 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                         this[SignalKeyTable.type] = IfrKeyIdentifier.Empty.TYPE
                                     }
 
-                                    is IfrKeyIdentifier.Name -> error("Identifying by name is not possible!")
+                                    is IfrKeyIdentifier.Name -> {
+                                        this[SignalKeyTable.remoteKeyName] = keyIdentifier.name
+                                        this[SignalKeyTable.type] = IfrKeyIdentifier.Sha256.TYPE
+                                    }
 
                                     is IfrKeyIdentifier.Sha256 -> {
                                         this[SignalKeyTable.remoteKeyName] = keyIdentifier.name
@@ -180,6 +192,12 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                         onColumn = SignalTable.id,
                                         otherColumn = InfraredFileToSignalTable.signalId
                                     )
+                                    .join(
+                                        otherTable = SignalNameAliasTable,
+                                        joinType = JoinType.LEFT,
+                                        onColumn = SignalTable.id,
+                                        otherColumn = SignalNameAliasTable.signalId
+                                    )
                                     .select(SignalTable.id)
                                     .where { SignalTable.brandId eq brandId }
                                     .andWhere { InfraredFileToSignalTable.infraredFileId eq irFileId }
@@ -191,7 +209,9 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                                 andWhere { SignalTable.hash eq keyIdentifier.hash }
                                             }
 
-                                            is IfrKeyIdentifier.Name -> error("Identifying by name is not possible!")
+                                            is IfrKeyIdentifier.Name -> {
+                                                andWhere { SignalNameAliasTable.signalName eq keyIdentifier.name }
+                                            }
                                         }
                                     }
                                     .map { it[SignalTable.id] }
