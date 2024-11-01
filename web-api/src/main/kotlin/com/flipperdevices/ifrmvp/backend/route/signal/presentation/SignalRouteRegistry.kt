@@ -35,6 +35,7 @@ import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.or
+import org.jetbrains.exposed.sql.orWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.wrapAsExpression
@@ -217,7 +218,9 @@ internal class SignalRouteRegistry(
         includedFileIds: Query,
         brand: BrandModel,
         // Index of successful results
-        index: Int = signalRequestModel.successResults.size + signalRequestModel.skippedResults.size,
+        index: Int = signalRequestModel.successResults.size
+            .plus(signalRequestModel.skippedResults.size)
+            .plus(signalRequestModel.failedResults.size),
         categoryType: CategoryType,
         category: DeviceCategory
     ): SignalResponseModel {
@@ -242,6 +245,8 @@ internal class SignalRouteRegistry(
             SignalNameAliasTable
                 .selectAll()
                 .where { SignalNameAliasTable.id inList signalRequestModel.skippedResults.map(SignalRequestModel.SignalResultData::signalId) }
+                .orWhere { SignalNameAliasTable.id inList signalRequestModel.successResults.map(SignalRequestModel.SignalResultData::signalId) }
+                .orWhere { SignalNameAliasTable.id inList signalRequestModel.failedResults.map(SignalRequestModel.SignalResultData::signalId) }
                 .mapNotNull {
                     val keyName = it[SignalNameAliasTable.signalName]
                     AnyDeviceKeyNamesProvider.getKey(keyName)
