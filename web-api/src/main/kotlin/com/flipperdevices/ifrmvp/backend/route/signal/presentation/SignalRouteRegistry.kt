@@ -18,7 +18,6 @@ import com.flipperdevices.ifrmvp.backend.model.SignalResponse
 import com.flipperdevices.ifrmvp.backend.model.SignalResponseModel
 import com.flipperdevices.ifrmvp.backend.route.signal.data.CategoryConfigRepository
 import com.flipperdevices.ifrmvp.backend.route.signal.data.IRDBCategoryConfigRepository
-import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvider
 import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvider.Companion.getKey
 import com.flipperdevices.ifrmvp.generator.config.device.api.any.AnyDeviceKeyNamesProvider
 import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
@@ -302,7 +301,46 @@ internal class SignalRouteRegistry(
                 println("#root includedInfraredFilesCount=$includedInfraredFilesCount")
                 when (includedInfraredFilesCount) {
                     0L -> {
-                        context.respond(HttpStatusCode.NoContent)
+                        if (signalRequestModel.failedResults.isEmpty()
+                                .and(signalRequestModel.successResults.isEmpty())
+                                .and(signalRequestModel.skippedResults.isEmpty())
+                        ) {
+                            println("#root everything is empty")
+                            context.respond(HttpStatusCode.NoContent)
+                        } else {
+                            val fallbackIncludedFileId = transaction(database) {
+                                getIncludedFileIds(
+                                    signalRequestModel = when {
+                                        signalRequestModel.skippedResults.isNotEmpty() -> {
+                                            signalRequestModel.copy(
+                                                skippedResults = signalRequestModel.skippedResults.dropLast(1)
+                                            )
+                                        }
+
+                                        signalRequestModel.failedResults.isNotEmpty() -> {
+                                            signalRequestModel.copy(
+                                                failedResults = signalRequestModel.failedResults.dropLast(1)
+                                            )
+                                        }
+
+                                        else -> {
+                                            signalRequestModel.copy(
+                                                successResults = signalRequestModel.successResults.dropLast(1)
+                                            )
+                                        }
+                                    },
+                                    brandId = brand.id
+                                ).map { it[InfraredFileTable.id] }.firstOrNull()?.value
+                            }
+                            println("#root fallbackIncludedFileId is $fallbackIncludedFileId")
+                            if (fallbackIncludedFileId == null) {
+                                context.respond(HttpStatusCode.NoContent)
+                            } else {
+                                val response =
+                                    SignalResponseModel(ifrFileModel = tableDao.ifrFileById(fallbackIncludedFileId))
+                                context.respond(response)
+                            }
+                        }
                         return@post
                     }
 
