@@ -23,7 +23,7 @@ class OrderRepository(private val database: Database) {
                 .selectAll()
                 .where { SignalNameAliasTable.id inList signalRequestModel.skippedResults.map(SignalRequestModel.SignalResultData::signalId) }
                 .orWhere { SignalNameAliasTable.id inList signalRequestModel.successResults.map(SignalRequestModel.SignalResultData::signalId) }
-                .orWhere { SignalNameAliasTable.id inList signalRequestModel.failedResults.map(SignalRequestModel.SignalResultData::signalId) }
+//                .orWhere { SignalNameAliasTable.id inList signalRequestModel.failedResults.map(SignalRequestModel.SignalResultData::signalId) }
                 .mapNotNull {
                     val keyName = it[SignalNameAliasTable.signalName]
                     AnyDeviceKeyNamesProvider.getKey(keyName)
