@@ -1,283 +1,76 @@
 package com.flipperdevices.ifrmvp.backend.route.signal.presentation
 
+import com.flipperdevices.ifrmvp.backend.core.logging.Loggable
 import com.flipperdevices.ifrmvp.backend.core.route.RouteRegistry
 import com.flipperdevices.ifrmvp.backend.db.signal.dao.TableDao
 import com.flipperdevices.ifrmvp.backend.db.signal.exception.TableDaoException
-import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileTable
-import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileToSignalTable
-import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalKeyTable
-import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalNameAliasTable
-import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
-import com.flipperdevices.ifrmvp.backend.model.BrandModel
-import com.flipperdevices.ifrmvp.backend.model.CategoryConfiguration
 import com.flipperdevices.ifrmvp.backend.model.CategoryType
 import com.flipperdevices.ifrmvp.backend.model.DeviceCategory
-import com.flipperdevices.ifrmvp.backend.model.SignalModel
 import com.flipperdevices.ifrmvp.backend.model.SignalRequestModel
 import com.flipperdevices.ifrmvp.backend.model.SignalResponse
 import com.flipperdevices.ifrmvp.backend.model.SignalResponseModel
-import com.flipperdevices.ifrmvp.backend.route.signal.data.CategoryConfigRepository
-import com.flipperdevices.ifrmvp.backend.route.signal.data.IRDBCategoryConfigRepository
-import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvider.Companion.getKey
-import com.flipperdevices.ifrmvp.generator.config.device.api.any.AnyDeviceKeyNamesProvider
-import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
-import com.flipperdevices.ifrmvp.model.buttondata.SingleKeyButtonData
+import com.flipperdevices.ifrmvp.backend.route.signal.data.IncludedFilesRepository
+import com.flipperdevices.ifrmvp.backend.route.signal.data.OrderRepository
+import com.flipperdevices.ifrmvp.backend.route.signal.data.SignalRepository
+import com.flipperdevices.ifrmvp.backend.route.signal.data.model.IncludedFile
 import io.github.smiley4.ktorswaggerui.dsl.routing.post
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.Query
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.andWhere
-import org.jetbrains.exposed.sql.count
-import org.jetbrains.exposed.sql.or
-import org.jetbrains.exposed.sql.orWhere
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.wrapAsExpression
 
 @Suppress("UnusedPrivateProperty")
 internal class SignalRouteRegistry(
     private val database: Database,
     private val tableDao: TableDao,
-    private val categoryConfigRepository: CategoryConfigRepository = IRDBCategoryConfigRepository,
-) : RouteRegistry {
+) : RouteRegistry, Loggable by Loggable.Default("SignalRouteRegistry") {
+    private val includedFilesRepository = IncludedFilesRepository(database)
+    private val signalRepository = SignalRepository(database)
+    private val orderRepository = OrderRepository(database)
 
-    /**
-     * Keep only those files, in which signals have been successfully passed
-     *
-     * SELECT INFRARED_FILE."id", INFRARED_FILE."signal_count"
-     * FROM INFRARED_FILE JOIN INFRARED_FILE_TO_SIGNAL on INFRARED_FILE_TO_SIGNAL."infrared_file_id" = INFRARED_FILE."id"
-     * group by INFRARED_FILE."id"
-     * order by INFRARED_FILE."signal_count" desc
-     */
-    private fun getIncludedFileIds(signalRequestModel: SignalRequestModel, brandId: Long): Query {
-        val excludedFileIds = transaction(database) {
-            InfraredFileToSignalTable.select(InfraredFileToSignalTable.infraredFileId)
-                .where {
-                    InfraredFileToSignalTable.signalId inList
-                            signalRequestModel.failedResults
-                                .map(SignalRequestModel.SignalResultData::signalId)
-                }.map { it[InfraredFileToSignalTable.infraredFileId].value }
-        }
-        return transaction(database) {
-            InfraredFileTable
-                .join(
-                    otherTable = InfraredFileToSignalTable,
-                    onColumn = InfraredFileTable.id,
-                    otherColumn = InfraredFileToSignalTable.infraredFileId,
-                    joinType = JoinType.LEFT
-                )
-                .select(InfraredFileTable.id, InfraredFileTable.signalCount)
-                .groupBy(InfraredFileTable.id)
-                .orderBy(InfraredFileTable.signalCount to SortOrder.DESC)
-                .where { InfraredFileTable.brandId eq brandId }
-                .apply {
-                    val successSignalIds = signalRequestModel
-                        .successResults
-                        .map(SignalRequestModel.SignalResultData::signalId)
-                    var nextQuery = this
-                    nextQuery = if (successSignalIds.isNotEmpty()) {
-                        nextQuery.andWhere {
-                            InfraredFileToSignalTable
-                                .signalId
-                                .inList(successSignalIds)
-                        }
-                    } else {
-                        nextQuery
-                    }
-                    val failedSignalIds = signalRequestModel
-                        .failedResults
-                        .map(SignalRequestModel.SignalResultData::signalId)
-                    nextQuery = if (failedSignalIds.isNotEmpty()) {
-                        nextQuery.andWhere {
-                            InfraredFileToSignalTable
-                                .infraredFileId
-                                .notInList(excludedFileIds)
-                        }
-                    } else {
-                        nextQuery
-                    }
-                    nextQuery
-                }
-        }
-    }
 
-    private suspend fun getSignalModel(
+    private suspend fun getNextSignal(
         signalRequestModel: SignalRequestModel,
-        order: CategoryConfiguration.OrderModel,
-        brand: BrandModel
-    ): SignalModel? {
-        return transaction(database) {
-            SignalTable
-                .join(
-                    otherTable = InfraredFileToSignalTable,
-                    joinType = JoinType.LEFT,
-                    onColumn = SignalTable.id,
-                    otherColumn = InfraredFileToSignalTable.signalId
-                )
-                .join(
-                    otherTable = InfraredFileTable,
-                    joinType = JoinType.LEFT,
-                    onColumn = InfraredFileToSignalTable.infraredFileId,
-                    otherColumn = InfraredFileTable.id
-                )
-                .join(
-                    otherTable = SignalKeyTable,
-                    joinType = JoinType.LEFT,
-                    onColumn = SignalTable.id,
-                    otherColumn = SignalKeyTable.signalId
-                )
-                .selectAll()
-                .where { SignalTable.brandId eq brand.id }
-                .apply {
-                    val singleButtonData = order.data as? SingleKeyButtonData
-                    when (val identifier = singleButtonData?.keyIdentifier) {
-                        is IfrKeyIdentifier.Sha256 -> {
-                            andWhere {
-                                SignalKeyTable.deviceKey.eq(order.key)
-                                    .or { SignalKeyTable.hash.eq(identifier.hash) }
-                            }
-                        }
-
-                        is IfrKeyIdentifier.Name -> {
-                            andWhere {
-                                SignalKeyTable.remoteKeyName.eq(identifier.name)
-                            }
-                        }
-
-                        else -> andWhere { SignalKeyTable.deviceKey.eq(order.key) }
-                    }
-                }
-                .andWhere { SignalKeyTable.deviceKey eq order.key }
-                .andWhere { SignalKeyTable.signalId eq SignalTable.id }
-                .apply {
-                    val failedSignalIds = signalRequestModel.failedResults
-                        .map(SignalRequestModel.SignalResultData::signalId)
-                    if (failedSignalIds.isEmpty()) {
-                        this
-                    } else {
-                        andWhere { SignalTable.id.notInList(failedSignalIds) }
-                    }
-                }
-                .apply {
-                    val successfulSignalIds = signalRequestModel.successResults
-                        .map(SignalRequestModel.SignalResultData::signalId)
-                    if (successfulSignalIds.isEmpty()) {
-                        this
-                    } else {
-                        andWhere { SignalTable.id.notInList(successfulSignalIds) }
-                    }
-                }
-                .apply {
-                    val successfulSignalIds = signalRequestModel.successResults
-                        .map(SignalRequestModel.SignalResultData::signalId)
-                    if (successfulSignalIds.isEmpty()) {
-                        this
-                    } else {
-                        andWhere {
-                            InfraredFileToSignalTable.infraredFileId inSubQuery InfraredFileToSignalTable
-                                .select(InfraredFileToSignalTable.infraredFileId)
-                                .where { InfraredFileToSignalTable.signalId inList successfulSignalIds }
-                        }
-                    }
-                }
-                .orderBy(
-                    wrapAsExpression<Long>(
-                        InfraredFileToSignalTable
-                            .select(InfraredFileToSignalTable.signalId.count())
-                            .where { InfraredFileToSignalTable.signalId eq SignalTable.id }
-                    ) to SortOrder.DESC
-                )
-                .limit(1)
-                .map {
-                    SignalModel(
-                        id = it[SignalTable.id].value,
-                        remote = SignalModel.FlipperRemote(
-                            name = "empty",
-                            type = it[SignalTable.type],
-                            protocol = it[SignalTable.protocol],
-                            address = it[SignalTable.address],
-                            command = it[SignalTable.command],
-                            frequency = it[SignalTable.frequency],
-                            dutyCycle = it[SignalTable.dutyCycle],
-                            data = it[SignalTable.data],
-                        )
-                    )
-                }
-                .firstOrNull()
-        }
-    }
-
-    private suspend fun findSignal(
-        signalRequestModel: SignalRequestModel,
-        includedFileIds: Query,
-        brand: BrandModel,
-        // Index of successful results
-        index: Int = signalRequestModel.successResults.size
-            .plus(signalRequestModel.skippedResults.size)
-            .plus(signalRequestModel.failedResults.size),
         categoryType: CategoryType,
-        category: DeviceCategory
-    ): SignalResponseModel {
-        val order = categoryConfigRepository.getOrNull(
-            categoryType = categoryType,
-            index = index
-        )
-        println("Getting order: $order index: $index")
-        // todo When orders is empty we can't define the next key. Need to think how to bypass it or may be just log
-        if (order == null) {
-            val infraredFileId = transaction(database) {
-                includedFileIds
-                    .map { it[InfraredFileTable.id] }
-                    .first()
-                    .value
-            }
-            val response = SignalResponseModel(ifrFileModel = tableDao.ifrFileById(infraredFileId))
-            return response
-        }
-
-        val skippedKeys = transaction(database) {
-            SignalNameAliasTable
-                .selectAll()
-                .where { SignalNameAliasTable.id inList signalRequestModel.skippedResults.map(SignalRequestModel.SignalResultData::signalId) }
-                .orWhere { SignalNameAliasTable.id inList signalRequestModel.successResults.map(SignalRequestModel.SignalResultData::signalId) }
-                .orWhere { SignalNameAliasTable.id inList signalRequestModel.failedResults.map(SignalRequestModel.SignalResultData::signalId) }
-                .mapNotNull {
-                    val keyName = it[SignalNameAliasTable.signalName]
-                    AnyDeviceKeyNamesProvider.getKey(keyName)
-                }.distinct()
-        }
-
-        val signalModel = getSignalModel(
+        includedFiles: List<IncludedFile>,
+        category: DeviceCategory,
+        recursionLevel: Int = 0
+    ): SignalResponseModel? {
+        val orderModel = orderRepository.findOrder(
             signalRequestModel = signalRequestModel,
-            order = order,
-            brand = brand
-        )
+            categoryType = categoryType,
+            recursionLevel = recursionLevel
+        ) ?: run {
+            debug { "Order is null for recursionLevel: $recursionLevel $signalRequestModel" }
+            return null
+        }
 
-        if (signalModel == null || skippedKeys.contains(order.key)) {
-            return findSignal(
+        val signalModel = signalRepository.getSignalModel(
+            signalRequestModel = signalRequestModel,
+            order = orderModel,
+            includedFiles = includedFiles.map(IncludedFile::fileId)
+        )
+        // For some orders signal may be null
+        // But it may be not null for next orders
+        if (signalModel == null) {
+            debug { "Signal model is null for $orderModel" }
+            return getNextSignal(
                 signalRequestModel = signalRequestModel,
-                includedFileIds = includedFileIds,
-                brand = brand,
-                index = index + 1,
                 categoryType = categoryType,
-                category = category
+                includedFiles = includedFiles,
+                category = category,
+                recursionLevel = recursionLevel + 1
             )
         }
-
-        val response = SignalResponseModel(
+        return SignalResponseModel(
             signalResponse = SignalResponse(
                 signalModel = signalModel,
-                message = order.message,
+                message = orderModel.message,
                 categoryName = category.meta.manifest.singularDisplayName,
-                data = order.data
+                data = orderModel.data
             )
         )
-        return response
     }
 
     private fun Routing.statusRoute() {
@@ -287,7 +80,6 @@ internal class SignalRouteRegistry(
             body = {
                 @Suppress("UnusedPrivateProperty")
                 val signalRequestModel = context.receive<SignalRequestModel>()
-                println("signalRequestModel: ${signalRequestModel}")
 
                 val brand = tableDao.getBrandById(signalRequestModel.brandId)
                 val category = tableDao.getCategoryById(brand.categoryId)
@@ -295,75 +87,57 @@ internal class SignalRouteRegistry(
                     .entries
                     .firstOrNull { it.folderName == category.folderName }
                     ?: throw TableDaoException.CategoryNotFound(category.id)
+                debug { "category: $category categoryType: $categoryType signalRequestModel: ${signalRequestModel}" }
 
-                val includedFileIds = getIncludedFileIds(signalRequestModel, brand.id)
-                val includedInfraredFilesCount = transaction(database) { includedFileIds.count() }
-                println("#root includedInfraredFilesCount=$includedInfraredFilesCount")
-                when (includedInfraredFilesCount) {
-                    0L -> {
-                        if (signalRequestModel.failedResults.isEmpty()
-                                .and(signalRequestModel.successResults.isEmpty())
-                                .and(signalRequestModel.skippedResults.isEmpty())
-                        ) {
-                            println("#root everything is empty")
+
+                val includedFiles = includedFilesRepository.findIncludedFiles(signalRequestModel)
+
+                when {
+                    includedFiles.isEmpty() -> {
+                        debug { "#root includedInfraredFilesCount is empty!" }
+                        val irFileModel = includedFilesRepository
+                            .findFallbackFile(signalRequestModel)
+                            ?.fileId
+                            ?.let { id -> tableDao.ifrFileById(id) }
+                        if (irFileModel == null) {
                             context.respond(HttpStatusCode.NoContent)
                         } else {
-                            val fallbackIncludedFileId = transaction(database) {
-                                getIncludedFileIds(
-                                    signalRequestModel = when {
-                                        signalRequestModel.skippedResults.isNotEmpty() -> {
-                                            signalRequestModel.copy(
-                                                skippedResults = signalRequestModel.skippedResults.dropLast(1)
-                                            )
-                                        }
-
-                                        signalRequestModel.failedResults.isNotEmpty() -> {
-                                            signalRequestModel.copy(
-                                                failedResults = signalRequestModel.failedResults.dropLast(1)
-                                            )
-                                        }
-
-                                        else -> {
-                                            signalRequestModel.copy(
-                                                successResults = signalRequestModel.successResults.dropLast(1)
-                                            )
-                                        }
-                                    },
-                                    brandId = brand.id
-                                ).map { it[InfraredFileTable.id] }.firstOrNull()?.value
-                            }
-                            println("#root fallbackIncludedFileId is $fallbackIncludedFileId")
-                            if (fallbackIncludedFileId == null) {
-                                context.respond(HttpStatusCode.NoContent)
-                            } else {
-                                val response =
-                                    SignalResponseModel(ifrFileModel = tableDao.ifrFileById(fallbackIncludedFileId))
-                                context.respond(response)
-                            }
+                            context.respond(SignalResponseModel(ifrFileModel = irFileModel))
                         }
-                        return@post
                     }
 
-                    1L -> {
-                        val infraredFileId = transaction(database) {
-                            includedFileIds
-                                .map { it[InfraredFileTable.id] }
-                                .first()
-                                .value
-                        }
-                        val response = SignalResponseModel(ifrFileModel = tableDao.ifrFileById(infraredFileId))
+                    includedFiles.size == 1 -> {
+                        debug { "#root found exact one infrared file" }
+                        val irFileModel = tableDao.ifrFileById(includedFiles.first().fileId)
+                        val response = SignalResponseModel(ifrFileModel = irFileModel)
                         context.respond(response)
                     }
 
                     else -> {
-                        val response = findSignal(
+                        val signal = getNextSignal(
                             signalRequestModel = signalRequestModel,
-                            includedFileIds = includedFileIds,
-                            brand = brand,
                             categoryType = categoryType,
+                            includedFiles = includedFiles,
                             category = category
                         )
-                        context.respond(response)
+
+                        if (signal != null) {
+                            debug { "#root found multiple infrared files: ${includedFiles.size}" }
+                            context.respond(signal)
+                        } else {
+                            debug { "#root could not find signal model. Giving fallback file" }
+
+                            val irFileModel = includedFilesRepository
+                                .findFallbackFile(signalRequestModel)
+                                ?.fileId
+                                ?.let { id -> tableDao.ifrFileById(id) }
+
+                            if (irFileModel == null) {
+                                context.respond(HttpStatusCode.NoContent)
+                            } else {
+                                context.respond(SignalResponseModel(ifrFileModel = irFileModel))
+                            }
+                        }
                     }
                 }
             }

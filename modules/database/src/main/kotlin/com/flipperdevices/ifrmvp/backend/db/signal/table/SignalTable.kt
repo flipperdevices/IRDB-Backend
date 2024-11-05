@@ -1,5 +1,6 @@
 package com.flipperdevices.ifrmvp.backend.db.signal.table
 
+import com.flipperdevices.ifrmvp.backend.model.DeviceKey
 import org.jetbrains.exposed.dao.id.LongIdTable
 
 /**
@@ -20,9 +21,11 @@ object SignalTable : LongIdTable("SIGNAL_TABLE") {
     val dutyCycle = text("duty_cycle").nullable()
     val data = text("data").nullable()
     val hash = text("hash")
+    val deviceKey = enumeration<DeviceKey>("device_key").nullable()
 
     init {
         uniqueIndex(
+            deviceKey,
             brandId,
             type,
             frequency,
@@ -30,6 +33,7 @@ object SignalTable : LongIdTable("SIGNAL_TABLE") {
             data
         )
         uniqueIndex(
+            deviceKey,
             brandId,
             type,
             protocol,

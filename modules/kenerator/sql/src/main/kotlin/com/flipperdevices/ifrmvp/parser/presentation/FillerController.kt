@@ -11,6 +11,8 @@ import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalKeyTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalNameAliasTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.SignalTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.UiPresetTable
+import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvider.Companion.getKey
+import com.flipperdevices.ifrmvp.generator.config.device.api.any.AnyDeviceKeyNamesProvider
 import com.flipperdevices.ifrmvp.model.IfrKeyIdentifier
 import com.flipperdevices.ifrmvp.parser.util.ParserPathResolver
 import com.flipperdevices.infrared.editor.encoding.InfraredRemoteEncoder.identifier
@@ -24,9 +26,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.transactions.transaction
 
 internal class FillerController(private val database: Database) : CoroutineScope by IoCoroutineScope() {
@@ -115,6 +119,7 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                 this[SignalTable.dutyCycle] = rawRemote?.dutyCycle
                                 this[SignalTable.data] = rawRemote?.data
                                 this[SignalTable.hash] = remote.identifier.hash
+                                this[SignalTable.deviceKey] = AnyDeviceKeyNamesProvider.getKey(remote.identifier.name)
                             }
                             // ManyToMany file to signal references
                             val irFileId = InfraredFileTable
@@ -124,25 +129,25 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                 .map { it[InfraredFileTable.id] }
                                 .first()
 
-                            val signalIds = signals.map {
-                                val parsedRemote = it as? InfraredRemote.Parsed
-                                val rawRemote = it as? InfraredRemote.Raw
+                            val signalIds = signals.map { remote ->
+                                val parsedRemote = remote as? InfraredRemote.Parsed
+                                val rawRemote = remote as? InfraredRemote.Raw
                                 SignalTable
                                     .select(SignalTable.id)
                                     .where { SignalTable.brandId eq brandId }
-//                                    .andWhere { SignalTable.name eq it.name }
-                                    .andWhere { SignalTable.type eq it.type }
+                                    .andWhere { SignalTable.type eq remote.type }
                                     .andWhere { SignalTable.protocol eq parsedRemote?.protocol }
                                     .andWhere { SignalTable.address eq parsedRemote?.address }
                                     .andWhere { SignalTable.command eq parsedRemote?.command }
                                     .andWhere { SignalTable.frequency eq rawRemote?.frequency }
                                     .andWhere { SignalTable.dutyCycle eq rawRemote?.dutyCycle }
                                     .andWhere { SignalTable.data eq rawRemote?.data }
+                                    .andWhere { SignalTable.deviceKey eq AnyDeviceKeyNamesProvider.getKey(remote.name) }
                                     .map { it[SignalTable.id] }
                                     .firstOrNull() ?: error(
                                     """
-                                        The list is emoty for brand: ${brand.name} category: ${categoryFolder} file: ${irFile.name};
-                                        name: ${it.name}
+                                        The list is empty for brand: ${brand.name} category: ${categoryFolder} file: ${irFile.name};
+                                        name: ${remote.name}
                                     """.trimIndent()
                                 )
                             }
@@ -201,6 +206,8 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                     .select(SignalTable.id)
                                     .where { SignalTable.brandId eq brandId }
                                     .andWhere { InfraredFileToSignalTable.infraredFileId eq irFileId }
+                                    .andWhere { SignalTable.deviceKey.eq(baseKey).or(SignalTable.deviceKey.isNull()) }
+                                    .orderBy(SignalTable.deviceKey to SortOrder.ASC_NULLS_LAST)
                                     .apply {
                                         when (keyIdentifier) {
                                             IfrKeyIdentifier.Empty -> error("Identifying is not possible!")

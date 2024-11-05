@@ -37,6 +37,8 @@ dependencies {
     // Exposed
     implementation(libs.exposed.core)
     implementation(libs.exposed.dao)
+    // test
+    testImplementation(kotlin("test"))
     // Services
     implementation(projects.modules.buildKonfig)
     implementation(projects.modules.model)

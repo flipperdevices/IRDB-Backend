@@ -68,3 +68,7 @@ jobs:
         uses: gradle/gradle-build-action@ac2d340dc04d9e1113182899e983b5400c17cda1 # v3
         with:
           arguments: :modules:kenerator:sql:run
+      - name: Run test
+        uses: gradle/gradle-build-action@ac2d340dc04d9e1113182899e983b5400c17cda1 # v3
+        with:
+          arguments: :web-api:test
