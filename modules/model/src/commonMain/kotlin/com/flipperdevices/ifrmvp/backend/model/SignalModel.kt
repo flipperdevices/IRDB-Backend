@@ -9,6 +9,8 @@ data class SignalModel(
     val id: Long,
     @SerialName("remote")
     val remote: FlipperRemote,
+    @SerialName("device_key")
+    val deviceKey: DeviceKey? = null
 ) {
     @Serializable
     data class FlipperRemote(

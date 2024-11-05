@@ -1,5 +1,6 @@
 package com.flipperdevices.ifrmvp.backend.route.signal.presentation
 
+import com.flipperdevices.ifrmvp.backend.core.logging.Loggable
 import com.flipperdevices.ifrmvp.backend.core.route.RouteRegistry
 import com.flipperdevices.ifrmvp.backend.db.signal.dao.TableDao
 import com.flipperdevices.ifrmvp.backend.db.signal.exception.TableDaoException
@@ -23,7 +24,7 @@ import org.jetbrains.exposed.sql.Database
 internal class SignalRouteRegistry(
     private val database: Database,
     private val tableDao: TableDao,
-) : RouteRegistry {
+) : RouteRegistry, Loggable by Loggable.Default("SignalRouteRegistry") {
     private val includedFilesRepository = IncludedFilesRepository(database)
     private val signalRepository = SignalRepository(database)
     private val orderRepository = OrderRepository(database)
@@ -41,18 +42,19 @@ internal class SignalRouteRegistry(
             categoryType = categoryType,
             recursionLevel = recursionLevel
         ) ?: run {
-            println("Order is null for recursionLevel: $recursionLevel $signalRequestModel")
+            debug { "Order is null for recursionLevel: $recursionLevel $signalRequestModel" }
             return null
         }
 
         val signalModel = signalRepository.getSignalModel(
             signalRequestModel = signalRequestModel,
             order = orderModel,
+            includedFiles = includedFiles.map(IncludedFile::fileId)
         )
         // For some orders signal may be null
         // But it may be not null for next orders
         if (signalModel == null) {
-            println("Signal model is null for $orderModel")
+            debug { "Signal model is null for $orderModel" }
             return getNextSignal(
                 signalRequestModel = signalRequestModel,
                 categoryType = categoryType,
@@ -78,7 +80,6 @@ internal class SignalRouteRegistry(
             body = {
                 @Suppress("UnusedPrivateProperty")
                 val signalRequestModel = context.receive<SignalRequestModel>()
-                println("signalRequestModel: ${signalRequestModel}")
 
                 val brand = tableDao.getBrandById(signalRequestModel.brandId)
                 val category = tableDao.getCategoryById(brand.categoryId)
@@ -86,14 +87,14 @@ internal class SignalRouteRegistry(
                     .entries
                     .firstOrNull { it.folderName == category.folderName }
                     ?: throw TableDaoException.CategoryNotFound(category.id)
+                debug { "category: $category categoryType: $categoryType signalRequestModel: ${signalRequestModel}" }
 
 
                 val includedFiles = includedFilesRepository.findIncludedFiles(signalRequestModel)
 
-
                 when {
                     includedFiles.isEmpty() -> {
-                        println("#root includedInfraredFilesCount is empty!")
+                        debug { "#root includedInfraredFilesCount is empty!" }
                         val irFileModel = includedFilesRepository
                             .findFallbackFile(signalRequestModel)
                             ?.fileId
@@ -106,7 +107,7 @@ internal class SignalRouteRegistry(
                     }
 
                     includedFiles.size == 1 -> {
-                        println("#root found exact one infrared file")
+                        debug { "#root found exact one infrared file" }
                         val irFileModel = tableDao.ifrFileById(includedFiles.first().fileId)
                         val response = SignalResponseModel(ifrFileModel = irFileModel)
                         context.respond(response)
@@ -121,10 +122,10 @@ internal class SignalRouteRegistry(
                         )
 
                         if (signal != null) {
-                            println("#root found multiple infrared files: ${includedFiles.size}")
+                            debug { "#root found multiple infrared files: ${includedFiles.size}" }
                             context.respond(signal)
                         } else {
-                            println("#root could not find signal model. Giving fallback file")
+                            debug { "#root could not find signal model. Giving fallback file" }
 
                             val irFileModel = includedFilesRepository
                                 .findFallbackFile(signalRequestModel)
@@ -137,7 +138,6 @@ internal class SignalRouteRegistry(
                                 context.respond(SignalResponseModel(ifrFileModel = irFileModel))
                             }
                         }
-
                     }
                 }
             }

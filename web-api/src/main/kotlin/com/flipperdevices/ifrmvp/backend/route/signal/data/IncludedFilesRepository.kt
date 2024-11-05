@@ -1,16 +1,72 @@
 package com.flipperdevices.ifrmvp.backend.route.signal.data
 
+import com.flipperdevices.ifrmvp.backend.core.logging.Loggable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileTable
 import com.flipperdevices.ifrmvp.backend.db.signal.table.InfraredFileToSignalTable
 import com.flipperdevices.ifrmvp.backend.model.SignalRequestModel
 import com.flipperdevices.ifrmvp.backend.route.signal.data.model.IncludedFile
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.alias
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class IncludedFilesRepository(private val database: Database) {
+class IncludedFilesRepository(
+    private val database: Database
+) : Loggable by Loggable.Default("IncludedFilesRepository") {
+
+    /**
+     * This is a list of files, which contains every instance of [successSignalIds]
+     * aka list<SignalID>().containsAll(successSignal1,successSignal2)
+     */
+    private fun getWhiteListedFileIds(successSignalIds: List<Long>): List<Long> {
+        var join: Join? = null
+        successSignalIds.forEachIndexed { i, id ->
+            join = (join ?: InfraredFileToSignalTable)
+                .join(
+                    otherTable = InfraredFileToSignalTable.alias("F$i"),
+                    onColumn = InfraredFileToSignalTable.infraredFileId,
+                    otherColumn = InfraredFileToSignalTable.alias("F$i")[InfraredFileToSignalTable.infraredFileId],
+                    joinType = JoinType.INNER
+                )
+        }
+        var query = join
+            ?.select(InfraredFileToSignalTable.infraredFileId)
+            ?.withDistinct(true)
+        successSignalIds.forEachIndexed { index, id ->
+            query = if (index == 0) {
+                query?.where { InfraredFileToSignalTable.signalId eq id }
+            } else {
+                query?.andWhere {
+                    InfraredFileToSignalTable.alias("F$index")[InfraredFileToSignalTable.signalId] eq id
+                }
+            }
+        }
+        return when {
+            successSignalIds.isEmpty() -> emptyList()
+            else -> transaction(database) {
+                query?.map { it[InfraredFileToSignalTable.infraredFileId].value }.orEmpty()
+            }
+        }
+    }
+
+    /**
+     * If any signal is failed then we skip this file
+     */
+    private fun getBlackListedFileIds(failedSignalIds: List<Long>): List<Long> {
+        return when {
+            failedSignalIds.isEmpty() -> emptyList()
+            else -> transaction(database) {
+                InfraredFileToSignalTable.select(InfraredFileToSignalTable.infraredFileId)
+                    .withDistinct(true)
+                    .where { InfraredFileToSignalTable.signalId inList failedSignalIds }
+                    .map { it[InfraredFileToSignalTable.infraredFileId].value }
+            }
+        }
+    }
+
     /**
      * Keep only those files, in which signals have been successfully passed
      *
@@ -20,58 +76,43 @@ class IncludedFilesRepository(private val database: Database) {
      * order by INFRARED_FILE."signal_count" desc
      */
     suspend fun findIncludedFiles(signalRequestModel: SignalRequestModel): List<IncludedFile> {
-        val excludedFileIds = transaction(database) {
-            InfraredFileToSignalTable.select(InfraredFileToSignalTable.infraredFileId)
-                .where {
-                    InfraredFileToSignalTable.signalId inList
-                            signalRequestModel.failedResults
-                                .map(SignalRequestModel.SignalResultData::signalId)
-                }.map { it[InfraredFileToSignalTable.infraredFileId].value }
-        }
+        info { "#findIncludedFiles invoked" }
+
+        val excludedFileIds = getBlackListedFileIds(
+            failedSignalIds = signalRequestModel.failedResults
+                .map(SignalRequestModel.SignalResultData::signalId)
+        )
+        info { "#findIncludedFiles excludedFileIds: $excludedFileIds" }
+        val includedFileIds = getWhiteListedFileIds(
+            successSignalIds = signalRequestModel.successResults
+                .map(SignalRequestModel.SignalResultData::signalId)
+        )
+        info { "#findIncludedFiles includedFileIds: $includedFileIds" }
         return transaction(database) {
             InfraredFileTable
-                .join(
-                    otherTable = InfraredFileToSignalTable,
-                    onColumn = InfraredFileTable.id,
-                    otherColumn = InfraredFileToSignalTable.infraredFileId,
-                    joinType = JoinType.LEFT
-                )
+                // Main query
                 .select(InfraredFileTable.id, InfraredFileTable.signalCount)
-                .groupBy(InfraredFileTable.id)
+                .groupBy(InfraredFileTable.id, InfraredFileTable.signalCount)
                 .orderBy(InfraredFileTable.signalCount to SortOrder.DESC)
                 .where { InfraredFileTable.brandId eq signalRequestModel.brandId }
-                .let {
-                    val successSignalIds = signalRequestModel
-                        .successResults
-                        .map(SignalRequestModel.SignalResultData::signalId)
-                    var nextQuery = it
-                    nextQuery = if (successSignalIds.isNotEmpty()) {
-                        nextQuery.andWhere {
-                            InfraredFileToSignalTable
-                                .signalId
-                                .inList(successSignalIds)
-                        }
-                    } else {
-                        nextQuery
-                    }
-                    val failedSignalIds = signalRequestModel
-                        .failedResults
-                        .map(SignalRequestModel.SignalResultData::signalId)
-                    if (failedSignalIds.isNotEmpty()) {
-                        nextQuery.andWhere {
-                            InfraredFileToSignalTable
-                                .infraredFileId
-                                .notInList(excludedFileIds)
-                        }
-                    } else {
-                        nextQuery
-                    }
+                .let { nextQuery ->
+                    if (includedFileIds.isEmpty()) nextQuery
+                    else nextQuery.andWhere { InfraredFileTable.id inList includedFileIds }
+                }
+                //[3273, 3282, 3283, 3286]
+                .let { nextQuery ->
+                    if (excludedFileIds.isEmpty()) nextQuery
+                    else nextQuery.andWhere { InfraredFileTable.id notInList excludedFileIds }
                 }
                 .map {
-                    IncludedFile(
+                    val file = IncludedFile(
                         fileId = it[InfraredFileTable.id].value,
                         signalCount = it[InfraredFileTable.signalCount]
                     )
+                    file
+                }.also {
+
+                    debug { "#got files: ${it.map { it.fileId }}" }
                 }
         }
     }

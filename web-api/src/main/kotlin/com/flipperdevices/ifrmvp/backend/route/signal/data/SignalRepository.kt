@@ -23,6 +23,7 @@ class SignalRepository(private val database: Database) {
     suspend fun getSignalModel(
         signalRequestModel: SignalRequestModel,
         order: CategoryConfiguration.OrderModel,
+        includedFiles: List<Long>
     ): SignalModel? {
         return transaction(database) {
             SignalTable
@@ -69,6 +70,11 @@ class SignalRepository(private val database: Database) {
                 }
                 .andWhere { SignalKeyTable.deviceKey eq order.key }
                 .andWhere { SignalKeyTable.signalId eq SignalTable.id }
+                .let { query ->
+                    if (includedFiles.isEmpty()) query
+                    else query.andWhere { InfraredFileToSignalTable.infraredFileId inList includedFiles }
+
+                }
                 .let { query ->
                     val failedSignalIds = signalRequestModel.failedResults
                         .map(SignalRequestModel.SignalResultData::signalId)
