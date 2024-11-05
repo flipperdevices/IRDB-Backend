@@ -106,13 +106,7 @@ class SignalRepository(private val database: Database) {
                         }
                     }
                 }
-                .orderBy(
-                    wrapAsExpression<Long>(
-                        InfraredFileToSignalTable
-                            .select(InfraredFileToSignalTable.signalId.count())
-                            .where { InfraredFileToSignalTable.signalId eq SignalTable.id }
-                    ) to SortOrder.DESC
-                )
+                .orderBy(InfraredFileTable.signalCount to SortOrder.DESC)
                 .limit(1)
                 .map {
                     SignalModel(
