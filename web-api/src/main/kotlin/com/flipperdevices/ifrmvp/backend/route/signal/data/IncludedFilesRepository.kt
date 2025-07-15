@@ -96,13 +96,19 @@ class IncludedFilesRepository(
                 .orderBy(InfraredFileTable.signalCount to SortOrder.DESC)
                 .where { InfraredFileTable.brandId eq signalRequestModel.brandId }
                 .let { nextQuery ->
-                    if (includedFileIds.isEmpty()) nextQuery
-                    else nextQuery.andWhere { InfraredFileTable.id inList includedFileIds }
+                    if (includedFileIds.isEmpty()) {
+                        nextQuery
+                    } else {
+                        nextQuery.andWhere { InfraredFileTable.id inList includedFileIds }
+                    }
                 }
-                //[3273, 3282, 3283, 3286]
+                // [3273, 3282, 3283, 3286]
                 .let { nextQuery ->
-                    if (excludedFileIds.isEmpty()) nextQuery
-                    else nextQuery.andWhere { InfraredFileTable.id notInList excludedFileIds }
+                    if (excludedFileIds.isEmpty()) {
+                        nextQuery
+                    } else {
+                        nextQuery.andWhere { InfraredFileTable.id notInList excludedFileIds }
+                    }
                 }
                 .map {
                     val file = IncludedFile(
@@ -111,7 +117,6 @@ class IncludedFilesRepository(
                     )
                     file
                 }.also {
-
                     debug { "#got files: ${it.map { it.fileId }}" }
                 }
         }

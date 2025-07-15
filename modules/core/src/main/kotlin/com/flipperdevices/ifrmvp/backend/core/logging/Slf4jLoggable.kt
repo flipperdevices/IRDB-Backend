@@ -15,7 +15,10 @@ class Slf4jLoggable(tag: String) : Loggable {
     }
 
     override fun error(throwable: Throwable?, msg: () -> String) {
-        if (throwable == null) logger.error(msg.invoke())
-        else logger.error(msg.invoke(), throwable)
+        if (throwable == null) {
+            logger.error(msg.invoke())
+        } else {
+            logger.error(msg.invoke(), throwable)
+        }
     }
 }

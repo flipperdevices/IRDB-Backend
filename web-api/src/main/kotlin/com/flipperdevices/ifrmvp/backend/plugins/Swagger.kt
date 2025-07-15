@@ -1,7 +1,6 @@
 package com.flipperdevices.ifrmvp.backend.plugins
 
 import com.flipperdevices.ifrmvp.backend.buildkonfig.BuildKonfig
-import com.flipperdevices.ifrmvp.backend.envkonfig.EnvKonfig
 import io.github.smiley4.ktorswaggerui.SwaggerUI
 import io.github.smiley4.ktorswaggerui.data.SwaggerUiSort
 import io.github.smiley4.ktorswaggerui.routing.openApiSpec

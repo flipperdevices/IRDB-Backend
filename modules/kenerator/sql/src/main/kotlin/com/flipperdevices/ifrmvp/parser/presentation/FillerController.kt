@@ -19,11 +19,7 @@ import com.flipperdevices.infrared.editor.encoding.InfraredRemoteEncoder.identif
 import com.flipperdevices.infrared.editor.model.InfraredRemote
 import com.flipperdevices.infrared.editor.util.InfraredMapper
 import com.flipperdevices.infrared.editor.viewmodel.InfraredKeyParser
-import java.io.File
-import kotlin.math.sign
-import kotlin.time.measureTime
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.SortOrder
@@ -32,6 +28,7 @@ import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.io.File
 
 internal class FillerController(private val database: Database) : CoroutineScope by IoCoroutineScope() {
 
@@ -146,7 +143,7 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                     .map { it[SignalTable.id] }
                                     .firstOrNull() ?: error(
                                     """
-                                        The list is empty for brand: ${brand.name} category: ${categoryFolder} file: ${irFile.name};
+                                        The list is empty for brand: ${brand.name} category: $categoryFolder file: ${irFile.name};
                                         name: ${remote.name}
                                     """.trimIndent()
                                 )
@@ -168,7 +165,7 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                 ifrFolderName = irFile.parentFile.name
                             )
                             if (irFileConfiguration.keyMap.entries.isEmpty()) {
-                                error("Configuration file for ${irFile} is empty")
+                                error("Configuration file for $irFile is empty")
                             }
                             SignalKeyTable.batchInsert(irFileConfiguration.keyMap.entries) { (baseKey, keyIdentifier) ->
                                 this[SignalKeyTable.infraredFileId] = irFileId
@@ -225,7 +222,7 @@ internal class FillerController(private val database: Database) : CoroutineScope
                                     .also { assert(it.size == 1) }
                                     .firstOrNull() ?: error(
                                     """
-                                        Could not resolve identifier ${keyIdentifier} for file ${irFile}
+                                        Could not resolve identifier $keyIdentifier for file $irFile
                                     """.trimIndent()
                                 )
                             }

@@ -1,6 +1,5 @@
 package com.flipperdevices.ifrmvp.kenerator.ui.category
 
-import com.flipperdevices.ifrmvp.kenerator.ui.category.tv.TvMap
 import com.flipperdevices.ifrmvp.kenerator.ui.core.BrandMap
 import com.flipperdevices.ifrmvp.kenerator.ui.util.RemotesListExt.findButtonsData
 import com.flipperdevices.ifrmvp.kenerator.ui.util.RemotesListExt.findChannelButton

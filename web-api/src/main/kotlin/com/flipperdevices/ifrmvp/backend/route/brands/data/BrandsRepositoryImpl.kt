@@ -19,8 +19,11 @@ internal class BrandsRepositoryImpl(
             BrandTable.selectAll()
                 .where { BrandTable.categoryId eq categoryId }
                 .apply {
-                    if (query.isEmpty()) this
-                    else andWhere { BrandTable.folderName.upperCase().like("%${query.uppercase()}%") }
+                    if (query.isEmpty()) {
+                        this
+                    } else {
+                        andWhere { BrandTable.folderName.upperCase().like("%${query.uppercase()}%") }
+                    }
                 }
                 .map {
                     BrandModel(

@@ -16,5 +16,4 @@ class JvmEncoder(override val algorithm: ByteArrayEncoder.Algorithm) : ByteArray
             .digest(byteArray)
             .toHexString()
     }
-
 }

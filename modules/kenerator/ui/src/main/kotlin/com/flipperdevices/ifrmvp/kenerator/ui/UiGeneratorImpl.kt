@@ -29,7 +29,6 @@ class UiGeneratorImpl(private val tableDao: TableDao) : UiGenerator {
         return file
     }
 
-
     override suspend fun generate(irFileId: Long): PagesLayout {
         val infraredFileModel = tableDao.ifrFileById(irFileId)
         val brand = tableDao.getBrandById(infraredFileModel.brandId)

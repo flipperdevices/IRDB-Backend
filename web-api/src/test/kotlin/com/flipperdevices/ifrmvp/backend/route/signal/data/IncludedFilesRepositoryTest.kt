@@ -47,7 +47,6 @@ class IncludedFilesRepositoryTest {
 
     @Test
     fun `test included files are correct`(): Unit = runBlocking {
-
         val categoryId = transaction(requireSignalApiModule.database) {
             CategoryTable.select(CategoryTable.id)
                 .where { CategoryTable.folderName eq CategoryType.TVS.folderName }

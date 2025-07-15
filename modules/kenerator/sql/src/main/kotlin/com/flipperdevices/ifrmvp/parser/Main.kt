@@ -52,7 +52,7 @@ fun fixIrdbStructure() {
             category.listFiles()
                 .orEmpty()
                 .filter { it.isDirectory }
-                .filter { !it.name.contains("unknown",true) }
+                .filter { !it.name.contains("unknown", true) }
                 .onEach { brand ->
                     brand.listFiles()
                         .orEmpty()
@@ -65,8 +65,8 @@ fun fixIrdbStructure() {
                         .onEach { model ->
                             fun String.replaceInvalidChars(): String {
                                 return this
-                                    .replace("-","")
-                                    .replace(" ","_")
+                                    .replace("-", "")
+                                    .replace(" ", "_")
                             }
                             val modelFolder = brand.resolve(model.nameWithoutExtension.replaceInvalidChars())
                             modelFolder.mkdir()
@@ -77,7 +77,7 @@ fun fixIrdbStructure() {
                     // remove non-ir files
                     brand.listFiles()
                         .orEmpty()
-                        .filter { it.extension!=".ir" }
+                        .filter { it.extension != ".ir" }
                         .onEach { it.delete() }
                     // remove non-filtered files and empty folders
                     brand.listFiles()
@@ -100,7 +100,7 @@ fun fixIrdbStructure() {
 
             category.listFiles()
                 .orEmpty()
-                .filterNot { !it.name.contains("unknown",true) }
+                .filterNot { !it.name.contains("unknown", true) }
                 .onEach { it.deleteRecursively() }
             // remove empty folders
             category.listFiles()

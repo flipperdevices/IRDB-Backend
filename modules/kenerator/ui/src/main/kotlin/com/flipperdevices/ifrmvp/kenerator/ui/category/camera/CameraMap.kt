@@ -28,14 +28,12 @@ internal class CameraMap : BrandMap by BrandMap.Default(
                 ButtonType.ICON,
                 ButtonType.BASE64_IMAGE -> singleButtonLocations
 
-
                 ButtonType.SHUTTER -> mutableListOf(
                     Position(x = 1, y = 3, containerHeight = 3, containerWidth = 3)
                 )
 
                 ButtonType.OK_NAVIGATION,
                 ButtonType.NAVIGATION -> navigationLocations
-
 
                 ButtonType.VOLUME,
                 ButtonType.CHANNEL -> mutableListOf()

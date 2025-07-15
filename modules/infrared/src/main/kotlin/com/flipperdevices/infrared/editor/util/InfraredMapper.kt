@@ -20,7 +20,6 @@ object InfraredMapper {
         return raw
             .let(FlipperFileFormat.Companion::fromFileContent)
             .let(InfraredKeyParser::mapParsedKeyToInfraredRemotes)
-
     }
 
     fun parseRemotes(file: File): List<InfraredRemote> {
@@ -64,5 +63,4 @@ object InfraredMapper {
             append("\n")
         }
     }
-
 }

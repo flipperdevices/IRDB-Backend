@@ -1,10 +1,7 @@
 package com.flipperdevices.ifrmvp.generator.config.device.api.any
 
-import com.flipperdevices.ifrmvp.backend.model.DeviceConfiguration
 import com.flipperdevices.ifrmvp.backend.model.DeviceKey
 import com.flipperdevices.ifrmvp.generator.config.device.api.DeviceKeyNamesProvider
-import java.io.File
-import kotlinx.serialization.json.Json
 
 object AnyDeviceKeyNamesProvider : DeviceKeyNamesProvider {
     @Suppress("LongMethod", "CyclomaticComplexMethod")

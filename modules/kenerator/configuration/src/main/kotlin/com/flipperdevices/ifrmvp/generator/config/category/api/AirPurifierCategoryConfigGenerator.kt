@@ -6,13 +6,11 @@ import com.flipperdevices.ifrmvp.backend.model.DeviceKey
 import com.flipperdevices.ifrmvp.generator.config.category.api.DeviceKeyExt.getAllowedCategories
 import com.flipperdevices.ifrmvp.model.buttondata.IconButtonData
 import com.flipperdevices.ifrmvp.model.buttondata.PowerButtonData
-import com.flipperdevices.ifrmvp.model.buttondata.ShutterButtonData
-import com.flipperdevices.ifrmvp.model.buttondata.TextButtonData
 
 object AirPurifierCategoryConfigGenerator {
     @Suppress("LongMethod")
     fun generate(): CategoryConfiguration {
-        var i  =0
+        var i = 0
         return CategoryConfiguration(
             orders = listOf(
                 CategoryConfiguration.OrderModel(

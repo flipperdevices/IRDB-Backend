@@ -7,4 +7,3 @@ interface Loggable {
 
     class Default(tag: String) : Loggable by Slf4jLoggable(tag)
 }
-
