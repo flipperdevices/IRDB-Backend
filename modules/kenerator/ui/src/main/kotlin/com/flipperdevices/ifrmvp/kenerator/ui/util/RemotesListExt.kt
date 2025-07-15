@@ -67,7 +67,6 @@ internal object RemotesListExt {
                     ShutterButtonData(keyIdentifier = remote.identifier)
                 }
 
-
                 DeviceKey.FOCUS_MORE -> remotes.findByKey(deviceKey)?.let { remote ->
                     IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.FOCUS_MORE)
                 }
@@ -87,7 +86,6 @@ internal object RemotesListExt {
                 DeviceKey.RESET -> remotes.findByKey(deviceKey)?.let { remote ->
                     IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.RESET)
                 }
-
 
                 DeviceKey.NEXT -> remotes.findByKey(deviceKey)?.let { remote ->
                     IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.NEXT)
@@ -144,7 +142,6 @@ internal object RemotesListExt {
                 DeviceKey.PAUSE -> remotes.findByKey(deviceKey)?.let { remote ->
                     IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.PAUSE)
                 }
-
 
                 DeviceKey.WIND_SPEED -> remotes.findByKey(deviceKey)?.let { remote ->
                     IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.WIND_SPEED)
@@ -261,7 +258,6 @@ internal object RemotesListExt {
                 DeviceKey.ENERGY_SAVE -> remotes.findByKey(deviceKey)?.let { remote ->
                     IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.ENERGY_SAVE)
                 }
-
 
                 DeviceKey.REW -> remotes.findByKey(deviceKey)?.let { remote ->
                     IconButtonData(keyIdentifier = remote.identifier, iconId = IconType.REWIND)

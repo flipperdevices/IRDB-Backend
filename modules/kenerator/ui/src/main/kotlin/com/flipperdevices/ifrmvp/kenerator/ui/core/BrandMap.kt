@@ -26,7 +26,7 @@ interface BrandMap {
                     println("Could not find position for ${buttonData::class}")
                     return@mapNotNull null
                 }
-                println("Processing  button ${buttonData.type} ${currentPosition}")
+                println("Processing  button ${buttonData.type} $currentPosition")
                 IfrButton(
                     data = buttonData,
                     position = currentPosition

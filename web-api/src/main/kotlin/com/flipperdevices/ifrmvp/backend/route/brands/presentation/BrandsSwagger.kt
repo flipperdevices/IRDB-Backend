@@ -15,8 +15,8 @@ internal object BrandsSwagger {
             }
             queryParameter<String>("query") {
                 description = "Entry string of brand name. " +
-                        "For example, writing 'sam' - will return every brand that contains this string. " +
-                        "Case insensitive."
+                    "For example, writing 'sam' - will return every brand that contains this string. " +
+                    "Case insensitive."
                 required = true
             }
         }

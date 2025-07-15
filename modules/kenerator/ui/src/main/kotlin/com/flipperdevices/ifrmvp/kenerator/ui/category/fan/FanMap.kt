@@ -22,7 +22,6 @@ internal class FanMap : BrandMap by BrandMap.Default(
                 ButtonType.ICON,
                 ButtonType.BASE64_IMAGE -> oneTypeButtonLocations
 
-
                 ButtonType.SHUTTER,
                 ButtonType.VOLUME,
                 ButtonType.CHANNEL,

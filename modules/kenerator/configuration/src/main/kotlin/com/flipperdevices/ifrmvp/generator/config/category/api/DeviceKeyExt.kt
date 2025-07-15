@@ -74,7 +74,6 @@ object DeviceKeyExt {
                 CategoryType.FAN,
             )
 
-
             DeviceKey.PREVIOUS,
             DeviceKey.NEXT -> listOf(
                 CategoryType.A_V_RECEIVER,
@@ -122,7 +121,6 @@ object DeviceKeyExt {
                 CategoryType.PROJECTOR,
                 CategoryType.BOX
             )
-
 
             DeviceKey.MODE -> listOf(
                 CategoryType.FAN,
@@ -197,7 +195,7 @@ object DeviceKeyExt {
                 CategoryType.DVD,
                 CategoryType.TVS,
 
-                )
+            )
         }
     }
 }

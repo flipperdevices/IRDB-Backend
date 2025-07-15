@@ -13,11 +13,9 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.andWhere
-import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.wrapAsExpression
 
 class SignalRepository(private val database: Database) {
     suspend fun getSignalModel(
@@ -71,9 +69,11 @@ class SignalRepository(private val database: Database) {
                 .andWhere { SignalKeyTable.deviceKey eq order.key }
                 .andWhere { SignalKeyTable.signalId eq SignalTable.id }
                 .let { query ->
-                    if (includedFiles.isEmpty()) query
-                    else query.andWhere { InfraredFileToSignalTable.infraredFileId inList includedFiles }
-
+                    if (includedFiles.isEmpty()) {
+                        query
+                    } else {
+                        query.andWhere { InfraredFileToSignalTable.infraredFileId inList includedFiles }
+                    }
                 }
                 .let { query ->
                     val failedSignalIds = signalRequestModel.failedResults

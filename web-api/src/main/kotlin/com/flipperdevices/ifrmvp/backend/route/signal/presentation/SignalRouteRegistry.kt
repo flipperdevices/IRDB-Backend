@@ -29,7 +29,6 @@ internal class SignalRouteRegistry(
     private val signalRepository = SignalRepository(database)
     private val orderRepository = OrderRepository(database)
 
-
     private suspend fun getNextSignal(
         signalRequestModel: SignalRequestModel,
         categoryType: CategoryType,
@@ -87,8 +86,7 @@ internal class SignalRouteRegistry(
                     .entries
                     .firstOrNull { it.folderName == category.folderName }
                     ?: throw TableDaoException.CategoryNotFound(category.id)
-                debug { "category: $category categoryType: $categoryType signalRequestModel: ${signalRequestModel}" }
-
+                debug { "category: $category categoryType: $categoryType signalRequestModel: $signalRequestModel" }
 
                 val includedFiles = includedFilesRepository.findIncludedFiles(signalRequestModel)
 

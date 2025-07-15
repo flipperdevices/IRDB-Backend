@@ -1,9 +1,7 @@
 package com.flipperdevices.ifrmvp.backend.route.infrareds.presentation
 
 import com.flipperdevices.ifrmvp.backend.core.route.RouteRegistry
-import com.flipperdevices.ifrmvp.backend.model.BrandsResponse
 import com.flipperdevices.ifrmvp.backend.model.InfraredsResponse
-import com.flipperdevices.ifrmvp.backend.route.brands.data.BrandsRepository
 import com.flipperdevices.ifrmvp.backend.route.infrareds.data.InfraredsRepository
 import io.github.smiley4.ktorswaggerui.dsl.routing.get
 import io.ktor.server.response.respond

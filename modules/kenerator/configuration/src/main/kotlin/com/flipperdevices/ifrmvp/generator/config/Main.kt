@@ -7,7 +7,6 @@ import com.flipperdevices.ifrmvp.generator.config.category.api.AirPurifierCatego
 import com.flipperdevices.ifrmvp.generator.config.category.api.AvReceiverCategoryConfigGenerator
 import com.flipperdevices.ifrmvp.generator.config.category.api.BoxCategoryConfigGenerator
 import com.flipperdevices.ifrmvp.generator.config.category.api.CameraCategoryConfigGenerator
-import com.flipperdevices.ifrmvp.generator.config.category.api.DeviceKeyExt
 import com.flipperdevices.ifrmvp.generator.config.category.api.DeviceKeyExt.getAllowedCategories
 import com.flipperdevices.ifrmvp.generator.config.category.api.DvdCategoryConfigGenerator
 import com.flipperdevices.ifrmvp.generator.config.category.api.FanCategoryConfigGenerator
@@ -62,7 +61,7 @@ private fun generateDevicesConfigFiles() {
                     ).onEach { irFile ->
                         val config = DefaultDeviceConfigGenerator(AnyDeviceKeyNamesProvider)
                             .generate(irFile)
-                        if (config.keyMap.isEmpty()) error("Config file for ${irFile} is empty")
+                        if (config.keyMap.isEmpty()) error("Config file for $irFile is empty")
                         val configFile = irFile.parentFile.resolve("config.json")
                         val string = json.encodeToString(config)
                         configFile.writeText(string)
@@ -72,7 +71,6 @@ private fun generateDevicesConfigFiles() {
 }
 
 fun printAllKeys() {
-
     val keyNames = DeviceKey.entries.associateWith { AnyDeviceKeyNamesProvider.getKeyNames(it) }
     val namesToCategories = mutableMapOf<String, MutableSet<String>>()
     val nameToCount = mutableMapOf<String, Int>()
@@ -104,9 +102,10 @@ fun printAllKeys() {
         .sortedByDescending { nameToCount[it.name.lowercase()] }
         .onEach { key ->
             val filteredMap = keyNames.filterValues { it.map { it.lowercase() }.contains(key.name.lowercase()) }
-            println("${key.name.lowercase()} -> ${nameToCount[key.name.lowercase()]} ${namesToCategories[key.name.lowercase()]}  -> ${filteredMap.map { (k, v) -> "$k - ${k.getAllowedCategories()} -${v}" }}")
+            println(
+                "${key.name.lowercase()} -> ${nameToCount[key.name.lowercase()]} ${namesToCategories[key.name.lowercase()]}  -> ${filteredMap.map { (k, v) -> "$k - ${k.getAllowedCategories()} -$v" }}"
+            )
         }
-
 }
 
 private fun filterSameInfraredFiles() {
