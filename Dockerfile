@@ -1,14 +1,14 @@
-FROM openjdk:24-slim as builder
+FROM openjdk:24-rc-oraclelinux8 as builder
 
 WORKDIR /app/
 
 COPY . .
 
 
-RUN ./gradlew :web-api:shadowJar
-RUN ./gradlew :modules:kenerator:sql:shadowJar
+RUN ./gradlew :web-api:shadowJar --stacktrace
+RUN ./gradlew :modules:kenerator:sql:shadowJar --stacktrace
 
-FROM openjdk:24-slim as parser
+FROM openjdk:24-rc-oraclelinux8 as parser
 
 WORKDIR /app/
 
@@ -22,7 +22,7 @@ ENV DB_FULL_PATH="./output/database"
 
 RUN java -jar parser.jar
 
-FROM openjdk:24-slim
+FROM openjdk:24-rc-oraclelinux8
 
 COPY --from=builder /app/jars/IRDBBackend-web-*.jar web.jar
 COPY --from=parser /app/output/database.mv.db database.mv.db
