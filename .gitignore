@@ -8,3 +8,4 @@ jars
 output
 .env
 DB_FILE.*
+local.properties
